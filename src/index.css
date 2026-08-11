@@ -2,11 +2,56 @@
 @import 'pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css';
 @import 'tailwindcss';
 
+/*
+ * 디자인 토큰 — Figma 와이어프레임(node 9:506)에서 추출
+ *
+ * 타이포 스케일 이름은 px 값을 그대로 쓴다 (text-20 = 20px).
+ * Figma 수치와 1:1로 대응시켜 시안 대조 시 변환 실수를 없애기 위함.
+ *
+ * 자간은 전 사이즈가 예외 없이 폰트 크기의 -2.5%다 (48px→-1.2px, 20px→-0.5px ...).
+ * 그래서 px가 아니라 -0.025em 하나로 정의한다.
+ *
+ * 컬러는 아직 정의하지 않는다. 와이어프레임의 회색들은 플레이스홀더이므로
+ * 브랜드 토큰으로 승격시키지 않는다.
+ */
 @theme {
   --font-sans:
     'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont,
     system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo',
     'Noto Sans KR', 'Malgun Gothic', sans-serif;
+
+  /* 기본 라인하이트는 1.4 (와이어프레임 지배적 값). 1.5는 leading-[1.5]로 개별 지정 */
+  --text-14: 14px;
+  --text-14--line-height: 1.4;
+  --text-14--letter-spacing: -0.025em;
+
+  --text-16: 16px;
+  --text-16--line-height: 1.4;
+  --text-16--letter-spacing: -0.025em;
+
+  --text-18: 18px;
+  --text-18--line-height: 1.4;
+  --text-18--letter-spacing: -0.025em;
+
+  --text-20: 20px;
+  --text-20--line-height: 1.4;
+  --text-20--letter-spacing: -0.025em;
+
+  --text-24: 24px;
+  --text-24--line-height: 1.4;
+  --text-24--letter-spacing: -0.025em;
+
+  --text-28: 28px;
+  --text-28--line-height: 1.4;
+  --text-28--letter-spacing: -0.025em;
+
+  --text-34: 34px;
+  --text-34--line-height: 1.4;
+  --text-34--letter-spacing: -0.025em;
+
+  --text-48: 48px;
+  --text-48--line-height: 1.4;
+  --text-48--letter-spacing: -0.025em;
 }
 
 @layer base {
