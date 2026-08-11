@@ -1,7 +1,22 @@
-:root {
-  color-scheme: light;
+/* Pretendard Variable — 동적 서브셋(한글 포함, 필요한 글리프만 로드) */
+@import 'pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css';
+@import 'tailwindcss';
+
+@theme {
+  --font-sans:
+    'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont,
+    system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo',
+    'Noto Sans KR', 'Malgun Gothic', sans-serif;
 }
 
-body {
-  margin: 0;
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* 한글에서 기본 word-break가 어색하게 끊기는 것을 방지 */
+  body {
+    word-break: keep-all;
+  }
 }
