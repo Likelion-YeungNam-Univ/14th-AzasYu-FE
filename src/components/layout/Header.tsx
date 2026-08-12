@@ -1,6 +1,6 @@
-import { Link } from 'react-router'
+import { Link, useParams } from 'react-router'
 import { ChevronRight } from '@/components/icons/ChevronRight'
-import { NAV_ITEMS, SERVICE_NAME } from '@/constants/site'
+import { buildNavItems, SERVICE_NAME } from '@/constants/site'
 import { cn } from '@/lib/cn'
 import { PATHS } from '@/routes/paths'
 
@@ -13,6 +13,10 @@ import { PATHS } from '@/routes/paths'
  *   오른쪽 라벨 18px Medium + 꺾쇠 20px, gap-6
  *
  * 화면별로 갈리는 건 딱 세 가지다 → nav 유무 / 오른쪽 라벨 / 글자색.
+ *
+ * **nav 2번째 항목은 메뉴가 아니라 현재 프로젝트명이다** (constants/site.ts 참고).
+ * projectId는 URL에서 직접 읽는다 — 프로젝트 하위 라우트에서만 값이 잡히므로
+ * 페이지마다 prop으로 넘길 필요가 없다.
  *
  * | 화면                        | nav | 오른쪽   | tone    |
  * | --------------------------- | --- | -------- | ------- |
@@ -38,21 +42,27 @@ const TONE: Record<HeaderTone, string> = {
 
 export interface HeaderProps {
   tone?: HeaderTone
-  /** 가운데 nav 4항목 표시 여부. 로그인 후 화면만 true */
+  /** 가운데 nav 표시 여부. 로그인 후 화면만 true */
   nav?: boolean
   /** 오른쪽 라벨과 목적지. 기본값은 로그인 후 화면의 "로그아웃" */
   action?: { label: string; href: string }
+  /** nav에 찍을 현재 프로젝트명. 없으면 시안의 더미 이름을 쓴다 */
+  projectName?: string
   className?: string
 }
 
-const DEFAULT_ACTION = { label: '로그아웃', href: PATHS.HOME }
+const DEFAULT_ACTION = { label: '로그아웃', href: PATHS.WELCOME }
 
 export function Header({
   tone = 'onHero',
   nav = false,
   action = DEFAULT_ACTION,
+  projectName,
   className,
 }: HeaderProps) {
+  const { projectId } = useParams()
+  const navItems = buildNavItems(projectId, projectName)
+
   return (
     <header
       className={cn(
@@ -62,7 +72,7 @@ export function Header({
       )}
     >
       <Link
-        to={nav ? PATHS.PROJECTS : PATHS.HOME}
+        to={nav ? PATHS.PROJECTS : PATHS.WELCOME}
         className="text-18 font-semibold whitespace-nowrap sm:text-20 lg:text-24"
       >
         {SERVICE_NAME}
@@ -70,7 +80,7 @@ export function Header({
 
       {nav && (
         <nav className="text-16 absolute left-1/2 hidden -translate-x-1/2 items-center gap-[48px] font-medium whitespace-nowrap lg:flex">
-          {NAV_ITEMS.map((item) => (
+          {navItems.map((item) => (
             <Link key={item.label} to={item.href}>
               {item.label}
             </Link>

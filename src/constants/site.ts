@@ -2,27 +2,60 @@
  * 화면 전반에서 공유하는 상수.
  * 컴포넌트 파일에서 같이 export하면 Fast Refresh가 깨져 별도 파일로 둔다.
  */
-import { PATHS } from '@/routes/paths'
+import { PATHS, projectPath } from '@/routes/paths'
 
 /** Figma 헤더 로고 텍스트 */
 export const SERVICE_NAME = '이해했습니다! (아님)'
 
 /**
- * 로그인 후 화면 공통 내비게이션.
+ * 시안에 적혀 있는 프로젝트명("신규 서비스 기획").
  *
- * 목적지 확정 상태 — Figma에 nav 클릭 흐름이 그려져 있지 않아 일부는 추정이다.
- *   지난 회의       확정 (Desktop - 37)
- *   홈             추정. 로그인 후이므로 랜딩(/)보다 "내 프로젝트"가 자연스럽다고 봤다
- *   신규 서비스 기획  추정. Desktop - 31 "회의 생성"으로 걸었다
- *   프로젝트 설정    **대응 Figma 시안이 없다.** placeholder로 연결돼 있다
- * → 디자이너 확인 후 여기 href만 고치면 된다.
+ * **메뉴 라벨이 아니라 데이터다.** Desktop - 11에서 이 문자열이 헤더 nav와 히어로 제목에
+ * 두 번 나오고, Desktop - 29에서는 프로젝트 카드의 제목으로 나온다.
+ * 프로젝트명이 "앱 개선 프로젝트"면 nav에도 그렇게 찍힌다.
+ *
+ * 서버 연동은 범위 밖이라(§ 1) 실제 이름이 없을 때 쓰는 더미다.
+ * API가 붙으면 페이지가 Header에 projectName으로 넘겨주면 된다.
  */
-export const NAV_ITEMS = [
-  { label: '홈', href: PATHS.PROJECTS },
-  { label: '신규 서비스 기획', href: PATHS.MEETING_NEW },
-  { label: '지난 회의', href: PATHS.MEETINGS },
-  { label: '프로젝트 설정', href: PATHS.SETTINGS },
-] as const
+export const SAMPLE_PROJECT_NAME = '신규 서비스 기획'
+
+export interface NavItem {
+  label: string
+  href: string
+}
+
+/**
+ * 상단 nav 항목. **현재 프로젝트가 있느냐에 따라 항목 수가 달라진다.**
+ *
+ *   프로젝트 안 (/projects/:projectId/…)  홈 · {프로젝트명} · 지난 회의 · 프로젝트 설정
+ *   프로젝트 밖 (/projects, /meetings)    홈 · 지난 회의
+ *
+ * 시안에는 `Desktop - 29`(프로젝트 목록)·`37`(지난 회의) 헤더에도 "신규 서비스 기획"과
+ * "프로젝트 설정"이 그대로 박혀 있다. 하지만 두 화면은 특정 프로젝트에 속하지 않아
+ * projectId를 만들 수 없으므로 링크가 성립하지 않는다. 디자이너가 헤더를 복사해 붙인
+ * 것으로 보고 프로젝트 밖에서는 두 항목을 숨긴다. **시안과 의도적으로 다른 부분이다.**
+ */
+export function buildNavItems(
+  projectId?: string,
+  projectName: string = SAMPLE_PROJECT_NAME,
+): NavItem[] {
+  const items: NavItem[] = [{ label: '홈', href: PATHS.PROJECTS }]
+
+  if (projectId) {
+    items.push({ label: projectName, href: projectPath('DETAIL', projectId) })
+  }
+
+  items.push({ label: '지난 회의', href: PATHS.MEETINGS })
+
+  if (projectId) {
+    items.push({
+      label: '프로젝트 설정',
+      href: projectPath('SETTINGS', projectId),
+    })
+  }
+
+  return items
+}
 
 /**
  * 히어로(670px) 위로 카드를 top-401px에 올리기 위한 겹침 값.
