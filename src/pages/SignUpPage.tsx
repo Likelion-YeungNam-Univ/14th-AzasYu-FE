@@ -6,7 +6,7 @@ import { TextField } from '@/components/ui/TextField'
 import { PATHS } from '@/routes/paths'
 
 /*
- * Figma: Desktop - 8 (node 767:1564), 1920 x 1089
+ * Figma: Desktop - 8 (node 1:148), 1920 x 1089
  *
  * lg(1024px) 이상에서 시안 실측값과 일치한다.
  *   헤더            0 ~ 80

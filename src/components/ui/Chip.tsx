@@ -2,7 +2,7 @@ import { Close } from '@/components/icons/Close'
 import { cn } from '@/lib/cn'
 
 /*
- * 참여자 태그. Figma node `759:1161` — Desktop-31 참여자, Desktop-30 팀원 초대.
+ * 참여자 태그. Figma node `1:448` — Desktop-31 참여자, Desktop-30 팀원 초대.
  *
  *   h-41 / 1px #606060 / rounded-8 / px-16 py-8
  *   내부 gap-6, 라벨 16px Medium #606060, 삭제 × 20px
@@ -37,7 +37,7 @@ export function Chip({ label, onRemove, className }: ChipProps) {
           aria-label={`${label} 삭제`}
           className="flex shrink-0 cursor-pointer items-center"
         >
-          <Close />
+          <Close className="size-[20px]" />
         </button>
       )}
     </span>

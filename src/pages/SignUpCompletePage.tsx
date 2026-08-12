@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/Button'
 import { PATHS } from '@/routes/paths'
 
 /*
- * Figma: Desktop - 39 (node 767:1603), 1920 x 1089
+ * Figma: Desktop - 39 (node 1:186), 1920 x 1089
  *
  * lg(1024px) 이상에서 시안 실측값과 일치한다.
  *   헤더          0 ~ 80        (Desktop-8과 출력이 동일. Header preset auth 재사용)

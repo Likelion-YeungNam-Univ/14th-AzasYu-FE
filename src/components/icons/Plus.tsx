@@ -2,7 +2,7 @@ import { Close } from '@/components/icons/Close'
 import { cn } from '@/lib/cn'
 
 /*
- * + (추가). Figma node `759:1128` — Desktop-31 "안건 추가" 버튼.
+ * + (추가). Figma node `1:415` — Desktop-31 "안건 추가" 버튼.
  *
  * **Figma도 별도 글리프를 쓰지 않는다.** 10px × 를 -45° 회전시켜 +로 만든다.
  * 10px를 45° 돌리면 바운딩 박스가 10 x root2 = 14.142가 되므로 바깥 박스가 14.142다.

@@ -3,11 +3,11 @@ import { cn } from '@/lib/cn'
 
 /*
  * 축이 있는 오른쪽 화살표(→). 헤더의 꺾쇠(›)인 ChevronRight와는 다른 글리프다.
- * Figma: Desktop-39 "로그인하러 가기" 버튼 (node 767:1618-1619)
+ * Figma: Desktop-39 "로그인하러 가기" 버튼 (node 1:201 / 1:202)
  *
  * 박스가 3중이다. Figma 구조를 그대로 유지한다.
- *   바깥 20x20  = w-[20px] + py-[4px]  (node 767:1618, overflow-clip)
- *   잎   18x12  = 레이아웃상 아이콘 박스 (node 767:1619)
+ *   바깥 20x20  = w-[20px] + py-[4px]  (node 1:201, overflow-clip)
+ *   잎   18x12  = 레이아웃상 아이콘 박스 (node 1:202)
  *   img  18.707x12.707 = SVG 고유 크기. stroke가 잎 박스 밖으로 삐져나온다.
  *
  * SVG에 preserveAspectRatio="none"이 박혀 있어서 img를 18x12로 눌러 담으면 stroke가
