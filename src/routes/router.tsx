@@ -38,7 +38,7 @@ export const router = createBrowserRouter([
   {
     path: PATHS.WELCOME,
     element: (
-      <PlaceholderPage title="홈 (랜딩)" figma="Desktop - 25" nodeId="759:1263" />
+      <PlaceholderPage title="홈 (랜딩)" figma="Desktop - 25" nodeId="1:635" />
     ),
   },
   { path: PATHS.LOGIN, element: <LoginPage /> },
@@ -49,19 +49,19 @@ export const router = createBrowserRouter([
   {
     path: PATHS.PROJECTS,
     element: (
-      <PlaceholderPage title="내 프로젝트" figma="Desktop - 29" nodeId="759:724" />
+      <PlaceholderPage title="내 프로젝트" figma="Desktop - 29" nodeId="1:570" />
     ),
   },
   {
     path: PATHS.PROJECT_NEW,
     element: (
-      <PlaceholderPage title="프로젝트 생성" figma="Desktop - 30" nodeId="759:1008" />
+      <PlaceholderPage title="프로젝트 생성" figma="Desktop - 30" nodeId="1:295" />
     ),
   },
   {
     path: PROJECT_PATTERNS.DETAIL,
     element: (
-      <PlaceholderPage title="프로젝트 상세" figma="Desktop - 11" nodeId="772:42" />
+      <PlaceholderPage title="프로젝트 상세" figma="Desktop - 11" nodeId="1:205" />
     ),
   },
   {
@@ -70,7 +70,7 @@ export const router = createBrowserRouter([
       <PlaceholderPage
         title="프로젝트 생성 완료"
         figma="Desktop - 40"
-        nodeId="775:42"
+        nodeId="1:550"
       />
     ),
   },
@@ -85,7 +85,7 @@ export const router = createBrowserRouter([
   {
     path: MEETING_PATTERNS.DETAIL,
     element: (
-      <PlaceholderPage title="회의 결과" figma="Desktop - 36" nodeId="759:828" />
+      <PlaceholderPage title="회의 결과" figma="Desktop - 36" nodeId="1:52" />
     ),
   },
   {
@@ -94,7 +94,7 @@ export const router = createBrowserRouter([
       <PlaceholderPage
         title="AI 사전 인터뷰"
         figma="Desktop - 33"
-        nodeId="759:1179"
+        nodeId="1:466"
       />
     ),
   },
@@ -104,7 +104,7 @@ export const router = createBrowserRouter([
       <PlaceholderPage
         title="익명 아이디어 보드"
         figma="Desktop - 34"
-        nodeId="759:789"
+        nodeId="1:256"
       />
     ),
   },
@@ -114,7 +114,7 @@ export const router = createBrowserRouter([
       <PlaceholderPage
         title="회의 텍스트 업로드"
         figma="Desktop - 35"
-        nodeId="759:981"
+        nodeId="1:117"
       />
     ),
   },

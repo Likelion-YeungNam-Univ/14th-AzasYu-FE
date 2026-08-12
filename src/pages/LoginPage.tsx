@@ -7,7 +7,7 @@ import { HEADER_PRESETS } from '@/constants/header'
 import { PATHS } from '@/routes/paths'
 
 /*
- * Figma: Desktop - 26 (node 759:1282), 1920 x 1089
+ * Figma: Desktop - 26 (node 1:654), 1920 x 1089
  * 같은 화면의 다른 상태: Desktop - 27 (이메일 입력됨), Desktop - 28 (에러)
  *
  * lg(1024px) 이상에서 시안 실측값과 일치한다.
