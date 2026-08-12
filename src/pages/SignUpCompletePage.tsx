@@ -1,7 +1,9 @@
+import { useNavigate } from 'react-router'
 import checkBadge from '@/assets/icons/check-badge.svg'
 import { ArrowRight } from '@/components/icons/ArrowRight'
 import { AuthHeader } from '@/components/layout/AuthHeader'
 import { Button } from '@/components/ui/Button'
+import { PATHS } from '@/routes/paths'
 
 /*
  * Figma: Desktop - 39 (node 767:1603), 1920 x 1089
@@ -30,6 +32,8 @@ import { Button } from '@/components/ui/Button'
  *   아이콘 56.186과 gap 27은 360px에서도 답답하지 않아 그대로 둔다.
  */
 export function SignUpCompletePage() {
+  const navigate = useNavigate()
+
   return (
     <div className="min-h-svh w-full bg-white">
       <AuthHeader />
@@ -46,7 +50,11 @@ export function SignUpCompletePage() {
             회원가입이 완료되었습니다
           </h1>
 
-          <Button variant="secondary" size="inline">
+          <Button
+            variant="secondary"
+            size="inline"
+            onClick={() => navigate(PATHS.LOGIN)}
+          >
             로그인하러 가기
             <ArrowRight />
           </Button>

@@ -1,6 +1,8 @@
+import { Link } from 'react-router'
 import { ChevronRight } from '@/components/icons/ChevronRight'
 import { NAV_ITEMS, SERVICE_NAME } from '@/constants/site'
 import { cn } from '@/lib/cn'
+import { PATHS } from '@/routes/paths'
 
 /*
  * Figma: h-80px, 로고 left-52px(24px SemiBold), 가운데 nav(16px Medium, gap-48),
@@ -32,20 +34,23 @@ export function SiteHeader({ tone = 'onHero', className }: SiteHeaderProps) {
         className,
       )}
     >
-      <p className="text-24 font-semibold whitespace-nowrap">{SERVICE_NAME}</p>
+      <Link to={PATHS.PROJECTS} className="text-24 font-semibold whitespace-nowrap">
+        {SERVICE_NAME}
+      </Link>
 
       <nav className="text-16 absolute left-1/2 flex -translate-x-1/2 items-center gap-[48px] font-medium whitespace-nowrap">
         {NAV_ITEMS.map((item) => (
-          <a key={item} href="#">
-            {item}
-          </a>
+          <Link key={item.label} to={item.href}>
+            {item.label}
+          </Link>
         ))}
       </nav>
 
-      <a href="#" className="ml-auto flex items-center gap-[6px]">
+      {/* 로그아웃은 아직 동작 없음 (인증 미구현). 랜딩으로 보낸다 */}
+      <Link to={PATHS.HOME} className="ml-auto flex items-center gap-[6px]">
         <span className="text-18 font-medium whitespace-nowrap">로그아웃</span>
         <ChevronRight />
-      </a>
+      </Link>
     </header>
   )
 }

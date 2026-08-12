@@ -1,6 +1,8 @@
+import { Link } from 'react-router'
 import { ChevronRight } from '@/components/icons/ChevronRight'
 import { SERVICE_NAME } from '@/constants/site'
 import { cn } from '@/lib/cn'
+import { PATHS } from '@/routes/paths'
 
 /*
  * 회원가입 계열(Desktop-8, 39)의 헤더.
@@ -18,14 +20,17 @@ export function AuthHeader({ className }: { className?: string }) {
         className,
       )}
     >
-      <p className="text-18 font-semibold whitespace-nowrap sm:text-20 lg:text-24">
+      <Link
+        to={PATHS.HOME}
+        className="text-18 font-semibold whitespace-nowrap sm:text-20 lg:text-24"
+      >
         {SERVICE_NAME}
-      </p>
+      </Link>
 
-      <a href="#" className="flex items-center gap-[6px]">
+      <Link to={PATHS.HOME} className="flex items-center gap-[6px]">
         <span className="text-18 font-medium whitespace-nowrap">홈</span>
         <ChevronRight />
-      </a>
+      </Link>
     </header>
   )
 }

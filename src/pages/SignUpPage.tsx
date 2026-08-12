@@ -1,6 +1,8 @@
+import { useNavigate } from 'react-router'
 import { AuthHeader } from '@/components/layout/AuthHeader'
 import { Button } from '@/components/ui/Button'
 import { TextField } from '@/components/ui/TextField'
+import { PATHS } from '@/routes/paths'
 
 /*
  * Figma: Desktop - 8 (node 767:1564), 1920 x 1089
@@ -35,6 +37,8 @@ const FIELDS = [
 ] as const
 
 export function SignUpPage() {
+  const navigate = useNavigate()
+
   return (
     <div className="min-h-svh w-full bg-white">
       <AuthHeader />
@@ -60,7 +64,11 @@ export function SignUpPage() {
         </div>
 
         {/* lg에서 카드 바닥 849 → 버튼 top 883 */}
-        <Button className="mt-6 w-full max-w-[501px] lg:mt-[34px]">
+        {/* 인증 미구현. 와이어프레임 흐름을 걸어볼 수 있게 완료 화면으로만 보낸다 */}
+        <Button
+          className="mt-6 w-full max-w-[501px] lg:mt-[34px]"
+          onClick={() => navigate(PATHS.SIGNUP_COMPLETE)}
+        >
           가입 완료
         </Button>
       </main>
