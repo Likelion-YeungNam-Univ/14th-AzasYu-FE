@@ -1,4 +1,5 @@
 import { createBrowserRouter } from 'react-router'
+import { MeetingsPage } from '@/pages/MeetingsPage'
 import { PlaceholderPage } from '@/pages/PlaceholderPage'
 import { SignUpCompletePage } from '@/pages/SignUpCompletePage'
 import { SignUpPage } from '@/pages/SignUpPage'
@@ -76,16 +77,7 @@ export const router = createBrowserRouter([
 
   // ── 회의 ────────────────────────────────────────────────────
   // /meetings/new가 /meetings/:meetingId보다 먼저 매칭된다 (정적 세그먼트 우선)
-  {
-    path: PATHS.MEETINGS,
-    element: (
-      <PlaceholderPage
-        title="지난 회의"
-        figma="Desktop - 37"
-        nodeId="765:1476"
-      />
-    ),
-  },
+  { path: PATHS.MEETINGS, element: <MeetingsPage /> },
   {
     path: PATHS.MEETING_NEW,
     element: (
