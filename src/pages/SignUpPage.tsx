@@ -1,6 +1,9 @@
-import { AuthHeader } from '@/components/layout/AuthHeader'
+import { useNavigate } from 'react-router'
+import { Header } from '@/components/layout/Header'
+import { HEADER_PRESETS } from '@/constants/header'
 import { Button } from '@/components/ui/Button'
 import { TextField } from '@/components/ui/TextField'
+import { PATHS } from '@/routes/paths'
 
 /*
  * Figma: Desktop - 8 (node 767:1564), 1920 x 1089
@@ -35,9 +38,11 @@ const FIELDS = [
 ] as const
 
 export function SignUpPage() {
+  const navigate = useNavigate()
+
   return (
     <div className="min-h-svh w-full bg-white">
-      <AuthHeader />
+      <Header {...HEADER_PRESETS.auth} />
 
       <main className="flex flex-col items-center px-5 pb-16 sm:px-8 lg:pb-[140px]">
         <h1 className="text-28 mt-16 font-semibold whitespace-nowrap text-black sm:mt-24 sm:text-34 lg:mt-[180px] lg:text-48">
@@ -60,7 +65,11 @@ export function SignUpPage() {
         </div>
 
         {/* lg에서 카드 바닥 849 → 버튼 top 883 */}
-        <Button className="mt-6 w-full max-w-[501px] lg:mt-[34px]">
+        {/* 인증 미구현. 와이어프레임 흐름을 걸어볼 수 있게 완료 화면으로만 보낸다 */}
+        <Button
+          className="mt-6 w-full max-w-[501px] lg:mt-[34px]"
+          onClick={() => navigate(PATHS.SIGNUP_COMPLETE)}
+        >
           가입 완료
         </Button>
       </main>
