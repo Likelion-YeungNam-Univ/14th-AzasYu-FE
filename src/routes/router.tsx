@@ -8,7 +8,7 @@ import { MEETING_PATTERNS, PATHS } from '@/routes/paths'
  * Figma 와이어프레임 16개 화면을 그대로 옮긴 라우트 트리.
  *
  * 레이아웃 라우트를 쓰지 않고 각 페이지가 자기 헤더를 직접 렌더한다.
- * 헤더 종류(SiteHeader / AuthHeader)뿐 아니라 tone(onHero / onLight)까지 화면마다
+ * 헤더 preset(auth / appOnHero / appOnLight / landing)과 히어로 유무가 화면마다
  * 갈리는데(히어로 y좌표에 따라 결정됨) 그걸 라우트 config로 빼면 배보다 배꼽이 커진다.
  * 지금 구현된 페이지 2개도 이미 이 방식이다. 헤더 중복이 실제로 거슬려지면 그때
  * PageShell 같은 걸 도입할 것.

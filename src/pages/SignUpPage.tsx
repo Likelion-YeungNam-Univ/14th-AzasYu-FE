@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router'
-import { AuthHeader } from '@/components/layout/AuthHeader'
+import { Header } from '@/components/layout/Header'
+import { HEADER_PRESETS } from '@/constants/header'
 import { Button } from '@/components/ui/Button'
 import { TextField } from '@/components/ui/TextField'
 import { PATHS } from '@/routes/paths'
@@ -41,7 +42,7 @@ export function SignUpPage() {
 
   return (
     <div className="min-h-svh w-full bg-white">
-      <AuthHeader />
+      <Header {...HEADER_PRESETS.auth} />
 
       <main className="flex flex-col items-center px-5 pb-16 sm:px-8 lg:pb-[140px]">
         <h1 className="text-28 mt-16 font-semibold whitespace-nowrap text-black sm:mt-24 sm:text-34 lg:mt-[180px] lg:text-48">

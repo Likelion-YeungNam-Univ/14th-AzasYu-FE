@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router'
 import checkBadge from '@/assets/icons/check-badge.svg'
 import { ArrowRight } from '@/components/icons/ArrowRight'
-import { AuthHeader } from '@/components/layout/AuthHeader'
+import { Header } from '@/components/layout/Header'
+import { HEADER_PRESETS } from '@/constants/header'
 import { Button } from '@/components/ui/Button'
 import { PATHS } from '@/routes/paths'
 
@@ -9,7 +10,7 @@ import { PATHS } from '@/routes/paths'
  * Figma: Desktop - 39 (node 767:1603), 1920 x 1089
  *
  * lg(1024px) 이상에서 시안 실측값과 일치한다.
- *   헤더          0 ~ 80        (Desktop-8과 출력이 동일해 AuthHeader 그대로 재사용)
+ *   헤더          0 ~ 80        (Desktop-8과 출력이 동일. Header preset auth 재사용)
  *   스택 top      427           (헤더 아래 347px)
  *   체크 아이콘    56.186 정사각
  *   gap           27
@@ -36,7 +37,7 @@ export function SignUpCompletePage() {
 
   return (
     <div className="min-h-svh w-full bg-white">
-      <AuthHeader />
+      <Header {...HEADER_PRESETS.auth} />
 
       <main className="flex flex-col items-center px-5 pb-16 sm:px-8 lg:pb-[140px]">
         <div className="mt-24 flex flex-col items-center gap-[27px] sm:mt-40 lg:mt-[347px]">
