@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate } from 'react-router'
 import { LoginPage } from '@/pages/LoginPage'
 import { MeetingNewPage } from '@/pages/MeetingNewPage'
 import { MeetingsPage } from '@/pages/MeetingsPage'
+import { MeetingUploadPage } from '@/pages/MeetingUploadPage'
 import { PlaceholderPage } from '@/pages/PlaceholderPage'
 import { ProjectCompletePage } from '@/pages/ProjectCompletePage'
 import { ProjectDetailPage } from '@/pages/ProjectDetailPage'
@@ -88,16 +89,7 @@ export const router = createBrowserRouter([
       />
     ),
   },
-  {
-    path: MEETING_PATTERNS.UPLOAD,
-    element: (
-      <PlaceholderPage
-        title="회의 텍스트 업로드"
-        figma="Desktop - 35"
-        nodeId="1:117"
-      />
-    ),
-  },
+  { path: MEETING_PATTERNS.UPLOAD, element: <MeetingUploadPage /> },
 
   // ── 회의 (프로젝트 무관) ─────────────────────────────────────
   // 사용자가 소속된 회의를 최신순으로 모아 보여준다. nav "지난 회의"의 목적지
