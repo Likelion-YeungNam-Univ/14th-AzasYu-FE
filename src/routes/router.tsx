@@ -3,6 +3,7 @@ import { LoginPage } from '@/pages/LoginPage'
 import { MeetingNewPage } from '@/pages/MeetingNewPage'
 import { MeetingBoardPage } from '@/pages/MeetingBoardPage'
 import { MeetingInterviewPage } from '@/pages/MeetingInterviewPage'
+import { MeetingResultPage } from '@/pages/MeetingResultPage'
 import { MeetingsPage } from '@/pages/MeetingsPage'
 import { MeetingUploadPage } from '@/pages/MeetingUploadPage'
 import { PlaceholderPage } from '@/pages/PlaceholderPage'
@@ -65,12 +66,7 @@ export const router = createBrowserRouter([
 
   // ── 회의 (프로젝트 하위) ─────────────────────────────────────
   { path: PROJECT_PATTERNS.MEETING_NEW, element: <MeetingNewPage /> },
-  {
-    path: MEETING_PATTERNS.DETAIL,
-    element: (
-      <PlaceholderPage title="회의 결과" figma="Desktop - 36" nodeId="1:52" />
-    ),
-  },
+  { path: MEETING_PATTERNS.DETAIL, element: <MeetingResultPage /> },
   { path: MEETING_PATTERNS.INTERVIEW, element: <MeetingInterviewPage /> },
   { path: MEETING_PATTERNS.BOARD, element: <MeetingBoardPage /> },
   { path: MEETING_PATTERNS.UPLOAD, element: <MeetingUploadPage /> },
