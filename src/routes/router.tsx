@@ -1,7 +1,11 @@
 import { createBrowserRouter, Navigate } from 'react-router'
 import { LoginPage } from '@/pages/LoginPage'
 import { MeetingNewPage } from '@/pages/MeetingNewPage'
+import { MeetingBoardPage } from '@/pages/MeetingBoardPage'
+import { MeetingInterviewPage } from '@/pages/MeetingInterviewPage'
+import { MeetingResultPage } from '@/pages/MeetingResultPage'
 import { MeetingsPage } from '@/pages/MeetingsPage'
+import { MeetingUploadPage } from '@/pages/MeetingUploadPage'
 import { PlaceholderPage } from '@/pages/PlaceholderPage'
 import { ProjectCompletePage } from '@/pages/ProjectCompletePage'
 import { ProjectDetailPage } from '@/pages/ProjectDetailPage'
@@ -62,42 +66,10 @@ export const router = createBrowserRouter([
 
   // ── 회의 (프로젝트 하위) ─────────────────────────────────────
   { path: PROJECT_PATTERNS.MEETING_NEW, element: <MeetingNewPage /> },
-  {
-    path: MEETING_PATTERNS.DETAIL,
-    element: (
-      <PlaceholderPage title="회의 결과" figma="Desktop - 36" nodeId="1:52" />
-    ),
-  },
-  {
-    path: MEETING_PATTERNS.INTERVIEW,
-    element: (
-      <PlaceholderPage
-        title="AI 사전 인터뷰"
-        figma="Desktop - 33"
-        nodeId="1:466"
-      />
-    ),
-  },
-  {
-    path: MEETING_PATTERNS.BOARD,
-    element: (
-      <PlaceholderPage
-        title="익명 아이디어 보드"
-        figma="Desktop - 34"
-        nodeId="1:256"
-      />
-    ),
-  },
-  {
-    path: MEETING_PATTERNS.UPLOAD,
-    element: (
-      <PlaceholderPage
-        title="회의 텍스트 업로드"
-        figma="Desktop - 35"
-        nodeId="1:117"
-      />
-    ),
-  },
+  { path: MEETING_PATTERNS.DETAIL, element: <MeetingResultPage /> },
+  { path: MEETING_PATTERNS.INTERVIEW, element: <MeetingInterviewPage /> },
+  { path: MEETING_PATTERNS.BOARD, element: <MeetingBoardPage /> },
+  { path: MEETING_PATTERNS.UPLOAD, element: <MeetingUploadPage /> },
 
   // ── 회의 (프로젝트 무관) ─────────────────────────────────────
   // 사용자가 소속된 회의를 최신순으로 모아 보여준다. nav "지난 회의"의 목적지
