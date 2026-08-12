@@ -146,6 +146,12 @@ interface HeroLayoutProps {
   overlapHeader?: boolean
   /** 히어로 위로 콘텐츠를 끌어올릴 px. 안 주면 겹치지 않는다 */
   cardOverlap?: number
+  /**
+   * 페이지 배경 클래스. **base에 두지 않고 별도 슬롯으로 뺐다** —
+   * cn()이 단순 concat이라 base의 `bg-white`가 className의 배경을 이겨버린다
+   * (Close 아이콘 크기와 같은 함정 — § 3-3). Desktop-25만 `bg-[#f4f4f4]`다.
+   */
+  background?: string
   className?: string
 }
 
@@ -155,10 +161,11 @@ export function HeroLayout({
   children,
   overlapHeader = false,
   cardOverlap,
+  background = 'bg-white',
   className,
 }: HeroLayoutProps) {
   return (
-    <div className={cn('min-h-svh w-full bg-white', className)}>
+    <div className={cn('min-h-svh w-full', background, className)}>
       <div className="relative w-full">
         {overlapHeader ? (
           <>

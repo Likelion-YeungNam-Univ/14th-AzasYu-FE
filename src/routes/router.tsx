@@ -13,6 +13,7 @@ import { ProjectNewPage } from '@/pages/ProjectNewPage'
 import { ProjectsPage } from '@/pages/ProjectsPage'
 import { SignUpCompletePage } from '@/pages/SignUpCompletePage'
 import { SignUpPage } from '@/pages/SignUpPage'
+import { WelcomePage } from '@/pages/WelcomePage'
 import { MEETING_PATTERNS, PATHS, PROJECT_PATTERNS } from '@/routes/paths'
 
 /*
@@ -43,12 +44,7 @@ export const router = createBrowserRouter([
   { path: PATHS.ROOT, element: <Navigate to={PATHS.WELCOME} replace /> },
 
   // ── 로그인 전 ────────────────────────────────────────────────
-  {
-    path: PATHS.WELCOME,
-    element: (
-      <PlaceholderPage title="홈 (랜딩)" figma="Desktop - 25" nodeId="1:635" />
-    ),
-  },
+  { path: PATHS.WELCOME, element: <WelcomePage /> },
   { path: PATHS.LOGIN, element: <LoginPage /> },
   { path: PATHS.SIGNUP, element: <SignUpPage /> },
   { path: PATHS.SIGNUP_COMPLETE, element: <SignUpCompletePage /> },
