@@ -3,6 +3,7 @@ import { LoginPage } from '@/pages/LoginPage'
 import { MeetingNewPage } from '@/pages/MeetingNewPage'
 import { MeetingsPage } from '@/pages/MeetingsPage'
 import { PlaceholderPage } from '@/pages/PlaceholderPage'
+import { ProjectNewPage } from '@/pages/ProjectNewPage'
 import { ProjectsPage } from '@/pages/ProjectsPage'
 import { SignUpCompletePage } from '@/pages/SignUpCompletePage'
 import { SignUpPage } from '@/pages/SignUpPage'
@@ -48,12 +49,7 @@ export const router = createBrowserRouter([
 
   // ── 프로젝트 ────────────────────────────────────────────────
   { path: PATHS.PROJECTS, element: <ProjectsPage /> },
-  {
-    path: PATHS.PROJECT_NEW,
-    element: (
-      <PlaceholderPage title="프로젝트 생성" figma="Desktop - 30" nodeId="1:295" />
-    ),
-  },
+  { path: PATHS.PROJECT_NEW, element: <ProjectNewPage /> },
   {
     path: PROJECT_PATTERNS.DETAIL,
     element: (
