@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate } from 'react-router'
 import { LoginPage } from '@/pages/LoginPage'
 import { MeetingNewPage } from '@/pages/MeetingNewPage'
 import { MeetingBoardPage } from '@/pages/MeetingBoardPage'
+import { MeetingInterviewPage } from '@/pages/MeetingInterviewPage'
 import { MeetingsPage } from '@/pages/MeetingsPage'
 import { MeetingUploadPage } from '@/pages/MeetingUploadPage'
 import { PlaceholderPage } from '@/pages/PlaceholderPage'
@@ -70,16 +71,7 @@ export const router = createBrowserRouter([
       <PlaceholderPage title="회의 결과" figma="Desktop - 36" nodeId="1:52" />
     ),
   },
-  {
-    path: MEETING_PATTERNS.INTERVIEW,
-    element: (
-      <PlaceholderPage
-        title="AI 사전 인터뷰"
-        figma="Desktop - 33"
-        nodeId="1:466"
-      />
-    ),
-  },
+  { path: MEETING_PATTERNS.INTERVIEW, element: <MeetingInterviewPage /> },
   { path: MEETING_PATTERNS.BOARD, element: <MeetingBoardPage /> },
   { path: MEETING_PATTERNS.UPLOAD, element: <MeetingUploadPage /> },
 
