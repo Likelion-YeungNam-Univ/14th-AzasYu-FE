@@ -4,6 +4,7 @@ import { MeetingNewPage } from '@/pages/MeetingNewPage'
 import { MeetingsPage } from '@/pages/MeetingsPage'
 import { PlaceholderPage } from '@/pages/PlaceholderPage'
 import { ProjectCompletePage } from '@/pages/ProjectCompletePage'
+import { ProjectDetailPage } from '@/pages/ProjectDetailPage'
 import { ProjectNewPage } from '@/pages/ProjectNewPage'
 import { ProjectsPage } from '@/pages/ProjectsPage'
 import { SignUpCompletePage } from '@/pages/SignUpCompletePage'
@@ -51,12 +52,7 @@ export const router = createBrowserRouter([
   // ── 프로젝트 ────────────────────────────────────────────────
   { path: PATHS.PROJECTS, element: <ProjectsPage /> },
   { path: PATHS.PROJECT_NEW, element: <ProjectNewPage /> },
-  {
-    path: PROJECT_PATTERNS.DETAIL,
-    element: (
-      <PlaceholderPage title="프로젝트 상세" figma="Desktop - 11" nodeId="1:205" />
-    ),
-  },
+  { path: PROJECT_PATTERNS.DETAIL, element: <ProjectDetailPage /> },
   { path: PROJECT_PATTERNS.COMPLETE, element: <ProjectCompletePage /> },
   // nav "프로젝트 설정"의 목적지. 대응하는 Figma 시안이 아직 없다
   {
