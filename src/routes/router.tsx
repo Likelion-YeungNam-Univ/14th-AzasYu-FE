@@ -1,4 +1,5 @@
 import { createBrowserRouter } from 'react-router'
+import { LoginPage } from '@/pages/LoginPage'
 import { MeetingsPage } from '@/pages/MeetingsPage'
 import { PlaceholderPage } from '@/pages/PlaceholderPage'
 import { SignUpCompletePage } from '@/pages/SignUpCompletePage'
@@ -25,16 +26,7 @@ export const router = createBrowserRouter([
       <PlaceholderPage title="홈 (랜딩)" figma="Desktop - 25" nodeId="759:1263" />
     ),
   },
-  {
-    path: PATHS.LOGIN,
-    element: (
-      <PlaceholderPage
-        title="로그인"
-        figma="Desktop - 26 / 27 / 28 (빈 값 / 입력됨 / 에러)"
-        nodeId="759:1282"
-      />
-    ),
-  },
+  { path: PATHS.LOGIN, element: <LoginPage /> },
   { path: PATHS.SIGNUP, element: <SignUpPage /> },
   { path: PATHS.SIGNUP_COMPLETE, element: <SignUpCompletePage /> },
 
