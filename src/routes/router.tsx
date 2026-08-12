@@ -1,28 +1,42 @@
-import { createBrowserRouter } from 'react-router'
+import { createBrowserRouter, Navigate } from 'react-router'
 import { LoginPage } from '@/pages/LoginPage'
 import { MeetingNewPage } from '@/pages/MeetingNewPage'
 import { MeetingsPage } from '@/pages/MeetingsPage'
 import { PlaceholderPage } from '@/pages/PlaceholderPage'
 import { SignUpCompletePage } from '@/pages/SignUpCompletePage'
 import { SignUpPage } from '@/pages/SignUpPage'
-import { MEETING_PATTERNS, PATHS } from '@/routes/paths'
+import { MEETING_PATTERNS, PATHS, PROJECT_PATTERNS } from '@/routes/paths'
 
 /*
- * Figma 와이어프레임 16개 화면을 그대로 옮긴 라우트 트리.
+ * 라우트 트리. 도메인 구조는 paths.ts 주석 참고.
+ *
+ *   회의는 프로젝트에 소속된다 → /projects/:projectId/meetings/:meetingId/...
+ *   예외는 /meetings 하나 (사용자가 소속된 회의 전체, 프로젝트 무관)
  *
  * 레이아웃 라우트를 쓰지 않고 각 페이지가 자기 헤더를 직접 렌더한다.
- * 헤더 preset(auth / appOnHero / appOnLight / landing)과 히어로 유무가 화면마다
- * 갈리는데(히어로 y좌표에 따라 결정됨) 그걸 라우트 config로 빼면 배보다 배꼽이 커진다.
- * 지금 구현된 페이지 2개도 이미 이 방식이다. 헤더 중복이 실제로 거슬려지면 그때
- * PageShell 같은 걸 도입할 것.
+ * 헤더 preset(auth / authApp / appOnHero / appOnLight / landing)과 히어로 유무가
+ * 화면마다 갈리는데(히어로 y좌표에 따라 결정됨) 그걸 라우트 config로 빼면
+ * 배보다 배꼽이 커진다. nav에 필요한 projectId는 Header가 useParams로 직접 읽으므로
+ * 레이아웃 라우트 없이도 프로젝트 컨텍스트가 전달된다.
+ *
+ * 정적 세그먼트가 동적 세그먼트보다 먼저 매칭된다 (react-router의 라우트 랭킹).
+ * /projects/new > /projects/:projectId, /meetings/new > /meetings/:meetingId — 실측 확인함.
  *
  * 주의: BrowserRouter이므로 EC2 nginx에 SPA fallback이 필요하다 (§ 3-1).
  *   try_files $uri $uri/ /index.html;
  */
 export const router = createBrowserRouter([
+  /*
+   * TODO(인증): 로그인 상태에 따라 분기해야 한다.
+   *   로그인 O → PATHS.PROJECTS (Desktop - 29, 로그인 후 홈)
+   *   로그인 X → PATHS.WELCOME  (Desktop - 25, 로그인 전 홈)
+   * 지금은 인증이 없어 항상 WELCOME으로 보낸다. 백엔드가 붙으면 여기만 고치면 된다.
+   */
+  { path: PATHS.ROOT, element: <Navigate to={PATHS.WELCOME} replace /> },
+
   // ── 로그인 전 ────────────────────────────────────────────────
   {
-    path: PATHS.HOME,
+    path: PATHS.WELCOME,
     element: (
       <PlaceholderPage title="홈 (랜딩)" figma="Desktop - 25" nodeId="759:1263" />
     ),
@@ -35,25 +49,23 @@ export const router = createBrowserRouter([
   {
     path: PATHS.PROJECTS,
     element: (
-      <PlaceholderPage
-        title="내 프로젝트"
-        figma="Desktop - 29"
-        nodeId="759:724"
-      />
+      <PlaceholderPage title="내 프로젝트" figma="Desktop - 29" nodeId="759:724" />
     ),
   },
   {
     path: PATHS.PROJECT_NEW,
     element: (
-      <PlaceholderPage
-        title="프로젝트 생성"
-        figma="Desktop - 30"
-        nodeId="759:1008"
-      />
+      <PlaceholderPage title="프로젝트 생성" figma="Desktop - 30" nodeId="759:1008" />
     ),
   },
   {
-    path: PATHS.PROJECT_NEW_COMPLETE,
+    path: PROJECT_PATTERNS.DETAIL,
+    element: (
+      <PlaceholderPage title="프로젝트 상세" figma="Desktop - 11" nodeId="772:42" />
+    ),
+  },
+  {
+    path: PROJECT_PATTERNS.COMPLETE,
     element: (
       <PlaceholderPage
         title="프로젝트 생성 완료"
@@ -64,18 +76,16 @@ export const router = createBrowserRouter([
   },
   // nav "프로젝트 설정"의 목적지. 대응하는 Figma 시안이 아직 없다
   {
-    path: PATHS.SETTINGS,
+    path: PROJECT_PATTERNS.SETTINGS,
     element: <PlaceholderPage title="프로젝트 설정" designMissing />,
   },
 
-  // ── 회의 ────────────────────────────────────────────────────
-  // /meetings/new가 /meetings/:meetingId보다 먼저 매칭된다 (정적 세그먼트 우선)
-  { path: PATHS.MEETINGS, element: <MeetingsPage /> },
-  { path: PATHS.MEETING_NEW, element: <MeetingNewPage /> },
+  // ── 회의 (프로젝트 하위) ─────────────────────────────────────
+  { path: PROJECT_PATTERNS.MEETING_NEW, element: <MeetingNewPage /> },
   {
     path: MEETING_PATTERNS.DETAIL,
     element: (
-      <PlaceholderPage title="회의 상세" figma="Desktop - 11" nodeId="772:42" />
+      <PlaceholderPage title="회의 결과" figma="Desktop - 36" nodeId="759:828" />
     ),
   },
   {
@@ -89,10 +99,10 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: MEETING_PATTERNS.IDEAS,
+    path: MEETING_PATTERNS.BOARD,
     element: (
       <PlaceholderPage
-        title="아이디어 보드"
+        title="익명 아이디어 보드"
         figma="Desktop - 34"
         nodeId="759:789"
       />
@@ -108,16 +118,10 @@ export const router = createBrowserRouter([
       />
     ),
   },
-  {
-    path: MEETING_PATTERNS.RESULT,
-    element: (
-      <PlaceholderPage
-        title="회의 결과"
-        figma="Desktop - 36"
-        nodeId="759:828"
-      />
-    ),
-  },
+
+  // ── 회의 (프로젝트 무관) ─────────────────────────────────────
+  // 사용자가 소속된 회의를 최신순으로 모아 보여준다. nav "지난 회의"의 목적지
+  { path: PATHS.MEETINGS, element: <MeetingsPage /> },
 
   { path: '*', element: <PlaceholderPage title="404 — 없는 경로" /> },
 ])

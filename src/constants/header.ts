@@ -13,11 +13,23 @@ export const HEADER_PRESETS = {
   appOnHero: { tone: 'onHero', nav: true },
   /** 로그인 후 + 히어로가 y=80이라 헤더는 흰 배경 위 (29, 34, 36, 37) */
   appOnLight: { tone: 'onLight', nav: true },
-  /** 가입/로그인 계열 — nav 없이 "홈"만, 검정 글씨 (8, 39, 40, 26, 27, 28) */
+  /**
+   * 가입/로그인 계열 — nav 없이 "홈"만, 검정 글씨 (8, 39, 40, 26, 27, 28).
+   * 여기서 "홈"은 로그인 전 홈(랜딩)이다. 로그인 후 홈은 /projects다.
+   */
   auth: {
     tone: 'onDark',
     nav: false,
-    action: { label: '홈', href: PATHS.HOME },
+    action: { label: '홈', href: PATHS.WELCOME },
+  },
+  /**
+   * 로그인 후인데 nav가 없는 화면 (40 프로젝트 생성 완료).
+   * 생김새는 auth와 같지만 "홈"이 로그인 후 홈(/projects)을 가리킨다.
+   */
+  authApp: {
+    tone: 'onDark',
+    nav: false,
+    action: { label: '홈', href: PATHS.PROJECTS },
   },
   /** 랜딩 — nav 없이 "회원가입", 히어로 위 흰 글씨 (25) */
   landing: {

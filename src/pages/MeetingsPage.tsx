@@ -29,20 +29,28 @@ const COLUMNS: TableColumn[] = [
   { label: '주요 안건' },
 ]
 
-/** 시안의 더미 데이터. 실제 API 연동은 범위 밖이다 (§ 1) */
+/*
+ * 시안의 더미 데이터. 실제 API 연동은 범위 밖이다 (§ 1).
+ *
+ * 이 화면은 특정 프로젝트가 아니라 **사용자가 소속된 회의 전체**를 보여주므로
+ * 행마다 소속 프로젝트가 다를 수 있다. 그래서 회의 링크를 만들려면 projectId가
+ * 행 데이터에 있어야 한다 (URL이 /projects/:projectId/meetings/:meetingId라서).
+ * 시안에는 프로젝트가 하나뿐이라 더미는 전부 같은 projectId를 쓴다.
+ */
 const MEETINGS = [
-  { id: '6', title: '6차 기획 회의', date: '2026. 08. 12 (수)', agenda: '서비스 방향 설정' },
-  { id: '5', title: '5차 기획 회의', date: '2026. 08. 12 (수)', agenda: '서비스 방향 설정' },
-  { id: '4', title: '4차 기획 회의', date: '2026. 08. 12 (수)', agenda: '서비스 방향 설정' },
-  { id: '3', title: '3차 기획 회의', date: '2026. 08. 12 (수)', agenda: '서비스 방향 설정' },
-  { id: '2', title: '2차 기획 회의', date: '2026. 08. 12 (수)', agenda: '서비스 방향 설정' },
-  { id: '1', title: '1차 기획 회의', date: '2026. 08. 12 (수)', agenda: '서비스 방향 설정' },
+  { id: '6', projectId: '1', title: '6차 기획 회의', date: '2026. 08. 12 (수)', agenda: '서비스 방향 설정' },
+  { id: '5', projectId: '1', title: '5차 기획 회의', date: '2026. 08. 12 (수)', agenda: '서비스 방향 설정' },
+  { id: '4', projectId: '1', title: '4차 기획 회의', date: '2026. 08. 12 (수)', agenda: '서비스 방향 설정' },
+  { id: '3', projectId: '1', title: '3차 기획 회의', date: '2026. 08. 12 (수)', agenda: '서비스 방향 설정' },
+  { id: '2', projectId: '1', title: '2차 기획 회의', date: '2026. 08. 12 (수)', agenda: '서비스 방향 설정' },
+  { id: '1', projectId: '1', title: '1차 기획 회의', date: '2026. 08. 12 (수)', agenda: '서비스 방향 설정' },
 ]
 
+// 회의를 클릭하면 회의 결과(Desktop - 36)로 간다 — 회의의 기본 경로다
 const ROWS: TableRow[] = MEETINGS.map((m) => ({
   id: m.id,
   cells: [m.title, m.date, m.agenda],
-  href: meetingPath('RESULT', m.id),
+  href: meetingPath('DETAIL', m.projectId, m.id),
 }))
 
 export function MeetingsPage() {
