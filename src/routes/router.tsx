@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate } from 'react-router'
 import { LoginPage } from '@/pages/LoginPage'
 import { MeetingNewPage } from '@/pages/MeetingNewPage'
+import { MeetingBoardPage } from '@/pages/MeetingBoardPage'
 import { MeetingsPage } from '@/pages/MeetingsPage'
 import { MeetingUploadPage } from '@/pages/MeetingUploadPage'
 import { PlaceholderPage } from '@/pages/PlaceholderPage'
@@ -79,16 +80,7 @@ export const router = createBrowserRouter([
       />
     ),
   },
-  {
-    path: MEETING_PATTERNS.BOARD,
-    element: (
-      <PlaceholderPage
-        title="익명 아이디어 보드"
-        figma="Desktop - 34"
-        nodeId="1:256"
-      />
-    ),
-  },
+  { path: MEETING_PATTERNS.BOARD, element: <MeetingBoardPage /> },
   { path: MEETING_PATTERNS.UPLOAD, element: <MeetingUploadPage /> },
 
   // ── 회의 (프로젝트 무관) ─────────────────────────────────────
