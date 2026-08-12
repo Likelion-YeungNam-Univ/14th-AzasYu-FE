@@ -11,7 +11,7 @@ import { cn } from '@/lib/cn'
  * | ---- | ---- | --- | ------ | ---------------- | ----- | --------- | --- | ----------------- |
  * | lg   | 670  | 0   | center | x863 y229 w194   | 48 Bd | 18 SemiBd | 16  | 11,30,31,33,35    |
  * | lg   | 670  | 0   | left   | x229 y231 w634   | 48 Bd | 20 SemiBd | 14  | 25 (랜딩)         |
- * | md   | 370  | 80  | left   | x230 y162 w634   | 48 Bd | 20        | 14  | 29                |
+ * | md   | 370  | 80  | left   | x230 y162 w634   | 48 Bd | 20 SemiBd | 14  | 29                |
  * | sm   | 270  | 80  | left   | x230 y162 w634   | 48 Bd | 20        | 14  | 34,36,37          |
  *
  * **y=0(lg)이면 헤더가 히어로 위에 겹친다 → 헤더 tone=onHero.**
@@ -22,8 +22,9 @@ import { cn } from '@/lib/cn'
  *
  * 채우기는 Figma 그대로 그라데이션 2겹 — #8d8d8d 위 검정 20% 오버레이.
  *
- * 부제 웨이트는 화면마다 갈린다. 37은 Regular, 25는 SemiBold로 확인됐고
- * 29/34/36은 아직 스타일을 읽지 않았다 — 해당 화면 구현할 때 확인할 것.
+ * 부제 웨이트는 화면마다 갈린다. 37 Regular / 25 SemiBold / **29 SemiBold** 확인됨.
+ * 34/36은 아직 스타일을 읽지 않았다 — 해당 화면 구현할 때 확인할 것.
+ * left의 기본값은 Regular이므로 29처럼 SemiBold인 화면은 descriptionWeight를 넘겨야 한다.
  */
 const HERO_FILL =
   'linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%), linear-gradient(90deg, rgb(141, 141, 141) 0%, rgb(141, 141, 141) 100%)'
@@ -90,14 +91,20 @@ export function Hero({
           'absolute flex flex-col gap-[40px] px-5 text-[#f4f4f4] sm:px-8 lg:px-0',
           isCenter
             ? 'left-1/2 w-full -translate-x-1/2 items-center text-center lg:w-max'
-            : 'items-start lg:left-[230px] lg:w-[634px]',
+            : // 페이지 콘텐츠와 **같은 컨테이너 규칙**을 쓴다 (max-w-1460 + 중앙 정렬).
+              // left-[230px] 고정으로 두면 세로 스크롤바가 생겼을 때 아래 콘텐츠와
+              // 왼쪽 선이 7.5px 어긋난다 — 1920 시안에서는 둘 다 230이어야 한다.
+              // absolute + inset-x-0 + mx-auto + max-w 조합이 중앙 정렬을 만든다.
+              'inset-x-0 mx-auto w-full max-w-[1460px] items-start',
         )}
         style={{ top }}
       >
         <div
           className={cn(
             'flex w-full flex-col',
-            isCenter ? 'items-center gap-[16px]' : 'items-start gap-[14px]',
+            isCenter
+              ? 'items-center gap-[16px]'
+              : 'items-start gap-[14px] lg:w-[634px]',
           )}
         >
           <p className="text-28 font-bold sm:text-34 lg:text-48 lg:whitespace-nowrap">
