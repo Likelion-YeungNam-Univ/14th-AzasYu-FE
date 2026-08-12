@@ -37,7 +37,7 @@ export function Chip({ label, onRemove, className }: ChipProps) {
           aria-label={`${label} 삭제`}
           className="flex shrink-0 cursor-pointer items-center"
         >
-          <Close />
+          <Close className="size-[20px]" />
         </button>
       )}
     </span>

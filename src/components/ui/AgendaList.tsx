@@ -52,7 +52,7 @@ export function AgendaList({ items, onRemove, className }: AgendaListProps) {
                   aria-label={`${item.text} 삭제`}
                   className="flex shrink-0 cursor-pointer items-center"
                 >
-                  <Close />
+                  <Close className="size-[20px]" />
                 </button>
               )}
             </div>
