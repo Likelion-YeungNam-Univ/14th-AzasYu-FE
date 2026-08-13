@@ -6,8 +6,8 @@ import { MeetingInterviewPage } from '@/pages/MeetingInterviewPage'
 import { MeetingLoadingPage } from '@/pages/MeetingLoadingPage'
 import { MeetingResultPage } from '@/pages/MeetingResultPage'
 import { MeetingsPage } from '@/pages/MeetingsPage'
+import { NotFoundPage } from '@/pages/NotFoundPage'
 import { MeetingUploadPage } from '@/pages/MeetingUploadPage'
-import { PlaceholderPage } from '@/pages/PlaceholderPage'
 import { ProjectCompletePage } from '@/pages/ProjectCompletePage'
 import { ProjectDetailPage } from '@/pages/ProjectDetailPage'
 import { ProjectNewPage } from '@/pages/ProjectNewPage'
@@ -67,5 +67,5 @@ export const router = createBrowserRouter([
   // 사용자가 소속된 회의를 최신순으로 모아 보여준다. nav "지난 회의"의 목적지
   { path: PATHS.MEETINGS, element: <MeetingsPage /> },
 
-  { path: '*', element: <PlaceholderPage title="404 — 없는 경로" /> },
+  { path: '*', element: <NotFoundPage /> },
 ])
