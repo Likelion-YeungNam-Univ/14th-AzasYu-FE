@@ -7,7 +7,6 @@ import { cn } from '@/lib/cn'
  * **화면마다 색이 갈린다** — 39는 `#606060`(흰 배경 위 secondary 버튼),
  * 25는 `#f4f4f4`(히어로 위). 도형은 완전히 같고 stroke 색만 다르다.
  * 그래서 파일 `<img>`가 아니라 인라인 + `currentColor`다 (§ 3-3의 ChevronRight와 같은 이유).
- * 원본 파일은 `src/assets/icons/arrow-right.svg`에 그대로 둔다.
  *
  * 박스가 3중이다. Figma 구조를 그대로 유지한다.
  *   바깥 20x20      = w-[20px] + py-[4px]  (overflow-clip)

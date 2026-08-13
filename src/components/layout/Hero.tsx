@@ -5,14 +5,14 @@ import { cn } from '@/lib/cn'
  * 히어로 배경 띠. 헤더는 포함하지 않는다 — 화면마다 헤더와의 관계가 다르다.
  * 페이지 골격은 아래 HeroLayout이 잡는다.
  *
- * Figma 실측 (16개 화면 전수 확인)
+ * Figma 실측 (전 화면 확인)
  *
  * | size | 높이 | y   | align  | 콘텐츠 블록      | 제목  | 부제      | gap | 화면              |
  * | ---- | ---- | --- | ------ | ---------------- | ----- | --------- | --- | ----------------- |
- * | lg   | 670  | 0   | center | x863 y229 w194   | 48 Bd | 18 SemiBd | 16  | 11,30,31,33,35    |
+ * | lg   | 670  | 0   | center | x863 y229 w194   | 48 Bd | 18 SemiBd | 16  | 30,31,33,35,46    |
  * | lg   | 670  | 0   | left   | x229 y231 w634   | 48 Bd | 20 SemiBd | 14  | 25 (랜딩)         |
  * | md   | 370  | 80  | left   | x230 y162 w634   | 48 Bd | 20 SemiBd | 14  | 29                |
- * | sm   | 270  | 80  | left   | x230 y162 w634   | 48 Bd | 20        | 14  | 34,36,37          |
+ * | sm   | 270  | 80  | left   | x230 y162 w634   | 48 Bd | 20        | 14  | 34,36,41          |
  *
  * **y=0(lg)이면 헤더가 히어로 위에 겹친다 → 헤더 tone=onHero.**
  * **y=80(md/sm)이면 헤더가 히어로 밖 흰 배경이다 → 헤더 tone=onLight.**
@@ -22,9 +22,8 @@ import { cn } from '@/lib/cn'
  *
  * 채우기는 Figma 그대로 그라데이션 2겹 — #8d8d8d 위 검정 20% 오버레이.
  *
- * 부제 웨이트는 화면마다 갈린다. 37 Regular / 25 SemiBold / **29 SemiBold** 확인됨.
- * 34/36은 아직 스타일을 읽지 않았다 — 해당 화면 구현할 때 확인할 것.
- * left의 기본값은 Regular이므로 29처럼 SemiBold인 화면은 descriptionWeight를 넘겨야 한다.
+ * 부제 웨이트가 화면마다 갈린다 — 25·29·34는 SemiBold, 36·41은 Regular.
+ * left의 기본값이 Regular이므로 SemiBold인 화면은 descriptionWeight를 넘겨야 한다.
  */
 const HERO_FILL =
   'linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%), linear-gradient(90deg, rgb(141, 141, 141) 0%, rgb(141, 141, 141) 100%)'

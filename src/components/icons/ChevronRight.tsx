@@ -1,7 +1,7 @@
 import { cn } from '@/lib/cn'
 
 /*
- * Figma 원본(src/assets/icons/chevron-left.svg)은 stroke가 white로 고정돼 있는데,
+ * Figma 원본은 stroke가 white로 고정돼 있는데,
  * 헤더 3종에서 흰색 / #717171 / 검정으로 각각 쓰인다.
  * 그래서 stroke만 currentColor로 바꿔 인라인 컴포넌트로 둔다.
  * viewBox·path 좌표·stroke-width는 Figma 그대로다.

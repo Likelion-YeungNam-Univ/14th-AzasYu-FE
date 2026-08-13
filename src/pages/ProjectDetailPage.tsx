@@ -18,8 +18,7 @@ import { HERO_CARD_OVERLAP, SAMPLE_PROJECT_NAME } from '@/constants/site'
  * 히어로 중심 x = 808 + 151.5 = 959.5로 정중앙이다.
  * 참여코드 행은 제목과 gap 16이라 Hero의 footer(gap 40)가 아니라 **description**으로 넘긴다.
  *
- * **이 화면에서 nav 4항목이 처음으로 시안과 그대로 일치한다.** URL에 projectId가 있어
- * Header가 프로젝트명과 "프로젝트 설정"을 렌더한다 (`buildNavItems` 참고).
+ * URL에 projectId가 있어 Header가 nav에 프로젝트명을 넣는다 (`buildNavItems` 참고).
  *
  * ── 회의 카드는 개수가 고정이 아니다 ──────────────────────────
  * **회의가 늘어나는 만큼 카드가 계속 쌓인다.** 시안이 카드 3개를 그려 둔 건 그걸

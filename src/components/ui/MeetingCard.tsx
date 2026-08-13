@@ -9,7 +9,7 @@ import { meetingPath, projectPath } from '@/routes/paths'
  *
  *   카드      878 폭, px-158 py-80, rounded-30, shadow **drop**
  *             (30/31의 soft와 다른 값이다 — Card의 shadow prop으로 구분)
- *   내부 폭   562, 섹션 간 **gap 30** (개편 전 44)
+ *   내부 폭   562, 섹션 간 gap 30
  *
  * 카드 내부 y (카드 상단 기준, Figma 절대값)
  *   제목 블록   80   34 Bold + gap4 + 16 Medium #9d9d9d      = 74
