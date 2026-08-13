@@ -80,7 +80,7 @@
 
 ### Frontend
 
-- Language: TypeScript 6.0
+- Language: JavaScript (ES2022)
 - Library: React 19.2
 - Build Tool: Vite 8.2
 - Styling: Tailwind CSS 4.3
@@ -126,7 +126,7 @@ npm run dev
 | 명령어 | 설명 |
 |---|---|
 | `npm run dev` | 개발 서버 실행 |
-| `npm run build` | 타입 검사 후 프로덕션 빌드 |
+| `npm run build` | 프로덕션 빌드 |
 | `npm run lint` | Oxlint 검사 |
 | `npm run preview` | 빌드 결과 미리보기 |
 
