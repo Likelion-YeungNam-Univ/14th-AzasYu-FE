@@ -27,13 +27,14 @@ export interface NavItem {
 /**
  * 상단 nav 항목. **현재 프로젝트가 있느냐에 따라 항목 수가 달라진다.**
  *
- *   프로젝트 안 (/projects/:projectId/…)  홈 · {프로젝트명} · 지난 회의 · 프로젝트 설정
+ *   프로젝트 안 (/projects/:projectId/…)  홈 · {프로젝트명} · 지난 회의
  *   프로젝트 밖 (/projects, /meetings)    홈 · 지난 회의
  *
- * 시안에는 `Desktop - 29`(프로젝트 목록)·`37`(지난 회의) 헤더에도 "신규 서비스 기획"과
- * "프로젝트 설정"이 그대로 박혀 있다. 하지만 두 화면은 특정 프로젝트에 속하지 않아
- * projectId를 만들 수 없으므로 링크가 성립하지 않는다. 디자이너가 헤더를 복사해 붙인
- * 것으로 보고 프로젝트 밖에서는 두 항목을 숨긴다. **시안과 의도적으로 다른 부분이다.**
+ * **2026-08-13 시안 개편에서 "프로젝트 설정"이 모든 화면의 nav에서 사라졌다.**
+ * 대응 시안도 없어서 라우트까지 함께 제거했다 (사용자 확정).
+ *
+ * 프로젝트명은 프로젝트 컨텍스트가 있을 때만 넣는다. 개편된 시안의 `Desktop - 29`도
+ * `홈 · 지난 회의` 2항목이라 이 규칙과 정확히 일치한다.
  */
 export function buildNavItems(
   projectId?: string,
@@ -46,13 +47,6 @@ export function buildNavItems(
   }
 
   items.push({ label: '지난 회의', href: PATHS.MEETINGS })
-
-  if (projectId) {
-    items.push({
-      label: '프로젝트 설정',
-      href: projectPath('SETTINGS', projectId),
-    })
-  }
 
   return items
 }

@@ -54,18 +54,18 @@ export const router = createBrowserRouter([
   { path: PATHS.PROJECT_NEW, element: <ProjectNewPage /> },
   { path: PROJECT_PATTERNS.DETAIL, element: <ProjectDetailPage /> },
   { path: PROJECT_PATTERNS.COMPLETE, element: <ProjectCompletePage /> },
-  // nav "프로젝트 설정"의 목적지. 대응하는 Figma 시안이 아직 없다
-  {
-    path: PROJECT_PATTERNS.SETTINGS,
-    element: <PlaceholderPage title="프로젝트 설정" designMissing />,
-  },
-
   // ── 회의 (프로젝트 하위) ─────────────────────────────────────
   { path: PROJECT_PATTERNS.MEETING_NEW, element: <MeetingNewPage /> },
   { path: MEETING_PATTERNS.DETAIL, element: <MeetingResultPage /> },
   { path: MEETING_PATTERNS.INTERVIEW, element: <MeetingInterviewPage /> },
   { path: MEETING_PATTERNS.BOARD, element: <MeetingBoardPage /> },
   { path: MEETING_PATTERNS.UPLOAD, element: <MeetingUploadPage /> },
+  {
+    path: MEETING_PATTERNS.LOADING,
+    element: (
+      <PlaceholderPage title="분석 로딩" figma="Desktop - 58" nodeId="3:850" />
+    ),
+  },
 
   // ── 회의 (프로젝트 무관) ─────────────────────────────────────
   // 사용자가 소속된 회의를 최신순으로 모아 보여준다. nav "지난 회의"의 목적지

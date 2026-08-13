@@ -49,8 +49,6 @@ export const PROJECT_PATTERNS = {
   DETAIL: '/projects/:projectId',
   /** Desktop - 51 프로젝트 생성 완료 — 참여코드 공유 */
   COMPLETE: '/projects/:projectId/complete',
-  /** 시안 없음 — nav "프로젝트 설정"의 목적지 */
-  SETTINGS: '/projects/:projectId/settings',
   /** Desktop - 31 회의 생성 */
   MEETING_NEW: '/projects/:projectId/meetings/new',
 } as const
@@ -70,12 +68,18 @@ export const MEETING_PATTERNS = {
   BOARD: '/projects/:projectId/meetings/:meetingId/board',
   /** Desktop - 35 회의 텍스트 업로드 */
   UPLOAD: '/projects/:projectId/meetings/:meetingId/upload',
+  /**
+   * Desktop - 58 분석 로딩.
+   * 업로드(35) → 로딩(58) → 분석 완료되면 회의 결과(= DETAIL)로 간다.
+   * 시안이 페이지 단위라 라우트로 뒀다 (사용자 확정).
+   */
+  LOADING: '/projects/:projectId/meetings/:meetingId/loading',
 } as const
 
 type ProjectSection = keyof typeof PROJECT_PATTERNS
 type MeetingSection = keyof typeof MEETING_PATTERNS
 
-/** projectPath('SETTINGS', 'abc') → '/projects/abc/settings' */
+/** projectPath('COMPLETE', 'abc') → '/projects/abc/complete' */
 export function projectPath(section: ProjectSection, projectId: string): string {
   return PROJECT_PATTERNS[section].replace(':projectId', projectId)
 }
