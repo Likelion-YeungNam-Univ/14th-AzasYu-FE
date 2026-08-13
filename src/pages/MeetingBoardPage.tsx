@@ -3,7 +3,7 @@ import { Hero, HeroLayout } from '@/components/layout/Hero'
 import { HEADER_PRESETS } from '@/constants/header'
 
 /*
- * Figma: Desktop - 34 (node 1:256), 1920 x 1532 — 익명 아이디어 보드
+ * Figma: Desktop - 34 (node 3:125), 1920 x 1532 — 익명 아이디어 보드
  *
  * lg(1024px) 이상에서 시안 실측값과 일치한다.
  *   헤더        0 ~ 80     tone onLight (히어로가 y=80)
@@ -18,7 +18,7 @@ import { HEADER_PRESETS } from '@/constants/header'
  * 규칙이 보이지 않고 같은 색이 반복되므로 회색 플레이스홀더로 본다 (§ 1).
  * 실제로는 작성자별 색이나 랜덤일 수 있다 — 컬러가 나오면 이 데이터만 교체하면 된다.
  *
- * **시안에 프레임 밖으로 벗어난 이미지가 하나 있다** (`image 261`, node `1:292`):
+ * **시안에 프레임 밖으로 벗어난 이미지가 하나 있다** (`image 261`, node `3:160`):
  * x1690 y1201에 **1930x379** 크기로 놓여 있어 1920 프레임을 1700px이나 넘어간다.
  * opacity 26%에 pointer-events도 없다. 디자이너가 흘린 잔여물로 보고 **넣지 않았다.**
  * 의도된 것이면 알려달라고 사용자에게 전달했다.

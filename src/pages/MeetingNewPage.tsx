@@ -13,7 +13,7 @@ import { HEADER_PRESETS } from '@/constants/header'
 import { HERO_CARD_OVERLAP } from '@/constants/site'
 
 /*
- * Figma: Desktop - 31 (node 1:361), 1920 x 1849
+ * Figma: Desktop - 31 (node 3:207), 1920 x 1849
  *
  * lg(1024px) 이상에서 시안 실측값과 일치한다.
  *   히어로      0 ~ 670, 헤더가 위에 겹침 (tone onHero, nav 있음)

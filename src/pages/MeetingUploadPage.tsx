@@ -1,12 +1,14 @@
+import { useNavigate, useParams } from 'react-router'
 import uploadIcon from '@/assets/icons/upload.svg'
 import { Header } from '@/components/layout/Header'
 import { Hero, HeroLayout } from '@/components/layout/Hero'
 import { Card } from '@/components/ui/Card'
 import { HEADER_PRESETS } from '@/constants/header'
 import { HERO_CARD_OVERLAP } from '@/constants/site'
+import { meetingPath } from '@/routes/paths'
 
 /*
- * Figma: Desktop - 35 (node 1:117), 1920 x 1564 — 회의 텍스트 업로드
+ * Figma: Desktop - 35 (node 3:817), 1920 x 1564 — 회의 텍스트 업로드
  *
  * lg(1024px) 이상에서 시안 실측값과 일치한다.
  *   히어로        0 ~ 670, 헤더가 위에 겹침 (tone onHero)
@@ -27,12 +29,18 @@ import { HERO_CARD_OVERLAP } from '@/constants/site'
  *
  * 히어로 제목 중심은 704 + 257 = 961로 정중앙(960)에서 1px 어긋난다 —
  * § 3-3에 따라 미세 오차로 보고 정중앙 정렬했다.
+ *
+ * **흐름: 파일을 고르면 분석 로딩(Desktop - 58)으로 넘어간다.**
+ * 시안에는 텍스트 직접 입력에 대한 제출 버튼이 없다 — 지어내지 않았다. 디자이너 확인 필요.
  */
 
 /* 시안의 회의명. 실제로는 회의 조회 응답에서 받아야 한다 (§ 1) */
 const MEETING_TITLE = '6차 기획 회의'
 
 export function MeetingUploadPage() {
+  const { projectId = '', meetingId = '' } = useParams()
+  const navigate = useNavigate()
+
   return (
     <HeroLayout
       overlapHeader
@@ -74,7 +82,16 @@ export function MeetingUploadPage() {
              */}
             <label className="text-20 flex w-full max-w-[282px] cursor-pointer items-center justify-center rounded-[8px] bg-[#d0d0d0] px-[24px] py-[14px] font-semibold whitespace-nowrap text-[#717171] focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[#606060]">
               파일 업로드
-              <input type="file" accept=".txt,.docx,.pdf" className="sr-only" />
+              <input
+                type="file"
+                accept=".txt,.docx,.pdf"
+                className="sr-only"
+                onChange={(e) => {
+                  if (e.target.files?.length) {
+                    navigate(meetingPath('LOADING', projectId, meetingId))
+                  }
+                }}
+              />
             </label>
 
             <p className="text-14 font-semibold text-[#717171]">또는</p>

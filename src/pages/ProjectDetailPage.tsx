@@ -7,13 +7,13 @@ import { HEADER_PRESETS } from '@/constants/header'
 import { HERO_CARD_OVERLAP, SAMPLE_PROJECT_NAME } from '@/constants/site'
 
 /*
- * Figma: Desktop - 11 (node 1:205), 1920 x 1521 — 프로젝트 상세
+ * Figma: Desktop - 46 (node 3:634), 1920 x 1521 — 프로젝트 상세
  *
  * lg(1024px) 이상에서 시안 실측값과 일치한다.
  *   히어로        0 ~ 670, 헤더가 위에 겹침 (tone onHero)
  *   히어로 콘텐츠  x808 y229 w303 h108 — 제목(프로젝트명) 48 Bold + gap16 + 참여코드 행
- *   회의 카드      x521 y401 878x891
- *   문서 높이      1521
+ *   회의 카드      x521 y401부터 878x799, **간격 32** (시안은 3개를 예시로 그려둠)
+ *   아래 여백      229
  *
  * 히어로 중심 x = 808 + 151.5 = 959.5로 정중앙이다.
  * 참여코드 행은 제목과 gap 16이라 Hero의 footer(gap 40)가 아니라 **description**으로 넘긴다.
@@ -21,19 +21,20 @@ import { HERO_CARD_OVERLAP, SAMPLE_PROJECT_NAME } from '@/constants/site'
  * **이 화면에서 nav 4항목이 처음으로 시안과 그대로 일치한다.** URL에 projectId가 있어
  * Header가 프로젝트명과 "프로젝트 설정"을 렌더한다 (`buildNavItems` 참고).
  *
- * ── 회의 카드가 하나인 것은 현재 시안 기준이다 ──────────────────
- * 사용자 계획: 회의 카드를 **여러 개 세로로, 최근 회의 순**으로 나열한다.
- * 디자이너 수정 시안이 아직 안 나왔으므로 지금은 시안 그대로 1개만 보이지만,
- * **배열을 map하는 구조로 짜뒀다** — 데이터가 늘면 그대로 쌓인다.
- * 카드 사이 간격(CARD_GAP)은 시안에 근거가 없다. 수정 시안이 나오면 맞출 것.
+ * ── 회의 카드는 개수가 고정이 아니다 ──────────────────────────
+ * **회의가 늘어나는 만큼 카드가 계속 쌓인다.** 시안이 카드 3개를 그려 둔 건 그걸
+ * 보여주기 위한 예시이고, 그래서 프레임 높이(2708)도 마지막 카드 바닥(2862)보다 짧다.
+ * 즉 프레임 높이는 맞춰야 할 수치가 아니다 — 문서 높이는 카드 수를 따라간다.
+ *
+ * 구현도 배열을 map하므로 데이터만 늘리면 그대로 쌓인다 (sortKey 내림차순 = 최근순).
  */
 
-/** 시안에 카드가 하나뿐이라 근거가 없는 값이다. 카드 내부 리듬(44)을 따랐다 */
-const CARD_GAP = 'gap-[44px]'
+/** 카드 사이 간격. Figma 카드 간격 831 - 카드 높이 799 = 32 */
+const CARD_GAP = 'gap-[32px]'
 
 /*
  * 시안의 더미 데이터. 실제 API 연동은 범위 밖이다 (§ 1).
- * 시안에는 "6차 기획 회의" 하나뿐이다.
+ * 개편된 시안은 회의 3개를 최근순으로 보여준다.
  */
 const MEETINGS: Meeting[] = [
   {
@@ -42,6 +43,22 @@ const MEETINGS: Meeting[] = [
     startsAt: '2026. 08. 12 오후 2:00',
     sortKey: 20260812,
     participantsDone: 4,
+    participantsTotal: 6,
+  },
+  {
+    id: '5',
+    title: '5차 기획 회의',
+    startsAt: '2026. 08. 04 오후 5:00',
+    sortKey: 20260804,
+    participantsDone: 6,
+    participantsTotal: 6,
+  },
+  {
+    id: '4',
+    title: '4차 기획 회의',
+    startsAt: '2026. 07. 25 오후 5:00',
+    sortKey: 20260725,
+    participantsDone: 6,
     participantsTotal: 6,
   },
 ]

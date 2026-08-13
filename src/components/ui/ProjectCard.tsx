@@ -3,7 +3,7 @@ import { cn } from '@/lib/cn'
 import { projectPath } from '@/routes/paths'
 
 /*
- * 프로젝트 카드. Figma node `1:588` — Desktop-29 내 프로젝트.
+ * 프로젝트 카드. Figma node `3:405` — Desktop-29 내 프로젝트.
  *
  * **썸네일 박스는 빈 프레임이다.** 채우기만 있고 안에 아무것도 없다.
  * 나중에 프로젝트 대표 이미지가 들어갈 자리로 보이지만 시안에 없으므로

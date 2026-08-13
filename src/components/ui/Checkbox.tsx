@@ -2,7 +2,7 @@ import type { InputHTMLAttributes } from 'react'
 import { cn } from '@/lib/cn'
 
 /*
- * Figma: Desktop - 26/27/28 "이메일 저장" (node 1:663)
+ * Figma: Desktop - 26/27/28 "이메일 저장" (node 3:502)
  *
  *   박스   18x18 / 1px #bcbcbc / rounded-2
  *   gap    8

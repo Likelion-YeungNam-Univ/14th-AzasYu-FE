@@ -4,7 +4,7 @@ import { Hero, HeroLayout } from '@/components/layout/Hero'
 import { HEADER_PRESETS } from '@/constants/header'
 
 /*
- * Figma: Desktop - 36 (node 1:52), 1920 x 3097 — 회의 결과 (AI 분석)
+ * Figma: Desktop - 36 (node 3:3), 1920 x 3097 — 회의 결과 (AI 분석)
  *
  * lg(1024px) 이상에서 시안 실측값과 일치한다.
  *   헤더         0 ~ 80      tone onLight (히어로가 y=80)

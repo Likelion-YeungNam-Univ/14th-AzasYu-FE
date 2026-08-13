@@ -1,0 +1,30 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="176.084" height="165" viewBox="0 0 176.084 165" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 1341">
+<rect id="Rectangle 39592928" width="141" height="165" fill="#E8E8E8"/>
+<circle id="Ellipse 24" cx="27.1619" cy="36.3553" r="9.61111" fill="#C5C5C5"/>
+<rect id="Rectangle 39592929" x="43.877" y="33.0117" width="79.814" height="6.68599" rx="3.343" fill="url(#paint0_linear_0_4)"/>
+<circle id="Ellipse 25" cx="27.1619" cy="63.9353" r="9.61111" fill="#C5C5C5"/>
+<rect id="Rectangle 39592930" x="43.877" y="60.5918" width="79.814" height="6.68599" rx="3.343" fill="url(#paint1_linear_0_4)"/>
+<rect id="Rectangle 39592931" x="17.5508" y="97.7832" width="106.14" height="6.68599" rx="3.343" fill="url(#paint2_linear_0_4)"/>
+<rect id="Rectangle 39592932" x="17.5508" y="112.826" width="106.14" height="6.68599" rx="3.343" fill="url(#paint3_linear_0_4)"/>
+<rect id="Rectangle 39592933" x="17.5508" y="127.869" width="106.14" height="6.68599" rx="3.343" fill="url(#paint4_linear_0_4)"/>
+<path id="Vector" fill-rule="evenodd" clip-rule="evenodd" d="M143.241 125.224C134.36 132.32 123.098 135.747 111.77 134.799C100.442 133.852 89.9061 128.603 82.3271 120.13C74.7481 111.657 70.7011 100.604 71.0172 89.2401C71.3334 77.8765 75.9887 67.0654 84.027 59.027C92.0654 50.9887 102.877 46.3334 114.24 46.0172C125.604 45.7011 136.657 49.7481 145.13 57.3271C153.603 64.9061 158.852 75.4417 159.799 86.7701C160.747 98.0985 157.32 109.36 150.224 118.241L174.511 141.526C174.996 141.978 175.386 142.524 175.656 143.13C175.926 143.736 176.071 144.39 176.083 145.053C176.095 145.717 175.972 146.376 175.724 146.991C175.475 147.606 175.106 148.165 174.636 148.635C174.167 149.104 173.608 149.474 172.993 149.722C172.378 149.971 171.719 150.093 171.055 150.081C170.392 150.069 169.738 149.924 169.131 149.654C168.525 149.384 167.98 148.995 167.527 148.509L143.241 125.224ZM91.0292 114.934C86.1938 110.098 82.9004 103.937 81.5654 97.2295C80.2303 90.5223 80.9135 83.5699 83.5287 77.2509C86.1438 70.932 90.5734 65.53 96.2577 61.7278C101.942 57.9256 108.626 55.8938 115.465 55.8892C122.303 55.8846 128.99 57.9074 134.68 61.702C140.369 65.4965 144.806 70.8925 147.429 77.2079C150.053 83.5234 150.746 90.4749 149.42 97.1838C148.094 103.893 144.809 110.058 139.98 114.901L139.947 114.934L139.914 114.96C133.425 121.434 124.632 125.067 115.466 125.062C106.3 125.057 97.511 121.414 91.0292 114.934Z" fill="#717171"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_4" x1="43.877" y1="36.3547" x2="123.691" y2="36.3547" gradientUnits="userSpaceOnUse">
+<stop offset="1" stop-color="#B9B9B9"/>
+</linearGradient>
+<linearGradient id="paint1_linear_0_4" x1="43.877" y1="63.9348" x2="123.691" y2="63.9348" gradientUnits="userSpaceOnUse">
+<stop stop-color="#B9B9B9"/>
+</linearGradient>
+<linearGradient id="paint2_linear_0_4" x1="17.5508" y1="101.126" x2="123.691" y2="101.126" gradientUnits="userSpaceOnUse">
+<stop stop-color="#B9B9B9"/>
+</linearGradient>
+<linearGradient id="paint3_linear_0_4" x1="17.5508" y1="116.169" x2="123.691" y2="116.169" gradientUnits="userSpaceOnUse">
+<stop stop-color="#B9B9B9"/>
+</linearGradient>
+<linearGradient id="paint4_linear_0_4" x1="17.5508" y1="131.212" x2="123.691" y2="131.212" gradientUnits="userSpaceOnUse">
+<stop stop-color="#B9B9B9"/>
+</linearGradient>
+</defs>
+</svg>

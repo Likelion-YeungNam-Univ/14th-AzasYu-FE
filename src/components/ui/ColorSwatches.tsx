@@ -1,7 +1,7 @@
 import { cn } from '@/lib/cn'
 
 /*
- * 프로젝트 색상 선택. Figma node `1:329` — Desktop-30 프로젝트 생성.
+ * 프로젝트 색상 선택. Figma node `3:196` — Desktop-30 프로젝트 생성.
  *
  *   원 40x40 (r20) 8개, 가로 간격 34 (피치 74), 전체 563x40
  *   **모든 원에 opacity 0.4가 걸려 있다.**

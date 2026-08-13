@@ -137,7 +137,7 @@ export function Hero({
  *  기본값(false)  히어로가 y=80에서 시작하는 md/sm 화면. 헤더가 히어로 위에 정상 흐름으로 온다.
  *
  * cardOverlap을 주면 히어로 아래 콘텐츠를 그만큼 끌어올린다.
- * 예: Desktop-11/30/31/33/35는 카드가 top-401이므로 670 - 401 = 269.
+ * 예: Desktop-46/30/31/33/35는 카드가 top-401이므로 670 - 401 = 269.
  */
 interface HeroLayoutProps {
   header: ReactNode
