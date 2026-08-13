@@ -6,7 +6,7 @@ import { HEADER_PRESETS } from '@/constants/header'
 import { HERO_CARD_OVERLAP } from '@/constants/site'
 
 /*
- * Figma: Desktop - 35 (node 1:117), 1920 x 1564 — 회의 텍스트 업로드
+ * Figma: Desktop - 35 (node 3:817), 1920 x 1564 — 회의 텍스트 업로드
  *
  * lg(1024px) 이상에서 시안 실측값과 일치한다.
  *   히어로        0 ~ 670, 헤더가 위에 겹침 (tone onHero)

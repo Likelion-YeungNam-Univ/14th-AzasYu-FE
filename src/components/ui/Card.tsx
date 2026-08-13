@@ -10,7 +10,7 @@ type Shadow = 'soft' | 'drop'
  *
  * 그림자 2종
  *  soft : 20px 20px 20px rgba(0,0,0,.05)  — Desktop-30, 33
- *  drop : 0 4px 20px rgba(0,0,0,.14)      — Desktop-11
+ *  drop : 0 4px 20px rgba(0,0,0,.14)      — Desktop-46
  */
 const SHADOW: Record<Shadow, string> = {
   soft: 'shadow-[20px_20px_20px_0px_rgba(0,0,0,0.05)]',

@@ -6,7 +6,7 @@ import { HEADER_PRESETS } from '@/constants/header'
 import { HERO_CARD_OVERLAP } from '@/constants/site'
 
 /*
- * Figma: Desktop - 33 (node 1:466), 1920 x 2249 — AI 사전 인터뷰
+ * Figma: Desktop - 33 (node 3:311), 1920 x 2249 — AI 사전 인터뷰
  *
  * lg(1024px) 이상에서 시안 실측값과 일치한다.
  *   히어로       0 ~ 670, 헤더가 위에 겹침 (tone onHero)

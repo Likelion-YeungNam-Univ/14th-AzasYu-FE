@@ -2,7 +2,7 @@ import { Close } from '@/components/icons/Close'
 import { cn } from '@/lib/cn'
 
 /*
- * 참여자 태그. Figma node `1:448` — Desktop-31 참여자, Desktop-30 팀원 초대.
+ * 참여자 태그. Figma node `3:293` — Desktop-31 참여자, Desktop-30 팀원 초대.
  *
  *   h-41 / 1px #606060 / rounded-8 / px-16 py-8
  *   내부 gap-6, 라벨 16px Medium #606060, 삭제 × 20px

@@ -10,7 +10,7 @@ import { HEADER_PRESETS } from '@/constants/header'
 import { PATHS } from '@/routes/paths'
 
 /*
- * Figma: Desktop - 29 (node 1:570), 1920 x 2190 — 내 프로젝트 (로그인 후 홈)
+ * Figma: Desktop - 29 (node 3:394), 1920 x 2190 — 내 프로젝트 (로그인 후 홈)
  *
  * lg(1024px) 이상에서 시안 실측값과 일치한다.
  *   헤더          0 ~ 80        tone onLight (히어로가 y=80이라 헤더는 흰 배경 위)
@@ -22,7 +22,7 @@ import { PATHS } from '@/routes/paths'
  *   문서 높이      2190
  *
  * **그리드 전체 폭이 1460이다** — 470x3 + 25x2 = 1460, left 230 / right 230.
- * Desktop-37 테이블과 같은 폭이라 같은 컨테이너 규칙을 쓴다 (max-w-1460 + 중앙 정렬).
+ * Desktop-41 테이블과 같은 폭이라 같은 컨테이너 규칙을 쓴다 (max-w-1460 + 중앙 정렬).
  * 좌우 여백을 px-[230px]로 고정하면 세로 스크롤바가 생길 때 폭이 모자란다 (§ 4 참고).
  *
  * 세로 리듬 (Figma 절대 y좌표에서 역산)

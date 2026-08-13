@@ -7,7 +7,7 @@
  * **회의는 프로젝트에 소속된다.** 그래서 회의 관련 화면은 전부
  * `/projects/:projectId/meetings/...` 아래로 중첩한다.
  *
- * 예외는 `/meetings`(Desktop - 37) 하나다. 이건 특정 프로젝트가 아니라
+ * 예외는 `/meetings`(Desktop - 41) 하나다. 이건 특정 프로젝트가 아니라
  * **사용자가 소속된 회의를 프로젝트와 무관하게 최신순으로 모아 보여주는** 화면이라
  * 최상위에 둔다. 상단 nav "지난 회의"의 목적지다.
  *
@@ -33,7 +33,7 @@ export const PATHS = {
   /** Desktop - 30 프로젝트 생성 */
   PROJECT_NEW: '/projects/new',
 
-  /** Desktop - 37 지난 회의 — 사용자가 소속된 회의 전체(프로젝트 무관) */
+  /** Desktop - 41 지난 회의 — 사용자가 소속된 회의 전체(프로젝트 무관) */
   MEETINGS: '/meetings',
 } as const
 
@@ -45,9 +45,9 @@ export const PATHS = {
  * 새로고침해도 살아남는다. 라우터 state로만 코드를 넘기면 새로고침에 사라진다.
  */
 export const PROJECT_PATTERNS = {
-  /** Desktop - 11 프로젝트 상세 (회의 카드 목록) */
+  /** Desktop - 46 프로젝트 상세 (회의 카드 목록) */
   DETAIL: '/projects/:projectId',
-  /** Desktop - 40 프로젝트 생성 완료 — 참여코드 공유 */
+  /** Desktop - 51 프로젝트 생성 완료 — 참여코드 공유 */
   COMPLETE: '/projects/:projectId/complete',
   /** 시안 없음 — nav "프로젝트 설정"의 목적지 */
   SETTINGS: '/projects/:projectId/settings',

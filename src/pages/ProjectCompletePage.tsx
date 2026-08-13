@@ -5,7 +5,7 @@ import { Header } from '@/components/layout/Header'
 import { HEADER_PRESETS } from '@/constants/header'
 
 /*
- * Figma: Desktop - 40 (node 1:550), 1920 x 1089 — 프로젝트 생성 완료
+ * Figma: Desktop - 51 (node 3:606), 1920 x 1089 — 프로젝트 생성 완료
  *
  * Desktop-39(회원가입 완료)와 골격이 같다. 헤더 + 세로 중앙 스택.
  * 다른 점은 ① 부제가 있고 ② 마지막이 버튼이 아니라 참여코드 알약이라는 것.
@@ -30,7 +30,7 @@ import { HEADER_PRESETS } from '@/constants/header'
 
 /*
  * 시안의 참여코드. 실제로는 프로젝트 생성 API 응답에서 받아야 한다 (§ 1).
- * Desktop-11(프로젝트 상세)에도 같은 코드가 적혀 있다.
+ * Desktop-46(프로젝트 상세)에도 같은 코드가 적혀 있다.
  */
 const JOIN_CODE = 'A7K9-M2P4'
 

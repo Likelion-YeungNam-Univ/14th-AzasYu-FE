@@ -12,7 +12,7 @@ import { HERO_CARD_OVERLAP } from '@/constants/site'
 import { projectPath } from '@/routes/paths'
 
 /*
- * Figma: Desktop - 30 (node 1:295), 1920 x 1487 — 프로젝트 생성
+ * Figma: Desktop - 30 (node 3:163), 1920 x 1487 — 프로젝트 생성
  *
  * 구조가 Desktop-31(회의 생성)과 거의 같다. 히어로 lg(670)@y0 + 헤더 겹침 +
  * 카드 top-401. 컴포넌트도 대부분 그대로 재사용한다.
@@ -110,7 +110,7 @@ export function ProjectNewPage() {
             </div>
 
             {/*
-             * 생성 후 참여코드 공유 화면(Desktop - 40)으로 간다.
+             * 생성 후 참여코드 공유 화면(Desktop - 51)으로 간다.
              * 실제로는 서버가 만든 projectId를 받아야 한다 — API가 범위 밖이라 더미다.
              */}
             <Button

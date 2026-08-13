@@ -7,7 +7,7 @@ import { HEADER_PRESETS } from '@/constants/header'
 import { PATHS } from '@/routes/paths'
 
 /*
- * Figma: Desktop - 25 (node 1:635), 1920 x 1089 — 랜딩 (로그인 전 홈)
+ * Figma: Desktop - 25 (node 3:454), 1920 x 1089 — 랜딩 (로그인 전 홈)
  *
  * lg(1024px) 이상에서 시안 실측값과 일치한다.
  *   페이지 배경   **#f4f4f4** ← 다른 화면은 전부 흰 배경이다. 이 화면만 다르다

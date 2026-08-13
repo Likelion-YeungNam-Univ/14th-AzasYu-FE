@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { cn } from '@/lib/cn'
 
 /*
- * 값을 보여주는 작은 테두리 박스. Figma node `1:423` / `1:434` / `1:438`
+ * 값을 보여주는 작은 테두리 박스. Figma node `3:268` / `3:279` / `3:283`
  * — Desktop-31 회의 일시 (날짜 217 / 시간 163 / 소요시간 139), gap-22.
  *
  *   1px #606060 / rounded-8 / px-16 py-8 / 높이는 내용에 맡긴다 (실측 40.4)

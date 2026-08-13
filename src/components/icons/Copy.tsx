@@ -1,7 +1,7 @@
 import { cn } from '@/lib/cn'
 
 /*
- * 복사 아이콘. Figma node `1:567` — Desktop-40 참여코드 옆.
+ * 복사 아이콘. Figma node `3:625` — Desktop-51 참여코드 옆.
  *
  * **화면마다 색이 갈린다**: Desktop-40은 `#606060`(흰 배경 알약 안),
  * Desktop-11은 흰색(히어로 위). 그래서 파일 `<img>`가 아니라 인라인 + currentColor다

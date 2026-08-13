@@ -2,7 +2,7 @@ import { Close } from '@/components/icons/Close'
 import { cn } from '@/lib/cn'
 
 /*
- * 번호 매긴 안건 목록. Figma node `1:400` — Desktop-31 회의 안건.
+ * 번호 매긴 안건 목록. Figma node `3:245` — Desktop-31 회의 안건.
  *
  *   박스   1px #606060 / **rounded-7** / h-154 / px-16 py-14 / flex-col gap-10 / overflow-clip
  *   행     h-36 / w-529 / justify-between — 번호 목록 텍스트 + 삭제 × 20px

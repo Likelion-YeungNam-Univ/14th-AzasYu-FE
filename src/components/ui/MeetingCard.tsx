@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/Card'
 import { meetingPath, projectPath } from '@/routes/paths'
 
 /*
- * 프로젝트 상세의 회의 카드. Figma node `1:219` — Desktop-11.
+ * 프로젝트 상세의 회의 카드. Figma node `3:647` — Desktop-46.
  *
  *   카드      878 폭, px-158 py-80, rounded-30, shadow **drop**
  *             (30/31의 soft와 다른 값이다 — Card의 shadow prop으로 구분)

@@ -5,7 +5,7 @@ import { Table, type TableColumn, type TableRow } from '@/components/ui/Table'
 import { meetingPath } from '@/routes/paths'
 
 /*
- * Figma: Desktop - 37 (node 1:3), 1920 x 1150
+ * Figma: Desktop - 41 (node 3:745), 1920 x 1150
  *
  * lg(1024px) 이상에서 시안 실측값과 일치한다.
  *   헤더        0 ~ 80        tone onLight (히어로가 y=80이라 헤더는 흰 배경 위)

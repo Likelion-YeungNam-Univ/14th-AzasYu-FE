@@ -1,7 +1,12 @@
 import { cn } from '@/lib/cn'
 
 /*
- * 필터 탭. Figma node `1:578` — Desktop-29 내 프로젝트 (전체 / 진행 중 / 완료).
+ * 필터 탭 (전체 / 진행 중 / 완료).
+ *
+ * ⚠️ **2026-08-13 시안 개편에서 Desktop-29의 필터 탭이 통째로 사라졌다.**
+ * 대응하는 Figma 노드가 더 이상 없다 (옛 node `1:578`).
+ * `ProjectsPage`는 아직 이 컴포넌트를 렌더한다 — 29를 새 시안으로 재구현할 때
+ * 화면에서 걷어낼지, 컴포넌트째 지울지 정할 것.
  *
  *   컨테이너  flex gap-33 items-center py-9   (Figma 337x69 = 51 + py-9 x2)
  *   탭        h-51 / rounded-45 / 20px Medium 검정 / px 23.5 (Figma 폭 82 = 35 + 23.5x2)
