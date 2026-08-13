@@ -11,8 +11,14 @@ import { PATHS } from '@/routes/paths'
 export const HEADER_PRESETS = {
   /** 로그인 후 + 히어로가 y=0이라 헤더가 히어로 위에 겹침 (11, 30, 31, 33, 35) */
   appOnHero: { tone: 'onHero', nav: true },
-  /** 로그인 후 + 히어로가 y=80이라 헤더는 흰 배경 위 (29, 34, 36, 37) */
+  /** 로그인 후 + 히어로가 y=80이라 헤더는 흰 배경 위 (29, 34, 36, 41) */
   appOnLight: { tone: 'onLight', nav: true },
+  /**
+   * 로그인 후 + **히어로가 아예 없는** 화면 (58 분석 로딩).
+   * appOnLight와 같은 흰 배경인데 글자색이 `#717171`이 아니라 **검정**이다.
+   * 히어로 없는 화면이 58 하나뿐이라 디자이너 편차일 수 있지만 시안을 따랐다.
+   */
+  appOnWhite: { tone: 'onDark', nav: true },
   /**
    * 가입/로그인 계열 — nav 없이 "홈"만, 검정 글씨 (8, 39, 40, 26, 27, 28).
    * 여기서 "홈"은 로그인 전 홈(랜딩)이다. 로그인 후 홈은 /projects다.
