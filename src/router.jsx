@@ -13,12 +13,10 @@ import { MeetingLoadingPage } from '@/pages/meetings/loading'
 import { MeetingNewPage } from '@/pages/meetings/new'
 import { MeetingResultPage } from '@/pages/meetings/result'
 import { MeetingUploadPage } from '@/pages/meetings/upload'
-import {
-  ProjectCompletePage,
-  ProjectDetailPage,
-  ProjectNewPage,
-  ProjectsPage,
-} from '@/pages/projects'
+import { ProjectCompletePage } from '@/pages/projects/complete'
+import { ProjectDetailPage } from '@/pages/projects/detail'
+import { ProjectsPage } from '@/pages/projects/list'
+import { ProjectNewPage } from '@/pages/projects/new'
 import { MEETING_PATTERNS, PATHS, PROJECT_PATTERNS } from '@/lib'
 
 export const router = createBrowserRouter([
