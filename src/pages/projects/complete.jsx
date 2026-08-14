@@ -11,6 +11,27 @@ export function ProjectCompletePage() {
 
   const joinCode = state?.joinCode ?? ''
 
+  const handleCopyJoinCode = () => {
+    if (!joinCode) return
+
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(joinCode)
+      return
+    }
+
+    const textarea = document.createElement('textarea')
+
+    textarea.value = joinCode
+    textarea.setAttribute('readonly', '')
+    textarea.style.position = 'fixed'
+    textarea.style.opacity = '0'
+
+    document.body.appendChild(textarea)
+    textarea.select()
+    document.execCommand('copy')
+    document.body.removeChild(textarea)
+  }
+
   return (
     <div className="min-h-svh w-full bg-white">
       <Header {...HEADER_PRESETS.authApp} />
@@ -36,7 +57,7 @@ export function ProjectCompletePage() {
           <div className="flex flex-wrap items-center justify-center gap-[24px]">
             <button
               type="button"
-              onClick={() => navigator.clipboard?.writeText(joinCode)}
+              onClick={handleCopyJoinCode}
               aria-label={`참여코드 ${joinCode} 복사`}
               className="text-20 flex cursor-pointer items-center gap-[10px] rounded-[33px] border border-solid border-[#606060] px-[18px] py-[14px] font-semibold whitespace-nowrap text-[#606060] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#606060]"
             >

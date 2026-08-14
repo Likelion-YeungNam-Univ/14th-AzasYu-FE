@@ -4,8 +4,6 @@ export function cn(...classes) {
 
 export const SERVICE_NAME = '이해했습니다! (아님)'
 
-export const SAMPLE_PROJECT_NAME = '신규 서비스 기획'
-
 export const MEETING_TITLE = '회의'
 
 export const API_BASE_URL = import.meta.env.VITE_API_URL
@@ -69,10 +67,10 @@ export const HEADER_PRESETS = {
   },
 }
 
-export function buildNavItems(projectId, projectName = SAMPLE_PROJECT_NAME) {
+export function buildNavItems(projectId, projectName) {
   const items = [{ label: '홈', href: PATHS.PROJECTS }]
 
-  if (projectId) {
+  if (projectId && projectName) {
     items.push({ label: projectName, href: projectPath('DETAIL', projectId) })
   }
 

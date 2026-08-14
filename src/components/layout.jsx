@@ -1,6 +1,7 @@
+import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { ChevronRight } from '@/components/icons'
-import { buildNavItems, cn, PATHS, SERVICE_NAME } from '@/lib'
+import { API_BASE_URL, buildNavItems, cn, PATHS, SERVICE_NAME } from '@/lib'
 
 const TONE = {
   onHero: 'text-[#f4f4f4]',
@@ -10,6 +11,65 @@ const TONE = {
 
 const DEFAULT_ACTION = { label: '로그아웃', href: PATHS.WELCOME }
 
+const projectNameCache = new Map()
+
+function useProjectName(projectId) {
+  const [name, setName] = useState(() => projectNameCache.get(projectId) ?? '')
+
+  useEffect(() => {
+    if (!projectId) {
+      setName('')
+      return
+    }
+
+    const cached = projectNameCache.get(projectId)
+
+    if (cached) {
+      setName(cached)
+      return
+    }
+
+    let cancelled = false
+
+    const fetchProjectName = async () => {
+      try {
+        const accessToken = localStorage.getItem('accessToken')
+
+        if (!accessToken) return
+
+        const response = await fetch(
+          `${API_BASE_URL}/api/v1/projects/${projectId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          },
+        )
+
+        const result = await response.json()
+
+        if (!response.ok || !result.success || !result.data?.name) return
+
+        projectNameCache.set(projectId, result.data.name)
+
+        if (!cancelled) {
+          setName(result.data.name)
+        }
+      } catch (error) {
+        console.error('헤더 프로젝트 이름 조회 실패:', error)
+      }
+    }
+
+    fetchProjectName()
+
+    return () => {
+      cancelled = true
+    }
+  }, [projectId])
+
+  return name
+}
+
 export function Header({
   tone = 'onHero',
   nav = false,
@@ -18,7 +78,8 @@ export function Header({
   className,
 }) {
   const { projectId } = useParams()
-  const navItems = buildNavItems(projectId, projectName)
+  const fetchedName = useProjectName(projectName ? '' : projectId)
+  const navItems = buildNavItems(projectId, projectName || fetchedName)
 
   return (
     <header
