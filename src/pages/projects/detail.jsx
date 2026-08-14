@@ -124,7 +124,9 @@ export function ProjectDetailPage() {
     <HeroLayout
       overlapHeader
       cardOverlap={HERO_CARD_OVERLAP}
-      header={<Header {...HEADER_PRESETS.appOnHero} />}
+      header={
+        <Header {...HEADER_PRESETS.appOnHero} projectName={project.name} />
+      }
       hero={
         <Hero
           size="lg"
