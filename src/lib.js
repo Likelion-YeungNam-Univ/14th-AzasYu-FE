@@ -6,6 +6,10 @@ export const SERVICE_NAME = '이해했습니다! (아님)'
 
 export const SAMPLE_PROJECT_NAME = '신규 서비스 기획'
 
+export const MEETING_TITLE = '회의'
+
+export const API_BASE_URL = import.meta.env.VITE_API_URL
+
 export const HERO_CARD_OVERLAP = 269
 
 export const PATHS = {

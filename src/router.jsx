@@ -6,15 +6,13 @@ import {
   SignUpPage,
   WelcomePage,
 } from '@/pages/auth'
-import {
-  MeetingBoardPage,
-  MeetingInterviewPage,
-  MeetingLoadingPage,
-  MeetingNewPage,
-  MeetingResultPage,
-  MeetingsPage,
-  MeetingUploadPage,
-} from '@/pages/meetings'
+import { MeetingBoardPage } from '@/pages/meetings/board'
+import { MeetingInterviewPage } from '@/pages/meetings/interview'
+import { MeetingsPage } from '@/pages/meetings/list'
+import { MeetingLoadingPage } from '@/pages/meetings/loading'
+import { MeetingNewPage } from '@/pages/meetings/new'
+import { MeetingResultPage } from '@/pages/meetings/result'
+import { MeetingUploadPage } from '@/pages/meetings/upload'
 import {
   ProjectCompletePage,
   ProjectDetailPage,
