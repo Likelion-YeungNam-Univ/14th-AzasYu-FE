@@ -1,6 +1,5 @@
 import { createBrowserRouter, Navigate } from 'react-router'
 import {
-  LoginPage,
   NotFoundPage,
   SignUpCompletePage,
   SignUpPage,
@@ -12,6 +11,7 @@ import { MeetingsPage } from '@/pages/meetings/list'
 import { MeetingLoadingPage } from '@/pages/meetings/loading'
 import { MeetingNewPage } from '@/pages/meetings/new'
 import { MeetingResultPage } from '@/pages/meetings/result'
+import { MeetingSummaryPage } from '@/pages/meetings/summary'
 import { MeetingUploadPage } from '@/pages/meetings/upload'
 import { ProjectCompletePage } from '@/pages/projects/complete'
 import { ProjectDetailPage } from '@/pages/projects/detail'
@@ -23,7 +23,6 @@ export const router = createBrowserRouter([
   { path: PATHS.ROOT, element: <Navigate to={PATHS.WELCOME} replace /> },
 
   { path: PATHS.WELCOME, element: <WelcomePage /> },
-  { path: PATHS.LOGIN, element: <LoginPage /> },
   { path: PATHS.SIGNUP, element: <SignUpPage /> },
   { path: PATHS.SIGNUP_COMPLETE, element: <SignUpCompletePage /> },
 
@@ -38,6 +37,7 @@ export const router = createBrowserRouter([
   { path: MEETING_PATTERNS.BOARD, element: <MeetingBoardPage /> },
   { path: MEETING_PATTERNS.UPLOAD, element: <MeetingUploadPage /> },
   { path: MEETING_PATTERNS.LOADING, element: <MeetingLoadingPage /> },
+  { path: MEETING_PATTERNS.SUMMARY, element: <MeetingSummaryPage /> },
   { path: PROJECT_PATTERNS.MEETINGS, element: <MeetingsPage /> },
   
   { path: '*', element: <NotFoundPage /> },

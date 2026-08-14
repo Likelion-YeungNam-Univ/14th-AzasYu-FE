@@ -7,6 +7,7 @@ const TONE = {
   onHero: 'text-[#f4f4f4]',
   onLight: 'text-[#717171]',
   onDark: 'text-black',
+  onLanding: 'text-[#1b2a4d]',
 }
 
 const DEFAULT_ACTION = { label: '로그아웃', href: PATHS.WELCOME }
