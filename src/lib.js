@@ -33,6 +33,7 @@ export const MEETING_PATTERNS = {
   BOARD: '/projects/:projectId/meetings/:meetingId/board',
   UPLOAD: '/projects/:projectId/meetings/:meetingId/upload',
   LOADING: '/projects/:projectId/meetings/:meetingId/loading',
+  SUMMARY: '/projects/:projectId/meetings/:meetingId/summary',
 }
 
 export function projectPath(section, projectId) {

@@ -441,6 +441,13 @@ export function MeetingCard({ projectId, meeting }) {
             >
               익명 아이디어 보드 보기
             </Button>
+            <Button
+              variant="secondary"
+              className="w-full"
+              onClick={() => navigate(meetingPath('SUMMARY', projectId, id))}
+            >
+              전체 의견 요약 보기
+            </Button>
           </div>
         </div>
 
