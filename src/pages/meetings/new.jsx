@@ -61,7 +61,7 @@ export function MeetingNewPage() {
     setAgenda((prev) => [
       ...prev,
       {
-        id: crypto.randomUUID(),
+        id: Date.now(), 
         text: newAgenda.trim(),
       },
     ]);
