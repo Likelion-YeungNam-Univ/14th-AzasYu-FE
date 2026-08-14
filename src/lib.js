@@ -23,6 +23,7 @@ export const PROJECT_PATTERNS = {
   DETAIL: '/projects/:projectId',
   COMPLETE: '/projects/:projectId/complete',
   MEETING_NEW: '/projects/:projectId/meetings/new',
+  MEETINGS: '/projects/:projectId/meetings',
 }
 
 export const MEETING_PATTERNS = {

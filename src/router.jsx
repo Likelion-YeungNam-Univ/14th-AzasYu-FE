@@ -42,8 +42,7 @@ export const router = createBrowserRouter([
   { path: MEETING_PATTERNS.BOARD, element: <MeetingBoardPage /> },
   { path: MEETING_PATTERNS.UPLOAD, element: <MeetingUploadPage /> },
   { path: MEETING_PATTERNS.LOADING, element: <MeetingLoadingPage /> },
-
-  { path: PATHS.MEETINGS, element: <MeetingsPage /> },
-
+  { path: PROJECT_PATTERNS.MEETINGS, element: <MeetingsPage /> },
+  
   { path: '*', element: <NotFoundPage /> },
 ])

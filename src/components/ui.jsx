@@ -376,6 +376,21 @@ function Divider() {
   )
 }
 
+function formatMeetingDate(value) {
+  if (!value) return ''
+
+  const date = new Date(value)
+
+  return date.toLocaleString('ko-KR', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+  })
+}
+
 export function MeetingCard({ projectId, meeting }) {
   const { id, title, startsAt, participantsDone, participantsTotal } = meeting
   const navigate = useNavigate()
@@ -391,7 +406,7 @@ export function MeetingCard({ projectId, meeting }) {
       <div className="mx-auto flex w-full max-w-[562px] flex-col gap-[30px]">
         <div className="flex flex-col gap-[4px]">
           <p className="text-28 font-bold text-black lg:text-34">{title}</p>
-          <p className="text-16 font-medium text-[#9d9d9d]">{startsAt}</p>
+          <p className="text-16 font-medium text-[#9d9d9d]">  {formatMeetingDate(startsAt)}</p>
         </div>
 
         <Divider />

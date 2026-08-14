@@ -6,6 +6,9 @@ import { Header, Hero, HeroLayout } from "@/components/layout";
 import { Button, Checkbox, TextField } from "@/components/ui";
 import { HEADER_PRESETS, PATHS } from "@/lib";
 
+
+const API_BASE_URL = import.meta.env.VITE_API_URL
+console.log("VITE_API_URL =", API_BASE_URL)
 export function WelcomePage() {
   const navigate = useNavigate();
 
@@ -49,49 +52,48 @@ export function LoginPage() {
   const [password, setPassword] = useState("");
 
   // 2. 로그인 버튼 클릭 시 실행할 함수
-  const handleLogin = async () => {
-    // 간단한 빈 값 검사
-    if (!email || !password) {
-      alert("이메일과 비밀번호를 모두 입력해주세요.");
-      return;
-    }
+const handleLogin = async () => {
+  if (!email || !password) {
+    alert("이메일과 비밀번호를 모두 입력해주세요.")
+    return
+  }
 
-    try {
-      const apiUrl = import.meta.env.VITE_API_URL;
+  try {
+    console.log("API_BASE_URL:", API_BASE_URL)
 
-      // 🚨 주의: 스웨거에서 로그인 API 주소가 맞는지 한 번 더 확인하세요! (보통 /login 입니다)
-      const response = await fetch(`${apiUrl}/api/v1/auth/login`, {
+    const response = await fetch(
+      `${API_BASE_URL}/api/v1/auth/login`,
+      {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: email,
-          password: password,
+          email,
+          password,
         }),
-      });
+      },
+    )
 
-      const result = await response.json();
+    const result = await response.json()
 
-      if (result.success) {
-        // 3. 가장 중요한 부분: 로그인 성공 시 발급받은 토큰을 브라우저에 저장
-        // 이렇게 저장해두면 나중에 내 정보 조회나 프로젝트 생성 등 다른 API를 쏠 때 꺼내 쓸 수 있습니다.
-        localStorage.setItem("accessToken", result.data.accessToken);
+    if (result.success) {
+      localStorage.setItem("accessToken", result.data.accessToken)
+      localStorage.setItem("userId", result.data.userId)
+      localStorage.setItem("userName", result.data.name)
 
-        // 4. 로그인 성공 후 메인 페이지(프로젝트 목록 등)로 이동
-        navigate(PATHS.PROJECTS);
-      } else {
-        // 백엔드에서 비밀번호 틀림 등의 에러를 내려준 경우
-        alert(
-          result.error?.message ||
-            "로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.",
-        );
-      }
-    } catch (error) {
-      console.error("로그인 에러:", error);
-      alert("서버와 연결할 수 없습니다.");
+      navigate(PATHS.PROJECTS)
+    } else {
+      alert(
+        result.error?.message ||
+          "로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.",
+      )
     }
-  };
+  } catch (error) {
+    console.error("로그인 에러:", error)
+    alert("서버와 연결할 수 없습니다.")
+  }
+}
 
   return (
     <div className="min-h-svh w-full bg-white">
@@ -209,19 +211,21 @@ export function SignUpPage() {
     }
 
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
 
-      const response = await fetch(`${apiUrl}/api/v1/auth/signup`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${API_BASE_URL}/api/v1/auth/signup`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: formData.email,
+            name: formData.name,
+            password: formData.password,
+          }),
         },
-        body: JSON.stringify({
-          email: formData.email,
-          name: formData.name,
-          password: formData.password,
-        }),
-      });
+      );
 
       const result = await response.json();
 
