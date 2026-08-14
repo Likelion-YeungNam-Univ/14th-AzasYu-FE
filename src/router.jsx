@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from 'react-router'
+import { createBrowserRouter } from 'react-router'
 import {
   NotFoundPage,
   SignUpCompletePage,
@@ -17,28 +17,45 @@ import { ProjectCompletePage } from '@/pages/projects/complete'
 import { ProjectDetailPage } from '@/pages/projects/detail'
 import { ProjectsPage } from '@/pages/projects/list'
 import { ProjectNewPage } from '@/pages/projects/new'
+import {
+  RequireAuth,
+  RequireSignUpComplete,
+  RootRedirect,
+} from '@/components/guards'
 import { MEETING_PATTERNS, PATHS, PROJECT_PATTERNS } from '@/lib'
 
+const protectedRoute = (path, element) => ({
+  path,
+  element: <RequireAuth>{element}</RequireAuth>,
+})
+
 export const router = createBrowserRouter([
-  { path: PATHS.ROOT, element: <Navigate to={PATHS.WELCOME} replace /> },
+  { path: PATHS.ROOT, element: <RootRedirect /> },
 
   { path: PATHS.WELCOME, element: <WelcomePage /> },
   { path: PATHS.SIGNUP, element: <SignUpPage /> },
-  { path: PATHS.SIGNUP_COMPLETE, element: <SignUpCompletePage /> },
+  {
+    path: PATHS.SIGNUP_COMPLETE,
+    element: (
+      <RequireSignUpComplete>
+        <SignUpCompletePage />
+      </RequireSignUpComplete>
+    ),
+  },
 
-  { path: PATHS.PROJECTS, element: <ProjectsPage /> },
-  { path: PATHS.PROJECT_NEW, element: <ProjectNewPage /> },
-  { path: PROJECT_PATTERNS.DETAIL, element: <ProjectDetailPage /> },
-  { path: PROJECT_PATTERNS.COMPLETE, element: <ProjectCompletePage /> },
+  protectedRoute(PATHS.PROJECTS, <ProjectsPage />),
+  protectedRoute(PATHS.PROJECT_NEW, <ProjectNewPage />),
+  protectedRoute(PROJECT_PATTERNS.DETAIL, <ProjectDetailPage />),
+  protectedRoute(PROJECT_PATTERNS.COMPLETE, <ProjectCompletePage />),
 
-  { path: PROJECT_PATTERNS.MEETING_NEW, element: <MeetingNewPage /> },
-  { path: MEETING_PATTERNS.DETAIL, element: <MeetingResultPage /> },
-  { path: MEETING_PATTERNS.INTERVIEW, element: <MeetingInterviewPage /> },
-  { path: MEETING_PATTERNS.BOARD, element: <MeetingBoardPage /> },
-  { path: MEETING_PATTERNS.UPLOAD, element: <MeetingUploadPage /> },
-  { path: MEETING_PATTERNS.LOADING, element: <MeetingLoadingPage /> },
-  { path: MEETING_PATTERNS.SUMMARY, element: <MeetingSummaryPage /> },
-  { path: PROJECT_PATTERNS.MEETINGS, element: <MeetingsPage /> },
-  
+  protectedRoute(PROJECT_PATTERNS.MEETING_NEW, <MeetingNewPage />),
+  protectedRoute(MEETING_PATTERNS.DETAIL, <MeetingResultPage />),
+  protectedRoute(MEETING_PATTERNS.INTERVIEW, <MeetingInterviewPage />),
+  protectedRoute(MEETING_PATTERNS.BOARD, <MeetingBoardPage />),
+  protectedRoute(MEETING_PATTERNS.UPLOAD, <MeetingUploadPage />),
+  protectedRoute(MEETING_PATTERNS.LOADING, <MeetingLoadingPage />),
+  protectedRoute(MEETING_PATTERNS.SUMMARY, <MeetingSummaryPage />),
+  protectedRoute(PROJECT_PATTERNS.MEETINGS, <MeetingsPage />),
+
   { path: '*', element: <NotFoundPage /> },
 ])

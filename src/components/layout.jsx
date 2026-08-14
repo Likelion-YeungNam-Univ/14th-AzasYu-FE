@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router'
+import { Link, useNavigate, useParams } from 'react-router'
 import { ChevronRight } from '@/components/icons'
 import { API_BASE_URL, buildNavItems, cn, PATHS, SERVICE_NAME } from '@/lib'
+import { clearSession } from '@/session'
 
 const TONE = {
   onHero: 'text-[#f4f4f4]',
@@ -10,7 +11,7 @@ const TONE = {
   onLanding: 'text-[#1b2a4d]',
 }
 
-const DEFAULT_ACTION = { label: '로그아웃', href: PATHS.WELCOME }
+const DEFAULT_ACTION = { label: '로그아웃', href: PATHS.WELCOME, logout: true }
 
 const projectNameCache = new Map()
 
@@ -79,8 +80,15 @@ export function Header({
   className,
 }) {
   const { projectId } = useParams()
+  const navigate = useNavigate()
   const fetchedName = useProjectName(projectName ? '' : projectId)
   const navItems = buildNavItems(projectId, projectName || fetchedName)
+
+  const handleLogout = () => {
+    clearSession()
+    projectNameCache.clear()
+    navigate(PATHS.WELCOME, { replace: true })
+  }
 
   return (
     <header
@@ -107,10 +115,21 @@ export function Header({
         </nav>
       )}
 
-      <Link to={action.href} className="flex items-center gap-[6px]">
-        <span className="text-18 font-medium whitespace-nowrap">{action.label}</span>
-        <ChevronRight />
-      </Link>
+      {action.logout ? (
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="flex cursor-pointer items-center gap-[6px]"
+        >
+          <span className="text-18 font-medium whitespace-nowrap">{action.label}</span>
+          <ChevronRight />
+        </button>
+      ) : (
+        <Link to={action.href} className="flex items-center gap-[6px]">
+          <span className="text-18 font-medium whitespace-nowrap">{action.label}</span>
+          <ChevronRight />
+        </Link>
+      )}
     </header>
   )
 }

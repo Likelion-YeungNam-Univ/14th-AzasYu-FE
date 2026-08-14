@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import checkBadge from "@/assets/icons/check-badge.svg";
 import welcomeBackground from "@/assets/welcome-bg.jpg";
 import { ArrowRight } from "@/components/icons";
+import { SIGNUP_COMPLETE_KEY } from "@/components/guards";
 import { Header } from "@/components/layout";
 import { Button, TextField } from "@/components/ui";
 import { HEADER_PRESETS, PATHS } from "@/lib";
@@ -250,6 +251,8 @@ const SIGNUP_FIELDS = [
 export function SignUpPage() {
   const navigate = useNavigate();
 
+  const [signingUp, setSigningUp] = useState(false);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -272,6 +275,7 @@ export function SignUpPage() {
     }
 
     try {
+      setSigningUp(true);
 
       const response = await fetch(
         `${API_BASE_URL}/api/v1/auth/signup`,
@@ -291,13 +295,16 @@ export function SignUpPage() {
       const result = await response.json();
 
       if (result.success) {
-        navigate(PATHS.SIGNUP_COMPLETE);
+        sessionStorage.setItem(SIGNUP_COMPLETE_KEY, "1");
+        navigate(PATHS.SIGNUP_COMPLETE, { replace: true });
       } else {
         alert(result.error?.message || "회원가입에 실패했습니다.");
       }
     } catch (error) {
       console.error("회원가입 에러:", error);
       alert("서버와 연결할 수 없습니다.");
+    } finally {
+      setSigningUp(false);
     }
   };
 
@@ -333,10 +340,21 @@ export function SignUpPage() {
         <Button
           className="mt-6 w-full max-w-[501px] lg:mt-[34px]"
           onClick={handleSignUp}
+          disabled={signingUp}
         >
           가입 완료
         </Button>
       </main>
+
+      {signingUp && (
+        <div
+          role="status"
+          aria-label="회원가입 처리 중"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-white/70"
+        >
+          <span className="block size-[56px] animate-spin rounded-full border-4 border-solid border-[#d0d0d0] border-t-[#606060]" />
+        </div>
+      )}
     </div>
   );
 }
@@ -363,7 +381,10 @@ export function SignUpCompletePage() {
           <Button
             variant="secondary"
             size="inline"
-            onClick={() => navigate(PATHS.WELCOME)}
+            onClick={() => {
+              sessionStorage.removeItem(SIGNUP_COMPLETE_KEY);
+              navigate(PATHS.WELCOME, { replace: true });
+            }}
           >
             로그인하러 가기
             <ArrowRight />
