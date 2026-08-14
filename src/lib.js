@@ -13,7 +13,6 @@ export const HERO_CARD_OVERLAP = 269
 export const PATHS = {
   ROOT: '/',
   WELCOME: '/welcome',
-  LOGIN: '/login',
   SIGNUP: '/signup',
   SIGNUP_COMPLETE: '/signup/complete',
   PROJECTS: '/projects',
@@ -61,7 +60,7 @@ export const HEADER_PRESETS = {
     action: { label: '홈', href: PATHS.PROJECTS },
   },
   landing: {
-    tone: 'onHero',
+    tone: 'onLanding',
     nav: false,
     action: { label: '회원가입', href: PATHS.SIGNUP },
   },

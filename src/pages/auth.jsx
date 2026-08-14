@@ -1,69 +1,51 @@
 import { Link, useNavigate } from "react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import checkBadge from "@/assets/icons/check-badge.svg";
+import welcomeBackground from "@/assets/welcome-bg.jpg";
 import { ArrowRight } from "@/components/icons";
-import { Header, Hero, HeroLayout } from "@/components/layout";
-import { Button, Checkbox, TextField } from "@/components/ui";
+import { Header } from "@/components/layout";
+import { Button, TextField } from "@/components/ui";
 import { HEADER_PRESETS, PATHS } from "@/lib";
 
 
 const API_BASE_URL = import.meta.env.VITE_API_URL
 console.log("VITE_API_URL =", API_BASE_URL)
+
+const REMEMBERED_EMAIL_KEY = "rememberedEmail";
+
+const LANDING_TEXT = "text-[#1b2a4d]";
+
+const LANDING_FIELD =
+  "text-20 h-[54px] w-full rounded-[10px] border border-solid border-white/70 bg-white/70 px-[17px] font-medium text-[#1b2a4d] outline-none backdrop-blur-[2px] placeholder:text-[#bcc2d2] focus:border-[#6d93f8]";
+
 export function WelcomePage() {
   const navigate = useNavigate();
 
-  return (
-    <HeroLayout
-      overlapHeader
-      background="bg-[#f4f4f4]"
-      header={<Header {...HEADER_PRESETS.landing} />}
-      hero={
-        <Hero
-          size="lg"
-          align="left"
-          title="우리... 같은 얘기하고 있는 거 맞죠?"
-          description="모두가 같은 의미로 이해할 수 있도록, 협업의 시작"
-          descriptionWeight="semibold"
-          footer={
-            <Button
-              size="inline"
-              variant="secondaryOnHero"
-              onClick={() => navigate(PATHS.LOGIN)}
-            >
-              로그인하기
-              <ArrowRight />
-            </Button>
-          }
-        />
-      }
-    >
-      {null}
-    </HeroLayout>
+  const [email, setEmail] = useState(
+    () => localStorage.getItem(REMEMBERED_EMAIL_KEY) ?? "",
   );
-}
-
-const LOGIN_COLUMN = "w-full max-w-[501px]";
-
-export function LoginPage() {
-  const navigate = useNavigate();
-
-  // 1. 이메일과 비밀번호 입력값 상태 관리
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberEmail, setRememberEmail] = useState(
+    () => localStorage.getItem(REMEMBERED_EMAIL_KEY) !== null,
+  );
 
-  // 2. 로그인 버튼 클릭 시 실행할 함수
-const handleLogin = async () => {
-  if (!email || !password) {
-    alert("이메일과 비밀번호를 모두 입력해주세요.")
-    return
-  }
+  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-  try {
-    console.log("API_BASE_URL:", API_BASE_URL)
+  useEffect(() => {
+    setError("");
+  }, [email, password]);
 
-    const response = await fetch(
-      `${API_BASE_URL}/api/v1/auth/login`,
-      {
+  const handleLogin = async () => {
+    if (!email || !password) {
+      setError("이메일과 비밀번호를 모두 입력해주세요.");
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+
+      const response = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -72,85 +54,164 @@ const handleLogin = async () => {
           email,
           password,
         }),
-      },
-    )
+      });
 
-    const result = await response.json()
+      const result = await response.json();
 
-    if (result.success) {
-      localStorage.setItem("accessToken", result.data.accessToken)
-      localStorage.setItem("userId", result.data.userId)
-      localStorage.setItem("userName", result.data.name)
+      if (result.success) {
+        localStorage.setItem("accessToken", result.data.accessToken);
+        localStorage.setItem("userId", result.data.userId);
+        localStorage.setItem("userName", result.data.name);
 
-      navigate(PATHS.PROJECTS)
-    } else {
-      alert(
-        result.error?.message ||
-          "로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.",
-      )
+        if (rememberEmail) {
+          localStorage.setItem(REMEMBERED_EMAIL_KEY, email);
+        } else {
+          localStorage.removeItem(REMEMBERED_EMAIL_KEY);
+        }
+
+        navigate(PATHS.PROJECTS);
+      } else {
+        setError(
+          result.error?.message ||
+            "로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.",
+        );
+      }
+    } catch (error) {
+      console.error("로그인 에러:", error);
+      setError("서버와 연결할 수 없습니다.");
+    } finally {
+      setSubmitting(false);
     }
-  } catch (error) {
-    console.error("로그인 에러:", error)
-    alert("서버와 연결할 수 없습니다.")
-  }
-}
+  };
 
   return (
-    <div className="min-h-svh w-full bg-white">
-      <Header {...HEADER_PRESETS.auth} />
+    <div className="relative min-h-svh w-full overflow-hidden bg-[#f4dcec]">
+      <img
+        src={welcomeBackground}
+        alt=""
+        className="pointer-events-none fixed inset-0 block h-full w-full max-w-none object-cover"
+      />
 
-      <main className="flex flex-col items-center px-5 pb-16 sm:px-8 lg:pb-[313px]">
-        <h1 className="text-28 mt-16 font-semibold whitespace-nowrap text-black sm:mt-24 sm:text-34 lg:mt-[233px] lg:text-48">
-          로그인
-        </h1>
+      <div className="relative flex min-h-svh flex-col">
+        <Header {...HEADER_PRESETS.landing} />
 
-        <div
-          className={`${LOGIN_COLUMN} mt-8 flex flex-col gap-[14px] lg:mt-[51px]`}
-        >
-          {/* 5. TextField에 상태(state) 연결 */}
-          <TextField
-            tone="login"
-            type="email"
-            name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            autoComplete="email"
-            placeholder="이메일"
-            aria-label="이메일"
-          />
-          <TextField
-            tone="login"
-            type="password"
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            autoComplete="current-password"
-            placeholder="비밀번호"
-            aria-label="비밀번호"
-          />
+        <div className="flex flex-1 items-center py-12 lg:py-0">
+          <div className="mx-auto flex w-full max-w-[1460px] flex-col items-center gap-14 px-5 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10 min-[1524px]:gap-0 min-[1524px]:px-0">
+            <div
+              className={`${LANDING_TEXT} flex w-full max-w-[635px] flex-col gap-[16px] text-center lg:text-left`}
+            >
+              <h1 className="text-28 font-bold sm:text-34 lg:text-48">
+                우리... 같은 얘기하고 있는 거 맞죠?
+              </h1>
+
+              <p className="text-16 font-semibold sm:text-18 lg:text-20">
+                모두가 같은 의미로 이해할 수 있도록, 협업의 시작
+              </p>
+            </div>
+
+            <div className="w-full max-w-[501px] lg:mr-[31px]">
+              <h2
+                className={`${LANDING_TEXT} text-28 text-center font-bold sm:text-34 lg:text-48`}
+              >
+                로그인
+              </h2>
+
+              <div className="mt-8 flex flex-col gap-[14px] lg:mt-[51px]">
+                <input
+                  className={LANDING_FIELD}
+                  type="email"
+                  name="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleLogin();
+                  }}
+                  autoComplete="email"
+                  placeholder="이메일"
+                  aria-label="이메일"
+                />
+
+                <input
+                  className={LANDING_FIELD}
+                  type="password"
+                  name="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleLogin();
+                  }}
+                  autoComplete="current-password"
+                  placeholder="비밀번호"
+                  aria-label="비밀번호"
+                />
+              </div>
+
+              {error && (
+                <p
+                  role="alert"
+                  className="text-16 mt-[10px] font-medium text-[#da1e51]"
+                >
+                  {error}
+                </p>
+              )}
+
+              <label className="mt-[18px] flex w-fit cursor-pointer items-center gap-[8px]">
+                <input
+                  type="checkbox"
+                  name="remember"
+                  checked={rememberEmail}
+                  onChange={(e) => setRememberEmail(e.target.checked)}
+                  className="peer sr-only"
+                />
+
+                <span
+                  aria-hidden
+                  className="flex size-[18px] shrink-0 items-center justify-center rounded-[4px] border border-solid border-[#bcc2d2] bg-white/70 text-transparent peer-checked:border-[#6d93f8] peer-checked:bg-[#6d93f8] peer-checked:text-white peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#6d93f8]"
+                >
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                    fill="none"
+                    className="block"
+                  >
+                    <path
+                      d="M2.5 6.2L4.8 8.6L9.5 3.4"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+
+                <span
+                  className={`${LANDING_TEXT} text-20 font-medium whitespace-nowrap`}
+                >
+                  이메일 저장
+                </span>
+              </label>
+
+              <button
+                type="button"
+                onClick={handleLogin}
+                disabled={submitting}
+                className="text-20 mt-8 flex h-[54px] w-full items-center justify-center rounded-[10px] bg-[#6d93f8] font-semibold whitespace-nowrap text-white disabled:opacity-60 lg:mt-[46px]"
+              >
+                {submitting ? "로그인 중..." : "로그인"}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => navigate(PATHS.SIGNUP)}
+                className={`${LANDING_TEXT} text-20 mt-[14px] flex h-[54px] w-full items-center justify-center rounded-[10px] border border-solid border-[#cdceda] bg-white/70 font-semibold whitespace-nowrap backdrop-blur-[2px]`}
+              >
+                회원가입
+              </button>
+            </div>
+          </div>
         </div>
-
-        <div className={`${LOGIN_COLUMN} mt-[18px]`}>
-          <Checkbox label="이메일 저장" name="remember" />
-        </div>
-
-        <Button
-          size="blockSm"
-          className={`${LOGIN_COLUMN} mt-8 lg:mt-[46px]`}
-          onClick={handleLogin} // 6. 버튼에 클릭 이벤트 연결
-        >
-          로그인
-        </Button>
-
-        <Button
-          variant="secondaryMuted"
-          size="blockSm"
-          className={`${LOGIN_COLUMN} mt-[14px]`}
-          onClick={() => navigate(PATHS.SIGNUP)}
-        >
-          회원가입
-        </Button>
-      </main>
+      </div>
     </div>
   );
 }
@@ -302,7 +363,7 @@ export function SignUpCompletePage() {
           <Button
             variant="secondary"
             size="inline"
-            onClick={() => navigate(PATHS.LOGIN)}
+            onClick={() => navigate(PATHS.WELCOME)}
           >
             로그인하러 가기
             <ArrowRight />

@@ -1,6 +1,5 @@
 import { createBrowserRouter, Navigate } from 'react-router'
 import {
-  LoginPage,
   NotFoundPage,
   SignUpCompletePage,
   SignUpPage,
@@ -23,7 +22,6 @@ export const router = createBrowserRouter([
   { path: PATHS.ROOT, element: <Navigate to={PATHS.WELCOME} replace /> },
 
   { path: PATHS.WELCOME, element: <WelcomePage /> },
-  { path: PATHS.LOGIN, element: <LoginPage /> },
   { path: PATHS.SIGNUP, element: <SignUpPage /> },
   { path: PATHS.SIGNUP_COMPLETE, element: <SignUpCompletePage /> },
 
