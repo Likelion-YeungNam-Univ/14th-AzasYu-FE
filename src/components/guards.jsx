@@ -22,6 +22,12 @@ export function RequireAuth({ children }) {
   return children
 }
 
+export function RootRedirect() {
+  const token = localStorage.getItem('accessToken')
+
+  return <Navigate to={token ? PATHS.PROJECTS : PATHS.WELCOME} replace />
+}
+
 export function RequireSignUpComplete({ children }) {
   const completed = sessionStorage.getItem(SIGNUP_COMPLETE_KEY) === '1'
 

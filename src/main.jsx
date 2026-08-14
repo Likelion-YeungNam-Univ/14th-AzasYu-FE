@@ -3,6 +3,9 @@ import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router'
 import './index.css'
 import { router } from '@/router'
+import { installUnauthorizedHandler } from '@/session'
+
+installUnauthorizedHandler()
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

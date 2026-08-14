@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from 'react-router'
+import { createBrowserRouter } from 'react-router'
 import {
   NotFoundPage,
   SignUpCompletePage,
@@ -17,7 +17,11 @@ import { ProjectCompletePage } from '@/pages/projects/complete'
 import { ProjectDetailPage } from '@/pages/projects/detail'
 import { ProjectsPage } from '@/pages/projects/list'
 import { ProjectNewPage } from '@/pages/projects/new'
-import { RequireAuth, RequireSignUpComplete } from '@/components/guards'
+import {
+  RequireAuth,
+  RequireSignUpComplete,
+  RootRedirect,
+} from '@/components/guards'
 import { MEETING_PATTERNS, PATHS, PROJECT_PATTERNS } from '@/lib'
 
 const protectedRoute = (path, element) => ({
@@ -26,7 +30,7 @@ const protectedRoute = (path, element) => ({
 })
 
 export const router = createBrowserRouter([
-  { path: PATHS.ROOT, element: <Navigate to={PATHS.WELCOME} replace /> },
+  { path: PATHS.ROOT, element: <RootRedirect /> },
 
   { path: PATHS.WELCOME, element: <WelcomePage /> },
   { path: PATHS.SIGNUP, element: <SignUpPage /> },
