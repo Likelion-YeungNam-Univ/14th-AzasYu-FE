@@ -182,7 +182,7 @@ export function Chip({ label, onRemove, className }) {
   return (
     <span
       className={cn(
-        'text-16 flex h-[41px] w-fit items-center justify-center gap-[6px] rounded-[8px] border border-solid border-[#606060] px-[16px] py-[8px] font-medium whitespace-nowrap text-[#606060]',
+        'text-16 flex h-[41px] w-fit items-center justify-center gap-[6px] rounded-[8px] bg-[#e6f3fe] px-[16px] py-[8px] font-medium whitespace-nowrap text-[#0075d3]',
         className,
       )}
     >
@@ -219,32 +219,27 @@ export function FieldBox({ children, icon, className }) {
 
 export function AgendaList({ items, onRemove, className }) {
   return (
-    <div
-      className={cn(
-        'flex min-h-[154px] flex-col justify-center gap-[10px] rounded-[7px] border border-solid border-[#606060] px-[16px] py-[14px] lg:h-[154px] lg:min-h-0 lg:overflow-clip',
-        className,
-      )}
-    >
-      <ol className="text-20 flex list-decimal flex-col gap-[10px] font-medium text-[#606060]">
-        {items.map((item) => (
-          <li key={item.id} className="ms-[30px] h-[36px]">
-            <div className="flex h-full items-center justify-between gap-[10px]">
-              <span className="truncate">{item.text}</span>
-              {onRemove && (
-                <button
-                  type="button"
-                  onClick={() => onRemove(item.id)}
-                  aria-label={`${item.text} 삭제`}
-                  className="flex shrink-0 cursor-pointer items-center"
-                >
-                  <Close className="size-[20px]" />
-                </button>
-              )}
-            </div>
-          </li>
-        ))}
-      </ol>
-    </div>
+    <ul className={cn('flex w-full flex-col gap-[10px]', className)}>
+      {items.map((item) => (
+        <li
+          key={item.id}
+          className="text-20 flex items-center justify-between gap-[10px] rounded-[55px] bg-[#f5f5f5] px-[16px] py-[8px] font-medium text-[#1c232b]"
+        >
+          <span className="truncate">{item.text}</span>
+
+          {onRemove && (
+            <button
+              type="button"
+              onClick={() => onRemove(item.id)}
+              aria-label={`${item.text} 삭제`}
+              className="flex shrink-0 cursor-pointer items-center"
+            >
+              <Close className="size-[20px]" />
+            </button>
+          )}
+        </li>
+      ))}
+    </ul>
   )
 }
 
