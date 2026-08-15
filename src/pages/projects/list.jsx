@@ -299,14 +299,6 @@ export function ProjectsPage() {
                   {joinLoading ? '참여 중...' : '프로젝트 참여'}
                 </Button>
               </div>
-
-              <button
-                type="button"
-                onClick={handleCloseJoinModal}
-                className="text-14 text-[#717171]"
-              >
-                닫기
-              </button>
             </div>
           </div>
         </div>
