@@ -48,7 +48,6 @@ export function MeetingUploadPage() {
         );
       }
 
-      // 원문 등록 성공 → 자동 분석 → 결과 페이지
       navigate(meetingPath("LOADING", projectId, meetingId));
     } catch (error) {
       console.error("회의 원문 등록 실패:", error);
@@ -90,7 +89,6 @@ export function MeetingUploadPage() {
         );
       }
 
-      // 원문 등록 성공 → 자동 분석 → 결과 페이지
       navigate(meetingPath("LOADING", projectId, meetingId));
     } catch (error) {
       console.error("회의 파일 업로드 실패:", error);

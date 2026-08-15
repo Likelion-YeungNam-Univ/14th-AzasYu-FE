@@ -12,9 +12,6 @@ const authHeaders = () => ({
   Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
 })
 
-/**
- * 현재 로그인한 사용자 ID
- */
 const getCurrentUserId = () => {
   const accessToken = localStorage.getItem('accessToken')
 
@@ -98,10 +95,6 @@ const readJson = async (url) => {
   }
 }
 
-/**
- * 회의 상세 정보를 가져와서
- * MeetingCard에서 사용할 데이터로 만든다.
- */
 const getMeetingProgress = async (meetingId) => {
   const [detail, record, result] = await Promise.all([
     readJson(
@@ -122,15 +115,9 @@ const getMeetingProgress = async (meetingId) => {
   const hasResult = Boolean(result?.success && result?.data?.status === 'GENERATED')
 
   return {
-    /**
-     * 회의 참여자
-     */
     participants:
       meetingDetail?.participants ?? [],
 
-    /**
-     * 인터뷰 현황
-     */
     interviewStatus: status ?? {
       totalParticipants:
         meetingDetail?.participants?.length ?? 0,
@@ -188,20 +175,12 @@ export function ProjectDetailPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  /**
-   * 현재 로그인한 사용자
-   */
   const [currentUserId, setCurrentUserId] = useState('')
-
-
 
   useEffect(() => {
     setCurrentUserId(getCurrentUserId())
   }, [])
 
-  /**
-   * 프로젝트 + 회의 목록 조회
-   */
   useEffect(() => {
     const fetchProjectDetail = async () => {
       try {
@@ -254,9 +233,6 @@ export function ProjectDetailPage() {
     }
   }, [projectId])
 
-  /**
-   * 프로젝트 참여코드 복사
-   */
   const handleCopyJoinCode = () => {
     const joinCode = project?.joinCode
 
@@ -284,12 +260,6 @@ export function ProjectDetailPage() {
 
     document.body.removeChild(textarea)
   }
-
-
-
-
-
-
 
   if (loading) {
     return (
@@ -389,8 +359,6 @@ export function ProjectDetailPage() {
           description="첫 회의를 만들어 프로젝트를 시작해보세요!"
         />
       )}
-
-
     </div>
   )
 }

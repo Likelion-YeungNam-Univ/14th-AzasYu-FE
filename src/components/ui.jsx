@@ -551,7 +551,6 @@ export function MeetingCard({
 
         <Divider />
 
-        {/* 회의 원문이 아직 없을 때 — 업로드 유도 */}
         {!hasRecord && !hasResult && (
           <>
             <div className="flex flex-col gap-[4px]">
@@ -582,7 +581,6 @@ export function MeetingCard({
           </>
         )}
 
-        {/* 업로드는 됐지만 분석 결과는 아직 없을 때 — 분석 보기로 전환 */}
         {hasRecord && !hasResult && (
           <>
             <div className="flex flex-col gap-[4px]">
@@ -613,7 +611,6 @@ export function MeetingCard({
           </>
         )}
 
-        {/* 분석 결과가 만들어진 경우 */}
         {hasResult && (
           <>
             <div className="flex flex-col gap-[4px]">
