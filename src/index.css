@@ -7,6 +7,10 @@
     system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo',
     'Noto Sans KR', 'Malgun Gothic', sans-serif;
 
+  --text-12: 12px;
+  --text-12--line-height: 1.4;
+  --text-12--letter-spacing: -0.025em;
+
   --text-14: 14px;
   --text-14--line-height: 1.4;
   --text-14--letter-spacing: -0.025em;

@@ -10,7 +10,7 @@ import { clearSession } from '@/session'
 
 const TONE = {
   onHero: 'text-[#f4f4f4]',
-  onLight: 'text-[#717171]',
+  onLight: 'text-[#1c232b]',
   onDark: 'text-[#1c232b]',
 }
 
@@ -147,14 +147,25 @@ const HERO_FILL =
 
 const HERO_HEIGHT = {
   lg: 'h-[670px]',
-  md: 'h-[370px]',
+  md: 'h-[350px]',
   sm: 'h-[270px]',
 }
 
 const HERO_CONTENT_TOP = {
   lg: { center: 229, left: 231 },
-  md: { center: 82, left: 82 },
+  md: { center: 71, left: 71 },
   sm: { center: 82, left: 82 },
+}
+
+const HERO_SURFACE = {
+  gradient: { band: '', text: 'text-[#f4f4f4]', description: '' },
+  light: { band: 'bg-[#f5f5f5]', text: 'text-[#1c232b]', description: 'text-[#858894]' },
+}
+
+const HERO_DESC_WEIGHT = {
+  semibold: 'font-semibold',
+  medium: 'font-medium',
+  normal: 'font-normal',
 }
 
 export function Hero({
@@ -163,6 +174,7 @@ export function Hero({
   footer,
   size = 'lg',
   align = 'center',
+  surface = 'gradient',
   descriptionWeight,
   contentTop,
   className,
@@ -170,15 +182,19 @@ export function Hero({
   const isCenter = align === 'center'
   const top = contentTop ?? HERO_CONTENT_TOP[size][align]
   const weight = descriptionWeight ?? (isCenter ? 'semibold' : 'normal')
+  const skin = HERO_SURFACE[surface]
 
   return (
     <div
-      className={cn('relative w-full', HERO_HEIGHT[size], className)}
-      style={{ backgroundImage: HERO_FILL }}
+      className={cn('relative w-full', HERO_HEIGHT[size], skin.band, className)}
+      style={
+        surface === 'gradient' ? { backgroundImage: HERO_FILL } : undefined
+      }
     >
       <div
         className={cn(
-          'absolute flex flex-col gap-[40px] px-5 text-[#f4f4f4] sm:px-8 lg:px-0',
+          'absolute flex flex-col gap-[40px] px-5 sm:px-8 lg:px-0',
+          skin.text,
           isCenter
             ? 'left-1/2 w-full -translate-x-1/2 items-center text-center lg:w-max'
             : 'inset-x-0 mx-auto w-full max-w-[1460px] items-start',
@@ -201,7 +217,8 @@ export function Hero({
             <p
               className={cn(
                 isCenter ? 'text-16 lg:text-18' : 'text-18 lg:text-20',
-                weight === 'semibold' ? 'font-semibold' : 'font-normal',
+                HERO_DESC_WEIGHT[weight],
+                skin.description,
               )}
             >
               {description}

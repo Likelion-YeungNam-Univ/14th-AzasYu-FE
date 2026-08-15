@@ -7,7 +7,7 @@ const BUTTON_VARIANT = {
   secondary: 'border border-solid border-[#1c232b] text-[#1c232b]',
   secondaryMuted: 'border border-solid border-[#717171] text-[#717171]',
   secondaryOnHero: 'border border-solid border-[#f4f4f4] text-[#f4f4f4]',
-  subtle: 'bg-[#e9e9e9] text-black',
+  subtle: 'bg-[#e6f3fe] text-[#0075d3]',
 }
 
 const BUTTON_SIZE = {
@@ -351,19 +351,43 @@ export function Table({ columns, rows, className }) {
   )
 }
 
+const PROJECT_CARD_GRADIENTS = [
+  'linear-gradient(124.58deg, rgb(155, 213, 255) 5.3878%, rgb(35, 162, 255) 94.612%)',
+  'linear-gradient(124.58deg, rgb(109, 219, 172) 5.3878%, rgb(1, 183, 106) 94.612%)',
+  'linear-gradient(124.58deg, rgb(238, 126, 111) 5.3878%, rgb(247, 73, 50) 94.612%)',
+  'linear-gradient(124.58deg, rgb(255, 217, 141) 5.3878%, rgb(255, 176, 16) 94.612%)',
+]
+
 export function ProjectCard({ project, className }) {
+  const palette = PROJECT_CARD_GRADIENTS.length
+  const gradient =
+    PROJECT_CARD_GRADIENTS[
+      (((Number(project.id) || 0) - 1) % palette + palette) % palette
+    ]
+
   return (
     <Link
       to={projectPath('DETAIL', project.id)}
       className={cn('flex flex-col', className)}
     >
-      <div className="aspect-[470/275] w-full rounded-[14px] bg-[#d1d1d1]" />
+      <div
+        className="flex aspect-[470/275] w-full items-start rounded-[14px] px-[18px] py-[14px]"
+        style={{ backgroundImage: gradient }}
+      >
+        {typeof project.meetingCount === 'number' && (
+          <span className="text-12 flex items-center justify-center rounded-[8px] bg-white px-[13px] py-[8px] font-bold whitespace-nowrap text-[#1c232b]">
+            {project.meetingCount}개 회의
+          </span>
+        )}
+      </div>
 
-      <p className="text-18 mt-[22px] font-medium text-[#999]">
+      <p className="text-18 mt-[22px] font-medium text-[#858894]">
         {project.participants}
       </p>
-      <p className="text-24 mt-[3.8px] font-semibold text-black">{project.name}</p>
-      <p className="text-18 mt-[29.4px] font-medium text-[#d1d1d1]">{project.date}</p>
+      <p className="text-24 mt-[4px] h-[65px] overflow-hidden font-semibold text-[#1c232b]">
+        {project.name}
+      </p>
+      <p className="text-18 font-medium text-[#d7d7d7]">{project.date}</p>
     </Link>
   )
 }
