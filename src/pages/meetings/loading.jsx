@@ -13,7 +13,6 @@ export function MeetingLoadingPage() {
 
     let stopped = false;
 
-    // 최소 대기 시간 (3초) — 로딩 화면이 충분히 보이도록
     const MIN_DISPLAY_MS = 3000;
     const enteredAt = Date.now();
 
@@ -36,7 +35,6 @@ export function MeetingLoadingPage() {
         );
 
         if (response.status === 404) {
-          console.log("아직 분석 결과가 생성되지 않았습니다.");
           return;
         }
 
@@ -50,12 +48,9 @@ export function MeetingLoadingPage() {
 
         const status = result.data?.status;
 
-        console.log("회의 분석 상태:", status);
-
         if (status === "GENERATED") {
           if (stopped) return;
 
-          // 최소 대기 시간이 지나지 않았으면 남은 시간만큼 기다린 후 이동
           const elapsed = Date.now() - enteredAt;
           const remaining = Math.max(0, MIN_DISPLAY_MS - elapsed);
 
@@ -75,9 +70,6 @@ export function MeetingLoadingPage() {
             result.data?.failureMessage || "회의 분석에 실패했습니다.",
           );
         }
-
-        // PENDING, PROCESSING 등의 상태라면
-        // 아무것도 하지 않고 다음 polling을 기다린다.
       } catch (error) {
         console.error("회의 분석 상태 확인 실패:", error);
 
@@ -87,10 +79,8 @@ export function MeetingLoadingPage() {
       }
     };
 
-    // 처음 한 번 바로 확인
     checkResult();
 
-    // 이후 2초마다 상태 확인
     const intervalId = setInterval(checkResult, 2000);
 
     return () => {
