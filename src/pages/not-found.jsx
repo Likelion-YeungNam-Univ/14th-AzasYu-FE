@@ -11,7 +11,7 @@ export function NotFoundPage() {
         주소가 바뀌었거나 삭제된 페이지일 수 있어요.
       </p>
       <Link
-        to={PATHS.PROJECTS}
+        to={PATHS.ROOT}
         className="text-18 mt-2 font-medium text-[#606060] underline underline-offset-4"
       >
         홈으로 가기
