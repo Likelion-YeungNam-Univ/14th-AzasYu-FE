@@ -1,13 +1,9 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
+import sendIcon from "@/assets/icons/send.svg";
 import { Header, Hero, HeroLayout } from "@/components/layout";
 import { Button, Card } from "@/components/ui";
-import {
-  API_BASE_URL,
-  HEADER_PRESETS,
-  HERO_CARD_OVERLAP,
-  meetingPath,
-} from "@/lib";
+import { API_BASE_URL, HEADER_PRESETS, meetingPath } from "@/lib";
 
 const INTRO = [
   [
@@ -23,16 +19,32 @@ const INTRO = [
 function BotMessage({ children, bubbleTop }) {
   return (
     <div className="flex gap-[8px]">
-      <span className="mt-[2px] size-[32px] shrink-0 rounded-full bg-[#d9d9d9]" />
+      <span className="mt-[2px] size-[32px] shrink-0 rounded-full bg-[#def4ec]" />
+
       <div className="flex min-w-0 flex-col">
-        <p className="text-16 font-medium text-[#717171]">AI 챗봇</p>
+        <p className="text-16 font-medium text-[#1c232b]">AI 챗봇</p>
+
         <div
           style={{ marginTop: bubbleTop - 22.4 }}
-          className="text-16 w-fit rounded-[20px] bg-[#e3e3e3] px-[20px] py-[12px] leading-[1.5] font-medium text-[#717171]"
+          className="text-16 w-fit rounded-[20px] border border-solid border-[#b8bccc] bg-white px-[20px] py-[12px] leading-[1.5] font-medium text-[#1c232b]"
         >
           {children}
         </div>
       </div>
+    </div>
+  );
+}
+
+function UserMessage({ children, tone = "primary" }) {
+  return (
+    <div className="flex w-full justify-end">
+      <p
+        className={`text-16 max-w-[479px] rounded-[26px] px-[20px] py-[12px] leading-[1.5] font-medium text-white ${
+          tone === "dark" ? "bg-[#1c232b]" : "bg-[#0075d3]"
+        }`}
+      >
+        {children}
+      </p>
     </div>
   );
 }
@@ -48,13 +60,17 @@ export function MeetingInterviewPage() {
   const [status, setStatus] = useState("LOADING");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [answers, setAnswers] = useState({});
+  // 한 번에 한 질문씩 답한다
+  const [answered, setAnswered] = useState([]);
+  const [draft, setDraft] = useState("");
 
   // 답변 제출 및 카드 생성 관련 상태
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [cardStatus, setCardStatus] = useState("NOT_SUBMITTED"); // NOT_SUBMITTED, LOADING, GENERATED, FAILED
   const [ideaCard, setIdeaCard] = useState(null);
   const [cardErrorMessage, setCardErrorMessage] = useState("");
+
+  const submittedRef = useRef(false);
 
   // 공통 질문 조회 API (GET)
   const fetchQuestions = async () => {
@@ -146,36 +162,12 @@ export function MeetingInterviewPage() {
     }
   };
 
-  // 답변 텍스트 입력 핸들러
-  const handleAnswerChange = (questionId, text) => {
-    setAnswers((prev) => ({
-      ...prev,
-      [questionId]: text,
-    }));
-  };
-
   // 답변 제출 및 아이디어 카드 생성 (POST)
-  const handleSubmitAnswers = async () => {
-    // 유효성 검사
-    const unansweredCount = questions.length - Object.keys(answers).length;
-    const hasEmptyText = Object.values(answers).some(
-      (text) => text.trim() === "",
-    );
-
-    if (unansweredCount > 0 || hasEmptyText) {
-      alert("모든 질문에 답변을 작성해주세요.");
-      return;
-    }
-
+  const submitAnswers = async (formattedAnswers) => {
     try {
       setIsSubmitting(true);
       setCardStatus("LOADING"); // 제출 즉시 로딩 모드
       const accessToken = localStorage.getItem("accessToken");
-
-      const formattedAnswers = Object.entries(answers).map(([qId, text]) => ({
-        questionId: Number(qId),
-        content: text.trim(),
-      }));
 
       const response = await fetch(
         `${API_BASE_URL}/api/v1/meetings/${meetingId}/interview/submissions`,
@@ -210,6 +202,7 @@ export function MeetingInterviewPage() {
       console.error("답변 제출 실패:", error);
       alert(error.message);
       setCardStatus("NOT_SUBMITTED"); // 에러 나면 다시 제출할 수 있게 원상복구
+      submittedRef.current = false;
     } finally {
       setIsSubmitting(false);
     }
@@ -252,23 +245,48 @@ export function MeetingInterviewPage() {
     }
   };
 
+  const answeredCount = answered.length;
+  const currentQuestion = questions[answeredCount];
+  const allAnswered = questions.length > 0 && !currentQuestion;
+
+  const handleSend = () => {
+    const content = draft.trim();
+
+    if (!content || !currentQuestion) return;
+
+    const next = [...answered, { questionId: currentQuestion.id, content }];
+
+    setAnswered(next);
+    setDraft("");
+
+    if (next.length === questions.length && !submittedRef.current) {
+      submittedRef.current = true;
+      submitAnswers(next);
+    }
+  };
+
+  const canType = status === "GENERATED" && Boolean(currentQuestion);
+
   return (
     <HeroLayout
-      overlapHeader
-      cardOverlap={HERO_CARD_OVERLAP}
-      header={<Header {...HEADER_PRESETS.appOnHero} />}
+      header={<Header {...HEADER_PRESETS.appOnLight} />}
       hero={
         <Hero
-          size="lg"
+          size="sm"
           align="center"
-          title="AI 사전 인터뷰"
-          description="6개의 질문으로 생각을 정리해보세요."
+          surface="light"
+          title="6개의 질문으로 생각을 정리해요."
+          description="답변은 익명으로 모여 회의 자료가 됩니다."
+          descriptionWeight="medium"
         />
       }
     >
-      <div className="flex w-full justify-center px-5 pb-16 sm:px-8 lg:pb-[220px]">
-        <Card className="w-full max-w-[878px] px-6 py-8 sm:px-10 lg:min-h-[800px] lg:px-[48px] lg:py-[40px]">
-          <div className="flex w-full flex-col gap-[36px]">
+      <div className="flex w-full justify-center px-5 pt-12 pb-16 sm:px-8 lg:pt-[60px] lg:pb-[84px]">
+        <Card
+          shadow="meeting"
+          className="w-full max-w-[878px] px-6 py-8 sm:px-10 lg:px-[48px] lg:py-[40px]"
+        >
+          <div className="flex w-full flex-col gap-[24px]">
             {/* 상단 인사말 */}
             <BotMessage bubbleTop={34}>
               {INTRO.map((lines, i) => (
@@ -283,7 +301,7 @@ export function MeetingInterviewPage() {
             {/* 질문 로딩, 생성 중 */}
             {(status === "LOADING" || status === "PENDING") && (
               <div className="flex flex-col items-center justify-center gap-4 py-20">
-                <span className="text-18 font-medium text-[#717171]">
+                <span className="text-18 font-medium text-[#858894]">
                   AI가 회의 안건을 분석하여 질문을 만들고 있습니다... 🤖
                 </span>
               </div>
@@ -295,11 +313,12 @@ export function MeetingInterviewPage() {
               status === "NOT_CONFIGURED" ||
               status === "ERROR") && (
               <div className="flex flex-col items-center justify-center gap-6 py-20">
-                <p className="text-18 font-medium text-red-500 text-center leading-[1.5]">
+                <p className="text-18 text-center leading-[1.5] font-medium text-[#da1e51]">
                   {errorMessage}
                 </p>
                 {status !== "NOT_CONFIGURED" && (
                   <Button
+                    size="pill"
                     onClick={handleGenerateQuestions}
                     className="w-fit px-8"
                   >
@@ -311,119 +330,123 @@ export function MeetingInterviewPage() {
               </div>
             )}
 
-            {/* 질문 생성 완료 , 답변 입력 및 카드 결과 화면 */}
-            {status === "GENERATED" && questions.length > 0 && (
-              <div className="flex flex-col gap-[32px]">
-                {/*  질문 , 텍스트  */}
-                {questions.map((q, index) => (
-                  <div key={q.id} className="contents">
+            {/* 질문 생성 완료 — 답한 만큼만 대화가 쌓인다 */}
+            {status === "GENERATED" &&
+              questions.map((question, index) => {
+                if (index > answeredCount) return null;
+
+                return (
+                  <Fragment key={question.id}>
                     <div className="flex flex-col gap-[8px]">
-                      <p className="text-14 font-medium text-[#717171]">
+                      <p className="text-14 font-medium text-[#858894]">
                         질문 {index + 1}/{questions.length}
                       </p>
-                      <BotMessage bubbleTop={31}>{q.content}</BotMessage>
+
+                      <BotMessage bubbleTop={31}>
+                        {question.content}
+                      </BotMessage>
                     </div>
 
-                    <div className="flex justify-end">
-                      <textarea
-                        value={answers[q.id] || ""}
-                        onChange={(e) =>
-                          handleAnswerChange(q.id, e.target.value)
-                        }
-                        disabled={cardStatus !== "NOT_SUBMITTED"}
-                        className={`text-16 w-full resize-none rounded-[26px] bg-[#f6f6f6] px-[20px] py-[14px] font-medium text-[#717171] placeholder:text-[#c0c0c0] focus:outline-none focus:ring-2 focus:ring-[#d0d0d0] lg:w-[439px] ${
-                          cardStatus !== "NOT_SUBMITTED"
-                            ? "opacity-60 cursor-not-allowed"
-                            : ""
-                        }`}
-                        rows={3}
-                        placeholder="이곳에 답변을 작성해주세요..."
-                      />
-                    </div>
-                  </div>
-                ))}
+                    {answered[index] && (
+                      <UserMessage>{answered[index].content}</UserMessage>
+                    )}
+                  </Fragment>
+                );
+              })}
 
-                {/* 제출 버튼 , 최종 카드 */}
-                <div className="mt-8 pt-8 border-t border-[#eaeaea] flex flex-col items-center gap-6">
-                  {/* 제출 전 */}
-                  {cardStatus === "NOT_SUBMITTED" && (
-                    <Button
-                      className="w-full max-w-[300px]"
-                      onClick={handleSubmitAnswers}
-                      disabled={isSubmitting}
-                    >
-                      {isSubmitting
-                        ? "답변 제출 중..."
-                        : "답변 제출하고 요약 카드 받기"}
-                    </Button>
-                  )}
+            {allAnswered && <UserMessage tone="dark">답변완료</UserMessage>}
 
-                  {/* 카드 요약 중 (로딩) */}
-                  {cardStatus === "LOADING" && (
-                    <div className="text-16 font-medium text-[#717171] py-8">
-                      작성해주신 답변을 바탕으로 AI가 핵심 아이디어 카드를
-                      생성하고 있습니다... ⏳
-                    </div>
-                  )}
+            {/* 카드 요약 중 (로딩) */}
+            {cardStatus === "LOADING" && (
+              <p className="text-16 py-8 text-center font-medium text-[#858894]">
+                작성해주신 답변을 바탕으로 AI가 핵심 아이디어 카드를 생성하고
+                있습니다... ⏳
+              </p>
+            )}
 
-                  {/* 카드 생성 실패 */}
-                  {cardStatus === "FAILED" && (
-                    <div className="flex flex-col items-center gap-4 py-8">
-                      <p className="text-16 font-medium text-red-500">
-                        {cardErrorMessage}
-                      </p>
-                      <Button
-                        variant="secondary"
-                        onClick={handleRegenerateCard}
-                      >
-                        아이디어 카드 다시 생성하기
-                      </Button>
-                    </div>
-                  )}
-
-                  {/* 카드 생성 완벽 성공 (결과 렌더링) */}
-                  {cardStatus === "GENERATED" && ideaCard && (
-                    <div className="w-full max-w-[500px] flex flex-col gap-4 bg-[#f8f9fa] rounded-[20px] p-8 border border-[#e0e0e0]">
-                      <div className="text-center mb-2">
-                        <span className="inline-block bg-[#717171] text-white text-12 font-bold px-3 py-1 rounded-full mb-2">
-                          나의 핵심 아이디어
-                        </span>
-                        <h3 className="text-20 font-bold text-[#333]">
-                          {ideaCard.coreOpinion}
-                        </h3>
-                      </div>
-
-                      <div className="flex flex-col gap-3 text-15 text-[#555]">
-                        <p>
-                          <strong>💡 근거:</strong> {ideaCard.rationale}
-                        </p>
-                        {ideaCard.concern && (
-                          <p>
-                            <strong>⚠️ 우려점:</strong> {ideaCard.concern}
-                          </p>
-                        )}
-                        {ideaCard.alternative && (
-                          <p>
-                            <strong>✅ 대안:</strong> {ideaCard.alternative}
-                          </p>
-                        )}
-                      </div>
-
-                      <div className="mt-4 pt-4 border-t border-[#ddd] flex justify-center">
-                        <Button
-                          onClick={() =>
-                            navigate(meetingPath("BOARD", projectId, meetingId))
-                          }
-                          className="w-full"
-                        >
-                          익명 아이디어 보드로 이동하기
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-                </div>
+            {/* 카드 생성 실패 */}
+            {cardStatus === "FAILED" && (
+              <div className="flex flex-col items-center gap-4 py-8">
+                <p className="text-16 font-medium text-[#da1e51]">
+                  {cardErrorMessage}
+                </p>
+                <Button
+                  size="pill"
+                  variant="secondary"
+                  onClick={handleRegenerateCard}
+                >
+                  아이디어 카드 다시 생성하기
+                </Button>
               </div>
             )}
+
+            {/* 카드 생성 성공 (결과 렌더링) */}
+            {cardStatus === "GENERATED" && ideaCard && (
+              <div className="flex w-full max-w-[500px] flex-col gap-4 self-center rounded-[20px] border border-solid border-[#b8bccc] p-8">
+                <div className="mb-2 text-center">
+                  <span className="text-12 mb-2 inline-block rounded-full bg-[#0075d3] px-3 py-1 font-bold text-white">
+                    나의 핵심 아이디어
+                  </span>
+                  <h3 className="text-20 font-bold text-[#1c232b]">
+                    {ideaCard.coreOpinion}
+                  </h3>
+                </div>
+
+                <div className="text-16 flex flex-col gap-3 leading-[1.5] text-[#858894]">
+                  <p>
+                    <strong>💡 근거:</strong> {ideaCard.rationale}
+                  </p>
+                  {ideaCard.concern && (
+                    <p>
+                      <strong>⚠️ 우려점:</strong> {ideaCard.concern}
+                    </p>
+                  )}
+                  {ideaCard.alternative && (
+                    <p>
+                      <strong>✅ 대안:</strong> {ideaCard.alternative}
+                    </p>
+                  )}
+                </div>
+
+                <Button
+                  className="mt-4 w-full"
+                  onClick={() =>
+                    navigate(meetingPath("BOARD", projectId, meetingId))
+                  }
+                >
+                  익명 아이디어 보드로 이동하기
+                </Button>
+              </div>
+            )}
+
+            {/* 답변 입력 */}
+            <div className="flex w-full items-center gap-[50px] rounded-[71px] bg-[#f5f5f5] px-[26px] py-[14px]">
+              <input
+                type="text"
+                value={draft}
+                onChange={(e) => setDraft(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleSend();
+                  }
+                }}
+                disabled={!canType || isSubmitting}
+                placeholder="메세지 보내기..."
+                aria-label="답변 입력"
+                className="text-16 min-w-0 flex-1 bg-transparent leading-[1.5] font-medium text-[#1c232b] outline-none placeholder:text-[#b8bccc]"
+              />
+
+              <button
+                type="button"
+                onClick={handleSend}
+                disabled={!canType || !draft.trim() || isSubmitting}
+                aria-label="답변 보내기"
+                className="shrink-0 cursor-pointer disabled:opacity-60"
+              >
+                <img src={sendIcon} alt="" className="size-[32px] max-w-none" />
+              </button>
+            </div>
           </div>
         </Card>
       </div>
