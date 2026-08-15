@@ -264,7 +264,7 @@ const SOCIAL_ICONS = [
 export function Footer({ className }) {
   return (
     <footer className={cn('w-full bg-white', className)}>
-      <div className="mx-auto flex w-full max-w-[1460px] items-start justify-between px-5 pt-[20px] pb-10 sm:px-8 lg:h-[174px] lg:px-0 lg:pb-0">
+      <div className="flex w-full items-start justify-between px-5 pt-[20px] pb-10 sm:px-8 lg:h-[174px] lg:px-[52px] lg:pb-0">
         <div className="flex w-[128px] flex-col gap-[12px]">
           <img
             src={likelionLogo}
