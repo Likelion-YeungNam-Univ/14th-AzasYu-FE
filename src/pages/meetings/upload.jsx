@@ -1,15 +1,9 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import uploadIcon from "@/assets/icons/upload.svg";
-import { Header, Hero, HeroLayout } from "@/components/layout";
+import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
 import { Button, Card } from "@/components/ui";
-import {
-  API_BASE_URL,
-  HEADER_PRESETS,
-  HERO_CARD_OVERLAP,
-  MEETING_TITLE,
-  meetingPath,
-} from "@/lib";
+import { API_BASE_URL, HEADER_PRESETS, meetingPath } from "@/lib";
 
 export function MeetingUploadPage() {
   const { projectId = "", meetingId = "" } = useParams();
@@ -107,20 +101,23 @@ export function MeetingUploadPage() {
   };
   return (
     <HeroLayout
-      overlapHeader
-      cardOverlap={HERO_CARD_OVERLAP}
-      header={<Header {...HEADER_PRESETS.appOnHero} />}
+      header={<Header {...HEADER_PRESETS.appOnLight} />}
       hero={
         <Hero
-          size="lg"
+          size="sm"
           align="center"
-          title={`${MEETING_TITLE} 텍스트 업로드`}
-          contentTop={258}
+          surface="light"
+          title="회의 내용을 분석해볼까요?"
+          description="회의 대화를 올리면 주요 결과와 모호한 부분을 확인할 수 있어요."
+          descriptionWeight="medium"
         />
       }
     >
-      <div className="flex w-full justify-center px-5 pb-16 sm:px-8 lg:pb-[191px]">
-        <Card className="w-full max-w-[878px] px-6 py-10 sm:px-10 lg:px-[40px] lg:py-[99px]">
+      <div className="flex w-full justify-center px-5 pt-12 pb-16 sm:px-8 lg:pt-[60px] lg:pb-[97px]">
+        <Card
+          shadow="meeting"
+          className="w-full max-w-[878px] px-6 py-10 sm:px-10 lg:px-[40px] lg:py-[99px]"
+        >
           <div className="flex w-full flex-col items-center gap-[20px]">
             <img
               src={uploadIcon}
@@ -129,16 +126,16 @@ export function MeetingUploadPage() {
             />
 
             <div className="flex flex-col items-center gap-[12px] py-[10px] text-center">
-              <p className="text-20 font-semibold text-[#717171] lg:text-24">
+              <p className="text-20 font-semibold text-[#1c232b] lg:text-24">
                 회의 내용을 분석해볼까요?
               </p>
-              <p className="text-16 font-medium text-[#878787] lg:text-18">
+              <p className="text-16 font-medium text-[#858894] lg:text-18">
                 회의 내용을 담은 TXT, DOCX, PDF 파일을 업로드해주세요.
               </p>
             </div>
 
-            <label className="text-20 flex w-full max-w-[282px] cursor-pointer items-center justify-center rounded-[8px] bg-[#d0d0d0] px-[24px] py-[14px] font-semibold whitespace-nowrap text-[#717171] focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[#606060]">
-              파일 업로드
+            <label className="text-20 flex w-[152px] cursor-pointer items-center justify-center rounded-[62px] bg-[#1c232b] px-[24px] py-[14px] font-semibold whitespace-nowrap text-white focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[#1c232b]">
+              파일 선택
               <input
                 type="file"
                 accept=".txt,.docx,.pdf"
@@ -153,25 +150,27 @@ export function MeetingUploadPage() {
               />
             </label>
 
-            <p className="text-14 font-semibold text-[#717171]">또는</p>
+            <p className="text-14 font-semibold text-[#858894]">또는</p>
 
             <textarea
               placeholder="텍스트 직접 입력하기"
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              className="text-14 h-[491px] w-full max-w-[514px] resize-none rounded-[8px] bg-[#eaeaea] px-[24px] py-[14px] font-semibold text-[#717171] placeholder:text-[#717171]"
+              className="text-14 h-[491px] w-full max-w-[514px] resize-none rounded-[8px] bg-[#f5f5f5] px-[24px] py-[20px] font-semibold text-[#1c232b] outline-none placeholder:text-[#858894]"
             />
 
             <Button
-              className="w-full max-w-[514px]"
+              className="w-full max-w-[516px]"
               onClick={handleTextUpload}
               disabled={uploading}
             >
-              {uploading ? "회의 내용 등록 중..." : "회의 내용 등록"}
+              {uploading ? "회의 내용 등록 중..." : "분석 시작하기"}
             </Button>
           </div>
         </Card>
       </div>
+
+      <Footer />
     </HeroLayout>
   );
 }

@@ -1,13 +1,15 @@
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { ChevronRight, Close } from '@/components/icons'
 import { cn, meetingPath, projectPath } from '@/lib'
 
 const BUTTON_VARIANT = {
-  primary: 'bg-[#606060] text-white',
-  secondary: 'border border-solid border-[#606060] text-[#606060]',
+  primary: 'bg-[#0075d3] text-white',
+  secondary: 'border border-solid border-[#1c232b] text-[#1c232b]',
   secondaryMuted: 'border border-solid border-[#717171] text-[#717171]',
   secondaryOnHero: 'border border-solid border-[#f4f4f4] text-[#f4f4f4]',
-  subtle: 'bg-[#e9e9e9] text-black',
+  subtle: 'bg-[#e6f3fe] text-[#0075d3]',
+  dark: 'bg-[#1c232b] text-white',
 }
 
 const BUTTON_SIZE = {
@@ -21,6 +23,7 @@ const BUTTON_SIZE = {
     'text-16 h-[42px] gap-[6px] rounded-[8px] px-[16px] py-[8px] font-medium',
   action:
     'text-18 gap-[10px] rounded-[8px] px-[24px] py-[12px] font-semibold',
+  pill: 'text-16 h-[44px] gap-[6px] rounded-[59px] px-[16px] py-[14px] font-medium',
 }
 
 export function Button({
@@ -49,6 +52,7 @@ export function Button({
 const CARD_SHADOW = {
   soft: 'shadow-[20px_20px_20px_0px_rgba(0,0,0,0.05)]',
   drop: 'shadow-[0px_4px_20px_0px_rgba(0,0,0,0.14)]',
+  meeting: 'shadow-[10px_10px_30px_0px_rgba(0,0,0,0.06)]',
 }
 
 export function Card({ shadow = 'soft', className, children }) {
@@ -66,9 +70,9 @@ export function Card({ shadow = 'soft', className, children }) {
 }
 
 const FIELD_LABEL = {
-  auth: 'text-16',
-  form: 'text-20',
-  login: 'text-20',
+  auth: 'text-16 text-[#1c232b]',
+  form: 'text-20 text-[#1c232b]',
+  login: 'text-20 text-[#717171]',
 }
 
 const FIELD_LABEL_GAP = {
@@ -78,23 +82,23 @@ const FIELD_LABEL_GAP = {
 }
 
 const FIELD_BOX = {
-  auth: 'h-[55px] rounded-[8px] border-[#d0d0d0] placeholder:text-[#d0d0d0]',
-  form: 'h-[66px] rounded-[8px] border-[#606060] placeholder:text-[#606060]',
-  login: 'h-[54px] rounded-[10px] border-[#bcbcbc] placeholder:text-[#bcbcbc]',
+  auth: 'h-[55px] rounded-[20px] border-[#b8bccc] text-[#1c232b] placeholder:text-[#b8bccc]',
+  form: 'h-[66px] rounded-[8px] border-[#b8bccc] text-[#1c232b] placeholder:text-[#b8bccc]',
+  login: 'h-[54px] rounded-[10px] border-[#bcbcbc] text-[#333] placeholder:text-[#bcbcbc]',
 }
 
 const FIELD_BASE =
-  'text-20 w-full border border-solid px-[16px] py-[14px] font-medium text-[#333] outline-none'
+  'text-20 w-full border border-solid px-[16px] py-[14px] font-medium outline-none'
 
 function FieldShell({ label, required, tone, className, children }) {
   return (
     <label className={cn('flex flex-col', label && FIELD_LABEL_GAP[tone], className)}>
       {label && (
         <span
-          className={cn('flex gap-[2px] font-medium text-[#717171]', FIELD_LABEL[tone])}
+          className={cn('flex gap-[2px] font-medium', FIELD_LABEL[tone])}
         >
           {label}
-          {required && <span className="text-[#da1e51]">*</span>}
+          {required && <span className="text-16 text-[#da1e51]">*</span>}
         </span>
       )}
       {children}
@@ -178,7 +182,7 @@ export function Chip({ label, onRemove, className }) {
   return (
     <span
       className={cn(
-        'text-16 flex h-[41px] w-fit items-center justify-center gap-[6px] rounded-[8px] border border-solid border-[#606060] px-[16px] py-[8px] font-medium whitespace-nowrap text-[#606060]',
+        'text-16 flex h-[41px] w-fit items-center justify-center gap-[6px] rounded-[8px] bg-[#e6f3fe] px-[16px] py-[8px] font-medium whitespace-nowrap text-[#0075d3]',
         className,
       )}
     >
@@ -215,45 +219,31 @@ export function FieldBox({ children, icon, className }) {
 
 export function AgendaList({ items, onRemove, className }) {
   return (
-    <div
-      className={cn(
-        'flex min-h-[154px] flex-col justify-center gap-[10px] rounded-[7px] border border-solid border-[#606060] px-[16px] py-[14px] lg:h-[154px] lg:min-h-0 lg:overflow-clip',
-        className,
-      )}
-    >
-      <ol className="text-20 flex list-decimal flex-col gap-[10px] font-medium text-[#606060]">
-        {items.map((item) => (
-          <li key={item.id} className="ms-[30px] h-[36px]">
-            <div className="flex h-full items-center justify-between gap-[10px]">
-              <span className="truncate">{item.text}</span>
-              {onRemove && (
-                <button
-                  type="button"
-                  onClick={() => onRemove(item.id)}
-                  aria-label={`${item.text} 삭제`}
-                  className="flex shrink-0 cursor-pointer items-center"
-                >
-                  <Close className="size-[20px]" />
-                </button>
-              )}
-            </div>
-          </li>
-        ))}
-      </ol>
-    </div>
+    <ul className={cn('flex w-full flex-col gap-[10px]', className)}>
+      {items.map((item) => (
+        <li
+          key={item.id}
+          className="text-20 flex items-center justify-between gap-[10px] rounded-[55px] bg-[#f5f5f5] px-[16px] py-[8px] font-medium text-[#1c232b]"
+        >
+          <span className="truncate">{item.text}</span>
+
+          {onRemove && (
+            <button
+              type="button"
+              onClick={() => onRemove(item.id)}
+              aria-label={`${item.text} 삭제`}
+              className="flex shrink-0 cursor-pointer items-center"
+            >
+              <Close className="size-[20px]" />
+            </button>
+          )}
+        </li>
+      ))}
+    </ul>
   )
 }
 
-const SWATCHES = [
-  '#D9D9D9',
-  '#8B8B8B',
-  '#414141',
-  '#090909',
-  '#5B5B5B',
-  '#8D8D8D',
-  '#D9D9D9',
-  '#D9D9D9',
-]
+const SWATCHES = ['#f74932', '#ffb010', '#01b76a', '#57b8ff', '#1c232b']
 
 export function ColorSwatches({ value, onChange, className }) {
   return (
@@ -272,9 +262,9 @@ export function ColorSwatches({ value, onChange, className }) {
           onClick={() => onChange(index)}
           style={{ backgroundColor: color }}
           className={cn(
-            'size-[40px] shrink-0 cursor-pointer rounded-full opacity-40',
-            'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#606060]',
-            index === value && 'outline outline-2 outline-offset-2 outline-[#606060]',
+            'size-[40px] shrink-0 cursor-pointer rounded-full',
+            'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1c232b]',
+            index === value && 'outline outline-2 outline-offset-2 outline-[#1c232b]',
           )}
         />
       ))}
@@ -282,8 +272,8 @@ export function ColorSwatches({ value, onChange, className }) {
   )
 }
 
-const TABLE_CONTAINER_WIDTH = 1452
-const TABLE_INNER_WIDTH = TABLE_CONTAINER_WIDTH - 2
+const TABLE_CONTAINER_WIDTH = 1460
+const TABLE_INNER_WIDTH = 1334
 const TABLE_CELL = 'shrink-0 overflow-hidden pr-4 text-ellipsis whitespace-nowrap'
 
 function tableCellWidth(col) {
@@ -294,17 +284,15 @@ export function Table({ columns, rows, className }) {
   return (
     <div
       className={cn(
-        'w-full overflow-hidden rounded-[35px] border border-solid border-[#717171] bg-white',
+        'w-full overflow-hidden rounded-[35px] border-[0.4px] border-solid border-[#b8bccc] bg-white',
+        CARD_SHADOW.meeting,
         className,
       )}
       style={{ maxWidth: TABLE_CONTAINER_WIDTH }}
     >
       <div className="overflow-x-auto">
-        <div
-          className="px-6 py-[29px] sm:px-10 lg:px-[70px]"
-          style={{ minWidth: TABLE_INNER_WIDTH }}
-        >
-          <div className="text-20 flex h-[76px] items-center border-b border-solid border-[#717171] font-semibold text-[#717171]">
+        <div style={{ minWidth: TABLE_INNER_WIDTH }}>
+          <div className="text-20 flex h-[76px] items-center border-b-[0.5px] border-solid border-[#b8bccc] bg-[#e6f3fe] px-6 font-semibold text-[#1c232b] sm:px-10 lg:px-[42px]">
             {columns.map((col) => (
               <p
                 key={col.label}
@@ -316,13 +304,10 @@ export function Table({ columns, rows, className }) {
             ))}
           </div>
 
-          {rows.map((row, i) => (
+          {rows.map((row) => (
             <div
               key={row.id}
-              className={cn(
-                'text-20 relative flex h-[70px] items-center font-medium text-[#717171]',
-                i < rows.length - 1 && 'border-b border-solid border-[#717171]',
-              )}
+              className="text-20 relative flex h-[76px] items-center border-b-[0.5px] border-solid border-[#b8bccc] px-6 font-bold text-[#1c232b] sm:px-10 lg:px-[42px]"
             >
               {row.cells.map((cell, j) => (
                 <div
@@ -351,19 +336,43 @@ export function Table({ columns, rows, className }) {
   )
 }
 
+const PROJECT_CARD_GRADIENTS = [
+  'linear-gradient(124.58deg, rgb(155, 213, 255) 5.3878%, rgb(35, 162, 255) 94.612%)',
+  'linear-gradient(124.58deg, rgb(109, 219, 172) 5.3878%, rgb(1, 183, 106) 94.612%)',
+  'linear-gradient(124.58deg, rgb(238, 126, 111) 5.3878%, rgb(247, 73, 50) 94.612%)',
+  'linear-gradient(124.58deg, rgb(255, 217, 141) 5.3878%, rgb(255, 176, 16) 94.612%)',
+]
+
 export function ProjectCard({ project, className }) {
+  const palette = PROJECT_CARD_GRADIENTS.length
+  const gradient =
+    PROJECT_CARD_GRADIENTS[
+      (((Number(project.id) || 0) - 1) % palette + palette) % palette
+    ]
+
   return (
     <Link
       to={projectPath('DETAIL', project.id)}
       className={cn('flex flex-col', className)}
     >
-      <div className="aspect-[470/275] w-full rounded-[14px] bg-[#d1d1d1]" />
+      <div
+        className="flex aspect-[470/275] w-full items-start rounded-[14px] px-[18px] py-[14px]"
+        style={{ backgroundImage: gradient }}
+      >
+        {typeof project.meetingCount === 'number' && (
+          <span className="text-12 flex items-center justify-center rounded-[8px] bg-white px-[13px] py-[8px] font-bold whitespace-nowrap text-[#1c232b]">
+            {project.meetingCount}개 회의
+          </span>
+        )}
+      </div>
 
-      <p className="text-18 mt-[22px] font-medium text-[#999]">
+      <p className="text-18 mt-[22px] font-medium text-[#858894]">
         {project.participants}
       </p>
-      <p className="text-24 mt-[3.8px] font-semibold text-black">{project.name}</p>
-      <p className="text-18 mt-[29.4px] font-medium text-[#d1d1d1]">{project.date}</p>
+      <p className="text-24 mt-[4px] h-[65px] overflow-hidden font-semibold text-[#1c232b]">
+        {project.name}
+      </p>
+      <p className="text-18 font-medium text-[#d7d7d7]">{project.date}</p>
     </Link>
   )
 }
@@ -371,7 +380,7 @@ export function ProjectCard({ project, className }) {
 function Divider() {
   return (
     <div className="relative h-0 w-full">
-      <span className="absolute inset-x-0 -top-px block border-t border-[#c7c7c7]" />
+      <span className="absolute inset-x-0 -top-px block border-t border-[#f6f5fa]" />
     </div>
   )
 }
@@ -391,91 +400,158 @@ function formatMeetingDate(value) {
   })
 }
 
+const AVATAR_COLORS = ['#f74932', '#01b76a', '#ffb010', '#57b8ff']
+
+const AVATAR_VISIBLE = 4
+
+export function AvatarStack({ members = [], className }) {
+  const [open, setOpen] = useState(false)
+
+  const shown = members.slice(0, AVATAR_VISIBLE)
+  const rest = members.length - shown.length
+
+  if (!shown.length) return null
+
+  return (
+    <div className={cn('relative', className)}>
+      <button
+        type="button"
+        onClick={() => setOpen((prev) => !prev)}
+        aria-expanded={open}
+        aria-label={`참여자 ${members.length}명 보기`}
+        className="flex cursor-pointer items-center"
+      >
+        {shown.map((member, index) => (
+          <span
+            key={member.userId ?? member.id ?? index}
+            style={{
+              backgroundColor: AVATAR_COLORS[index % AVATAR_COLORS.length],
+            }}
+            className="mr-[-13px] block size-[33px] shrink-0 rounded-full"
+          />
+        ))}
+
+        {rest > 0 && (
+          <span className="text-12 flex size-[33px] shrink-0 items-center justify-center rounded-full bg-white font-medium text-[#858894]">
+            +{rest}
+          </span>
+        )}
+      </button>
+
+      {open && (
+        <ul className="absolute top-[calc(100%+10px)] left-[88px] z-20 flex min-w-[89px] flex-col gap-[10px] rounded-[8px] bg-white px-[16px] py-[12px] shadow-[10px_10px_30px_0px_rgba(0,0,0,0.06)]">
+          {members.map((member, index) => (
+            <li
+              key={member.userId ?? member.id ?? index}
+              className="flex h-[18px] items-center gap-[8px]"
+            >
+              <span
+                style={{
+                  backgroundColor: AVATAR_COLORS[index % AVATAR_COLORS.length],
+                }}
+                className="block size-[18px] shrink-0 rounded-full"
+              />
+
+              <span className="text-12 font-medium whitespace-nowrap text-[#1c232b]">
+                {member.name}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
+}
+
 export function MeetingCard({ projectId, meeting }) {
-  const { id, title, startsAt, participantsDone, participantsTotal } = meeting
+  const {
+    id,
+    title,
+    startsAt,
+    participantsDone = 0,
+    participantsTotal = 0,
+    hasRecord = false,
+  } = meeting
   const navigate = useNavigate()
   const ratio = participantsTotal
     ? (participantsDone / participantsTotal) * 100
     : 0
 
+  const shortcuts = [
+    { label: 'AI 사전 인터뷰 하기', section: 'INTERVIEW' },
+    { label: '익명 아이디어 보드 보기', section: 'BOARD' },
+    { label: '전체 의견 요약 보기', section: 'SUMMARY' },
+  ]
+
   return (
     <Card
-      shadow="drop"
-      className="w-full max-w-[878px] px-6 py-10 sm:px-10 lg:px-[158px] lg:py-[80px]"
+      shadow="meeting"
+      className="w-full max-w-[658px] px-6 py-8 sm:px-10 lg:px-[48px] lg:py-[40px]"
     >
-      <div className="mx-auto flex w-full max-w-[562px] flex-col gap-[30px]">
+      <div className="flex w-full flex-col gap-[30px]">
         <div className="flex flex-col gap-[4px]">
-          <p className="text-28 font-bold text-black lg:text-34">{title}</p>
-          <p className="text-16 font-medium text-[#9d9d9d]">  {formatMeetingDate(startsAt)}</p>
+          <p className="text-28 font-bold text-[#1c232b] lg:text-34">{title}</p>
+          <p className="text-16 font-medium text-[#858894]">
+            {formatMeetingDate(startsAt)}
+          </p>
         </div>
 
         <Divider />
 
         <div className="flex flex-col gap-[28px]">
           <div className="relative h-[39px] w-full">
-            <p className="text-16 absolute top-0 left-0 font-medium text-[#9d9d9d]">
+            <p className="text-16 absolute top-0 left-0 font-medium text-[#858894]">
               참여 현황
             </p>
-            <p className="text-16 absolute top-0 right-0 font-medium text-[#9d9d9d]">
+            <p className="text-16 absolute top-0 right-0 font-medium text-[#858894]">
               {participantsDone}/{participantsTotal}명 완료
             </p>
-            <div className="absolute top-[31.5px] left-0 h-[9px] w-full overflow-clip rounded-[33px] bg-[#d9d9d9]">
+            <div className="absolute top-[31.5px] left-0 h-[9px] w-full overflow-clip rounded-[33px] bg-[#f5f5f5]">
               <div
-                className="h-full rounded-[33px] bg-[#606060]"
+                className="h-full rounded-[33px] bg-[#0075d3]"
                 style={{ width: `${ratio}%` }}
               />
             </div>
           </div>
 
-          <div className="flex flex-col gap-[12px]">
-            <Button
-              className="w-full"
-              onClick={() => navigate(meetingPath('INTERVIEW', projectId, id))}
-            >
-              AI 사전 인터뷰 하기
-            </Button>
-            <Button
-              variant="secondary"
-              className="w-full"
-              onClick={() => navigate(meetingPath('BOARD', projectId, id))}
-            >
-              익명 아이디어 보드 보기
-            </Button>
-            <Button
-              variant="secondary"
-              className="w-full"
-              onClick={() => navigate(meetingPath('SUMMARY', projectId, id))}
-            >
-              전체 의견 요약 보기
-            </Button>
+          <div className="flex flex-wrap gap-[16px]">
+            {shortcuts.map((shortcut) => (
+              <Button
+                key={shortcut.section}
+                size="pill"
+                variant="secondary"
+                onClick={() =>
+                  navigate(meetingPath(shortcut.section, projectId, id))
+                }
+              >
+                {shortcut.label}
+              </Button>
+            ))}
           </div>
         </div>
 
         <Divider />
 
-        <div className="flex flex-col gap-[4px]">
-          <p className="text-20 font-bold text-black lg:text-24">회의가 끝났나요?</p>
-          <p className="text-16 font-medium text-[#9d9d9d]">
-            회의 내용을 업로드하면 AI가 분석해드려요.
-          </p>
-        </div>
+        {!hasRecord && (
+          <>
+            <div className="flex flex-col gap-[4px]">
+              <p className="text-20 font-bold text-[#1c232b] lg:text-24">
+                회의가 끝났나요?
+              </p>
+              <p className="text-16 font-medium text-[#858894]">
+                회의 내용을 업로드하면 AI가 분석해드려요.
+              </p>
+            </div>
 
-        <div className="flex flex-col gap-[12px]">
-          <Button
-            variant="secondary"
-            className="w-full"
-            onClick={() => navigate(meetingPath('UPLOAD', projectId, id))}
-          >
-            회의 텍스트 업로드
-          </Button>
-          <Button
-            className="w-full"
-            onClick={() => navigate(projectPath('MEETING_NEW', projectId))}
-          >
-            다음 회의 생성하기
-            <ChevronRight />
-          </Button>
-        </div>
+            <Button
+              variant="dark"
+              className="w-full"
+              onClick={() => navigate(meetingPath('UPLOAD', projectId, id))}
+            >
+              회의 텍스트 업로드
+            </Button>
+          </>
+        )}
       </div>
     </Card>
   )

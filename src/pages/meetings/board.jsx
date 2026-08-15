@@ -1,17 +1,28 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
-import { Header, Hero, HeroLayout } from "@/components/layout";
-import { API_BASE_URL, HEADER_PRESETS, MEETING_TITLE } from "@/lib";
+import { useNavigate, useParams } from "react-router";
+import bubbleLarge from "@/assets/icons/board-bubble-lg.svg";
+import bubbleSmall from "@/assets/icons/board-bubble-sm.svg";
+import { Plus } from "@/components/icons";
+import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
+import { Button } from "@/components/ui";
+import {
+  API_BASE_URL,
+  HEADER_PRESETS,
+  MEETING_TITLE,
+  meetingPath,
+} from "@/lib";
+
+const CARD_COLORS = ["#fde2df", "#fef2d8", "#eff7da", "#dbf0ff"];
 
 export function MeetingBoardPage() {
   const { projectId = "", meetingId = "" } = useParams();
+  const navigate = useNavigate();
 
   // API에서 받아온 아이디어 카드 목록
   const [ideaCards, setIdeaCards] = useState([]);
+  const [meetingTitle, setMeetingTitle] = useState(MEETING_TITLE);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
-  const BG_COLORS = ["#d1d1d1", "#e6e6e6", "#cfcfcf"];
 
   useEffect(() => {
     if (!meetingId) return;
@@ -59,7 +70,29 @@ export function MeetingBoardPage() {
       }
     };
 
+    const fetchMeetingTitle = async () => {
+      try {
+        const accessToken = localStorage.getItem("accessToken");
+
+        const response = await fetch(
+          `${API_BASE_URL}/api/v1/meetings/${meetingId}`,
+          {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          },
+        );
+
+        const result = await response.json();
+
+        if (response.ok && result.success && result.data?.title) {
+          setMeetingTitle(result.data.title);
+        }
+      } catch (err) {
+        console.error("회의 정보 조회 실패:", err);
+      }
+    };
+
     fetchIdeaCards();
+    fetchMeetingTitle();
   }, [meetingId]);
 
   return (
@@ -69,71 +102,81 @@ export function MeetingBoardPage() {
         <Hero
           size="sm"
           align="left"
-          title="아이디어 보드"
-          description="모두의 생각을 한곳에"
-          descriptionWeight="semibold"
+          surface="light"
+          title="모두의 생각을 한곳에."
+          description={`${meetingTitle} · 누가 썼는지는 아무도 알 수 없어요.`}
+          descriptionWeight="medium"
+          decoration={
+            <>
+              <img
+                src={bubbleLarge}
+                alt=""
+                aria-hidden
+                className="absolute top-[96px] left-[755.75px] hidden h-[55.511px] w-[72.802px] max-w-none lg:block"
+              />
+
+              <img
+                src={bubbleSmall}
+                alt=""
+                aria-hidden
+                className="absolute top-[151.78px] left-[700px] hidden h-[38.223px] w-[50.051px] max-w-none lg:block"
+              />
+            </>
+          }
         />
       }
     >
-      <div className="mx-auto w-full max-w-[1460px] px-5 pb-16 sm:px-8 lg:px-0 lg:pb-[162px]">
-        <p className="text-24 mt-10 font-semibold text-[#717171] lg:mt-[94px] lg:text-28">
-          {`${MEETING_TITLE} 익명 아이디어 보드`}
-        </p>
+      <div className="mx-auto w-full max-w-[1460px] px-5 pb-16 sm:px-8 lg:px-0 lg:pb-[170px]">
+        <div className="mt-10 flex flex-wrap items-center justify-between gap-4 lg:mt-[93px]">
+          <p className="text-24 font-semibold text-[#1c232b] lg:text-28">
+            {meetingTitle}
+          </p>
+
+          <Button
+            size="action"
+            variant="subtle"
+            onClick={() =>
+              navigate(meetingPath("INTERVIEW", projectId, meetingId))
+            }
+          >
+            <Plus />
+            아이디어 추가하기
+          </Button>
+        </div>
 
         {/* 데이터 로딩 중이거나 에러/빈 화면 처리 */}
         {loading ? (
-          <p className="mt-10 text-18 font-medium text-[#717171]">
+          <p className="text-18 mt-10 font-medium text-[#858894]">
             팀원들의 아이디어 카드를 불러오는 중입니다... ⏳
           </p>
         ) : error ? (
-          <p className="mt-10 text-18 font-medium text-red-500">{error}</p>
+          <p className="text-18 mt-10 font-medium text-[#da1e51]">{error}</p>
         ) : ideaCards.length === 0 ? (
-          <p className="mt-10 text-18 font-medium text-[#717171]">
+          <p className="text-18 mt-10 font-medium text-[#858894]">
             아직 제출된 아이디어 카드가 없습니다. 첫 번째 카드의 주인공이
             되어보세요!
           </p>
         ) : (
           /* 아이디어 카드 렌더링 */
-          <ul className="mt-6 grid grid-cols-1 gap-[25px] sm:grid-cols-2 lg:mt-[41.8px] lg:grid-cols-3">
+          <ul className="mt-6 grid grid-cols-1 gap-[25px] sm:grid-cols-2 lg:mt-[25px] lg:grid-cols-3">
             {ideaCards.map((card, index) => (
               <li
                 key={card.id}
-                style={{ backgroundColor: BG_COLORS[index % BG_COLORS.length] }}
-                className="flex flex-col min-h-[265px] rounded-[14px] px-[24px] py-[24px] text-[#717171] sm:px-[40px] sm:py-[36px]"
+                style={{
+                  backgroundColor: CARD_COLORS[index % CARD_COLORS.length],
+                }}
+                className="flex h-[265px] items-center justify-center rounded-[14px] px-[24px] py-[36px] sm:px-[40px]"
               >
-                {/* 핵심 의견 */}
-                <div className="mb-4">
-                  <span className="inline-block bg-[#717171] text-white text-12 font-bold px-3 py-1 rounded-full mb-2">
-                    핵심 아이디어
-                  </span>
-                  <h3 className="text-20 lg:text-24 font-bold leading-tight text-[#333]">
-                    {card.coreOpinion}
-                  </h3>
-                </div>
-
-                {/* 근거, 우려점, 대안 */}
-                <div className="flex flex-col gap-2 text-14 lg:text-16 mt-auto">
-                  {card.rationale && (
-                    <p className="leading-snug">
-                      <strong>💡 근거:</strong> {card.rationale}
-                    </p>
-                  )}
-                  {card.concern && (
-                    <p className="leading-snug">
-                      <strong>⚠️ 우려:</strong> {card.concern}
-                    </p>
-                  )}
-                  {card.alternative && (
-                    <p className="leading-snug">
-                      <strong>✅ 대안:</strong> {card.alternative}
-                    </p>
-                  )}
-                </div>
+                <p className="text-18 h-[168px] w-full overflow-hidden font-medium text-[#1c232b] lg:text-20">
+                  {card.coreOpinion}
+                </p>
               </li>
             ))}
           </ul>
         )}
       </div>
+
+      <Footer />
     </HeroLayout>
   );
 }

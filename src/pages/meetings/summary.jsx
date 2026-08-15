@@ -1,33 +1,52 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { Header, Hero, HeroLayout } from "@/components/layout";
+import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
 import { Button } from "@/components/ui";
-import { HEADER_PRESETS } from "@/lib";
+import { API_BASE_URL, HEADER_PRESETS } from "@/lib";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL;
+const SUMMARY_CONTAINER = "mx-auto w-full max-w-[976px] px-5 sm:px-8 lg:px-0";
 
-const SUMMARY_CONTAINER = "mx-auto w-full max-w-[1460px] px-5 sm:px-8 lg:px-0";
+const toLines = (text) =>
+  String(text ?? "")
+    .split("\n")
+    .map((line) => line.replace(/^[-•\s]+/, "").trim())
+    .filter(Boolean);
 
 function SectionTitle({ children }) {
   return (
-    <h2 className="text-24 font-semibold text-[#717171] lg:text-28">
+    <h2 className="text-28 font-semibold text-[#1c232b] lg:text-34">
       {children}
     </h2>
   );
 }
 
 function SummaryBox({ content }) {
+  const lines = toLines(content);
+
   return (
-    <div className="rounded-[14px] bg-[#eee] px-6 py-6 sm:px-10 sm:py-[36px]">
-      <p className="text-16 whitespace-pre-wrap leading-[1.6] font-medium text-[#717171] lg:text-20">
-        {content || "내용이 없습니다."}
-      </p>
+    <div className="rounded-[14px] bg-[#f5f5f5] px-6 py-6 sm:px-[40px] sm:py-[36px]">
+      {lines.length > 1 ? (
+        <ul className="text-16 flex list-disc flex-col lg:text-20">
+          {lines.map((line) => (
+            <li
+              key={line}
+              className="ms-[30px] leading-[1.5] font-medium text-[#1c232b]"
+            >
+              {line}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="text-16 leading-[1.5] font-medium whitespace-pre-wrap text-[#1c232b] lg:text-20">
+          {lines[0] || "내용이 없습니다."}
+        </p>
+      )}
     </div>
   );
 }
 
 export function MeetingSummaryPage() {
-  const { projectId = "", meetingId = "" } = useParams();
+  const { meetingId = "" } = useParams();
 
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -133,86 +152,95 @@ export function MeetingSummaryPage() {
       hero={
         <Hero
           size="sm"
-          align="left"
-          title="전체 의견 요약"
-          description="팀원들이 보드에 남긴 아이디어를 AI가 한눈에 정리해드려요."
+          align="center"
+          surface="light"
+          title="의견을 모아봤어요."
+          description="팀원들이 미리 남긴 의견을 확인해보세요."
+          descriptionWeight="medium"
         />
       }
     >
       <div
-        className={`${SUMMARY_CONTAINER} mt-10 flex flex-col gap-[36px] pb-20 lg:mt-[82px] lg:pb-[240px]`}
+        className={`${SUMMARY_CONTAINER} mt-10 flex flex-col gap-[36px] pb-20 lg:mt-[68.62px] lg:gap-[60px] lg:pb-[150px]`}
       >
         {loading ? (
-          <div className="py-20 text-center text-18 font-medium text-[#717171]">
+          <div className="text-18 py-20 text-center font-medium text-[#858894]">
             요약 데이터를 확인하고 있습니다... ⏳
           </div>
         ) : error ? (
-          <div className="py-20 text-center text-18 font-medium text-red-500">
+          <div className="text-18 py-20 text-center font-medium text-[#da1e51]">
             {error}
           </div>
         ) : refreshing ? (
           <div className="flex flex-col items-center justify-center gap-4 py-32 text-center">
-            <span className="text-20 font-semibold text-[#717171]">
+            <span className="text-20 font-semibold text-[#1c232b]">
               AI가 팀원들의 모든 아이디어 카드를 꼼꼼히 종합하고 있습니다... 🤖
             </span>
-            <span className="text-16 text-[#878787]">
+            <span className="text-16 text-[#858894]">
               수 초 정도 소요될 수 있으니 잠시만 기다려주세요.
             </span>
           </div>
         ) : !summary ? (
           // 💡 한 번도 생성하지 않아 data가 null인 경우
           <div className="flex flex-col items-center justify-center gap-6 py-32 text-center">
-            <p className="text-20 font-semibold text-[#717171]">
+            <p className="text-20 font-semibold text-[#1c232b]">
               아직 전체 의견 요약이 생성되지 않았습니다.
             </p>
-            <p className="text-16 text-[#878787]">
+            <p className="text-16 text-[#858894]">
               팀원들이 아이디어 카드를 제출했다면 아래 버튼을 눌러 요약을
               확인해보세요.
             </p>
-            <Button onClick={handleRefreshSummary} className="w-fit px-8 mt-4">
+            <Button onClick={handleRefreshSummary} className="mt-4 w-fit px-8">
               AI 전체 의견 요약 생성하기
             </Button>
           </div>
         ) : (
           // 💡 요약 데이터가 존재하는 경우 렌더링
-          <div className="flex flex-col gap-[48px]">
+          <>
             {/* 버전 및 새로고침 영역 */}
-            <div className="flex items-center justify-between border-b border-[#eaeaea] pb-6">
+            <div className="flex items-center justify-between border-b border-solid border-[#f6f5fa] pb-6">
               <div>
-                <p className="text-18 font-semibold text-[#717171]">
+                <p className="text-18 font-semibold text-[#1c232b]">
                   현재 요약 버전: v{summary.version}
                 </p>
-                <p className="text-14 text-[#878787] mt-1">
+                <p className="text-14 mt-1 text-[#858894]">
                   종합된 카드 수: {summary.sourceCardCount}개
                 </p>
               </div>
-              <Button variant="secondary" onClick={handleRefreshSummary}>
+
+              <Button
+                size="pill"
+                variant="secondary"
+                onClick={handleRefreshSummary}
+              >
                 최신 내용으로 새로고침
               </Button>
             </div>
 
-            <section className="flex flex-col gap-[24px]">
-              <SectionTitle>공통적으로 나온 의견</SectionTitle>
-              <SummaryBox content={summary.commonOpinions} />
-            </section>
-
-            <section className="flex flex-col gap-[24px]">
+            <section className="flex flex-col gap-[32px]">
               <SectionTitle>의견이 나뉘는 부분</SectionTitle>
               <SummaryBox content={summary.differingOpinions} />
             </section>
 
-            <section className="flex flex-col gap-[24px]">
-              <SectionTitle>주요 우려사항 (Risk)</SectionTitle>
+            <section className="flex flex-col gap-[32px]">
+              <SectionTitle>공통적으로 나온 의견</SectionTitle>
+              <SummaryBox content={summary.commonOpinions} />
+            </section>
+
+            <section className="flex flex-col gap-[32px]">
+              <SectionTitle>주요 우려사항</SectionTitle>
               <SummaryBox content={summary.keyConcerns} />
             </section>
 
-            <section className="flex flex-col gap-[24px]">
-              <SectionTitle>회의에서 논의할 체크포인트</SectionTitle>
+            <section className="flex flex-col gap-[32px]">
+              <SectionTitle>회의에서 확인하면 좋을 내용</SectionTitle>
               <SummaryBox content={summary.discussionPoints} />
             </section>
-          </div>
+          </>
         )}
       </div>
+
+      <Footer />
     </HeroLayout>
   );
 }

@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
+import githubIcon from '@/assets/icons/github.svg'
+import instagramIcon from '@/assets/icons/instagram.svg'
+import kakaotalkIcon from '@/assets/icons/kakaotalk.svg'
+import likelionLogo from '@/assets/likelion-logo.svg'
 import { ChevronRight } from '@/components/icons'
 import { API_BASE_URL, buildNavItems, cn, PATHS, SERVICE_NAME } from '@/lib'
 import { clearSession } from '@/session'
 
 const TONE = {
   onHero: 'text-[#f4f4f4]',
-  onLight: 'text-[#717171]',
-  onDark: 'text-black',
-  onLanding: 'text-[#1b2a4d]',
+  onLight: 'text-[#1c232b]',
+  onDark: 'text-[#1c232b]',
 }
 
 const DEFAULT_ACTION = { label: '로그아웃', href: PATHS.WELCOME, logout: true }
@@ -77,12 +80,18 @@ export function Header({
   nav = false,
   action = DEFAULT_ACTION,
   projectName,
+  omitProjectNav = false,
   className,
 }) {
   const { projectId } = useParams()
   const navigate = useNavigate()
-  const fetchedName = useProjectName(projectName ? '' : projectId)
-  const navItems = buildNavItems(projectId, projectName || fetchedName)
+  const fetchedName = useProjectName(
+    omitProjectNav || projectName ? '' : projectId,
+  )
+  const navItems = buildNavItems(
+    omitProjectNav ? '' : projectId,
+    projectName || fetchedName,
+  )
 
   const handleLogout = () => {
     clearSession()
@@ -115,21 +124,26 @@ export function Header({
         </nav>
       )}
 
-      {action.logout ? (
-        <button
-          type="button"
-          onClick={handleLogout}
-          className="flex cursor-pointer items-center gap-[6px]"
-        >
-          <span className="text-18 font-medium whitespace-nowrap">{action.label}</span>
-          <ChevronRight />
-        </button>
-      ) : (
-        <Link to={action.href} className="flex items-center gap-[6px]">
-          <span className="text-18 font-medium whitespace-nowrap">{action.label}</span>
-          <ChevronRight />
-        </Link>
-      )}
+      {action &&
+        (action.logout ? (
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="flex cursor-pointer items-center gap-[6px]"
+          >
+            <span className="text-18 font-medium whitespace-nowrap">
+              {action.label}
+            </span>
+            <ChevronRight />
+          </button>
+        ) : (
+          <Link to={action.href} className="flex items-center gap-[6px]">
+            <span className="text-18 font-medium whitespace-nowrap">
+              {action.label}
+            </span>
+            <ChevronRight />
+          </Link>
+        ))}
     </header>
   )
 }
@@ -139,22 +153,47 @@ const HERO_FILL =
 
 const HERO_HEIGHT = {
   lg: 'h-[670px]',
-  md: 'h-[370px]',
+  md: 'h-[350px]',
   sm: 'h-[270px]',
 }
 
 const HERO_CONTENT_TOP = {
   lg: { center: 229, left: 231 },
-  md: { center: 82, left: 82 },
-  sm: { center: 82, left: 82 },
+  md: { center: 71, left: 71 },
+  sm: { center: 81, left: 82 },
+}
+
+const HERO_SURFACE = {
+  gradient: {
+    band: '',
+    text: 'text-[#f4f4f4]',
+    description: '',
+    centerSize: 'text-16 lg:text-18',
+    centerGap: 'gap-[16px]',
+  },
+  light: {
+    band: 'bg-[#f5f5f5]',
+    text: 'text-[#1c232b]',
+    description: 'text-[#858894]',
+    centerSize: 'text-16 sm:text-18 lg:text-20',
+    centerGap: 'gap-[14px]',
+  },
+}
+
+const HERO_DESC_WEIGHT = {
+  semibold: 'font-semibold',
+  medium: 'font-medium',
+  normal: 'font-normal',
 }
 
 export function Hero({
   title,
   description,
   footer,
+  decoration,
   size = 'lg',
   align = 'center',
+  surface = 'gradient',
   descriptionWeight,
   contentTop,
   className,
@@ -162,15 +201,21 @@ export function Hero({
   const isCenter = align === 'center'
   const top = contentTop ?? HERO_CONTENT_TOP[size][align]
   const weight = descriptionWeight ?? (isCenter ? 'semibold' : 'normal')
+  const skin = HERO_SURFACE[surface]
 
   return (
     <div
-      className={cn('relative w-full', HERO_HEIGHT[size], className)}
-      style={{ backgroundImage: HERO_FILL }}
+      className={cn('relative w-full', HERO_HEIGHT[size], skin.band, className)}
+      style={
+        surface === 'gradient' ? { backgroundImage: HERO_FILL } : undefined
+      }
     >
+      {decoration}
+
       <div
         className={cn(
-          'absolute flex flex-col gap-[40px] px-5 text-[#f4f4f4] sm:px-8 lg:px-0',
+          'absolute flex flex-col gap-[40px] px-5 sm:px-8 lg:px-0',
+          skin.text,
           isCenter
             ? 'left-1/2 w-full -translate-x-1/2 items-center text-center lg:w-max'
             : 'inset-x-0 mx-auto w-full max-w-[1460px] items-start',
@@ -181,7 +226,7 @@ export function Hero({
           className={cn(
             'flex w-full flex-col',
             isCenter
-              ? 'items-center gap-[16px]'
+              ? `items-center ${skin.centerGap}`
               : 'items-start gap-[14px] lg:w-[634px]',
           )}
         >
@@ -192,8 +237,9 @@ export function Hero({
           {description && (
             <p
               className={cn(
-                isCenter ? 'text-16 lg:text-18' : 'text-18 lg:text-20',
-                weight === 'semibold' ? 'font-semibold' : 'font-normal',
+                isCenter ? skin.centerSize : 'text-18 lg:text-20',
+                HERO_DESC_WEIGHT[weight],
+                skin.description,
               )}
             >
               {description}
@@ -239,5 +285,71 @@ export function HeroLayout({
         {children}
       </div>
     </div>
+  )
+}
+
+const SOCIAL_ICONS = [
+  {
+    src: instagramIcon,
+    label: 'Instagram',
+    href: 'https://www.instagram.com/likelion_yu/?hl=en',
+  },
+  { src: kakaotalkIcon, label: 'KakaoTalk' },
+  {
+    src: githubIcon,
+    label: 'GitHub',
+    href: 'https://github.com/Likelion-YeungNam-Univ',
+  },
+]
+
+export function Footer({ className }) {
+  return (
+    <footer className={cn('w-full bg-white', className)}>
+      <div className="mx-auto flex w-full max-w-[1460px] items-start justify-between px-5 pt-[20px] pb-10 sm:px-8 lg:h-[174px] lg:px-0 lg:pb-0">
+        <div className="flex w-[128px] flex-col gap-[12px]">
+          <img
+            src={likelionLogo}
+            alt=""
+            className="size-[70px] max-w-none shrink-0"
+          />
+
+          <span className="text-18 font-bold whitespace-nowrap text-[#a66822]">
+            LIKELION YU
+          </span>
+        </div>
+
+        <ul className="flex items-center gap-[16px] lg:pt-[25px]">
+          {SOCIAL_ICONS.map((icon) => {
+            const glyph = (
+              <img
+                src={icon.src}
+                alt={icon.label}
+                className="size-[24px] max-w-none"
+              />
+            )
+
+            return (
+              <li
+                key={icon.label}
+                className="flex size-[50px] shrink-0 items-center justify-center rounded-[30px] bg-white/10"
+              >
+                {icon.href ? (
+                  <a
+                    href={icon.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex size-full items-center justify-center"
+                  >
+                    {glyph}
+                  </a>
+                ) : (
+                  glyph
+                )}
+              </li>
+            )
+          })}
+        </ul>
+      </div>
+    </footer>
   )
 }

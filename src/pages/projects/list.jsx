@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { Plus } from '@/components/icons'
-import { Header, Hero, HeroLayout } from '@/components/layout'
+import { Footer, Header, Hero, HeroLayout } from '@/components/layout'
 import { Button, ProjectCard, TextField } from '@/components/ui'
 import { API_BASE_URL, HEADER_PRESETS, PATHS } from '@/lib'
 
@@ -50,6 +50,63 @@ const joinProject = async (joinCode) => {
   return response.json()
 }
 
+const getMeetingCount = async (projectId) => {
+  const accessToken = localStorage.getItem('accessToken')
+
+  const response = await fetch(
+    `${API_BASE_URL}/api/v1/projects/${projectId}/meetings`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
+  )
+
+  if (!response.ok) return undefined
+
+  const result = await response.json()
+
+  return Array.isArray(result.data) ? result.data.length : undefined
+}
+
+const formatProjectDate = (value) => {
+  const created = new Date(value)
+
+  if (Number.isNaN(created.getTime())) return ''
+
+  const pad = (part) => String(part).padStart(2, '0')
+
+  return `${created.getFullYear()}. ${pad(created.getMonth() + 1)}. ${pad(created.getDate())}`
+}
+
+const formatParticipants = (members) => {
+  if (!members?.length) return '참여자 없음'
+
+  return members.length === 1
+    ? members[0].name
+    : `${members[0].name} 외 ${members.length - 1}명`
+}
+
+const toProjectCards = async (rawProjects) => {
+  const counts = await Promise.all(
+    rawProjects.map((project) =>
+      getMeetingCount(project.id).catch(() => undefined),
+    ),
+  )
+
+  return rawProjects.map((project, index) => ({
+    ...project,
+
+    // 프로젝트 생성일
+    date: formatProjectDate(project.createdAt),
+
+    // 프로젝트 참여자
+    participants: formatParticipants(project.members),
+
+    meetingCount: counts[index],
+  }))
+}
+
 export function ProjectsPage() {
   const navigate = useNavigate()
 
@@ -71,22 +128,7 @@ export function ProjectsPage() {
 
         console.log('프로젝트 API 응답:', response)
 
-        const formattedProjects = response.data.map((project) => ({
-          ...project,
-
-          // 프로젝트 생성일
-          date: new Date(project.createdAt).toLocaleDateString('ko-KR'),
-
-          // 프로젝트 참여자
-          participants:
-            project.members?.length > 0
-              ? project.members.length === 1
-                ? project.members[0].name
-                : `${project.members[0].name} 외 ${project.members.length - 1}명`
-              : '참여자 없음',
-        }))
-
-        setProjects(formattedProjects)
+        setProjects(await toProjectCards(response.data))
       } catch (error) {
         console.error(error)
         setError('프로젝트를 불러오지 못했습니다.')
@@ -126,18 +168,7 @@ export function ProjectsPage() {
       // 프로젝트 목록 다시 조회
       const projectsResponse = await getMyProjects()
 
-      const formattedProjects = projectsResponse.data.map((project) => ({
-        ...project,
-        date: new Date(project.createdAt).toLocaleDateString('ko-KR'),
-        participants:
-          project.members?.length > 0
-            ? project.members.length === 1
-              ? project.members[0].name
-              : `${project.members[0].name} 외 ${project.members.length - 1}명`
-            : '참여자 없음',
-      }))
-
-      setProjects(formattedProjects)
+      setProjects(await toProjectCards(projectsResponse.data))
     } catch (error) {
       console.error(error)
       setJoinError('프로젝트 참여에 실패했습니다.')
@@ -159,13 +190,15 @@ export function ProjectsPage() {
         <Hero
           size="md"
           align="left"
+          surface="light"
           title="내 프로젝트"
-          description="참여할 프로젝트의 코드를 입력해주세요."
-          descriptionWeight="semibold"
+          description="진행 중인 프로젝트를 열거나, 참여코드로 새로운 팀에 합류해보세요."
+          descriptionWeight="medium"
           footer={
             <Button
               size="inline"
-              variant="secondaryOnHero"
+              variant="secondary"
+              className="bg-white"
               onClick={() => {
                 setIsJoinModalOpen(true)
                 setJoinError('')
@@ -177,16 +210,16 @@ export function ProjectsPage() {
         />
       }
     >
-      <div className="mx-auto w-full max-w-[1460px] px-5 pb-20 sm:px-8 lg:px-0 lg:pb-[182.8px]">
+      <div className="mx-auto w-full max-w-[1460px] px-5 pb-20 sm:px-8 lg:px-0 lg:pb-[151px]">
         {/* 새 프로젝트 만들기 */}
-        <div className="mt-10 flex lg:mt-[91px]">
+        <div className="mt-10 flex lg:mt-[111px]">
           <Button
             size="action"
             variant="subtle"
             onClick={() => navigate(PATHS.PROJECT_NEW)}
           >
             <Plus />
-            새 프로젝트 만들기
+            새 프로젝트
           </Button>
         </div>
 
@@ -206,7 +239,7 @@ export function ProjectsPage() {
 
         {/* 프로젝트 목록 */}
         {!loading && !error && (
-          <div className="mt-6 grid grid-cols-1 gap-x-[25px] gap-y-10 sm:grid-cols-2 lg:mt-[35px] lg:grid-cols-3 lg:gap-y-[69.8px]">
+          <div className="mt-6 grid grid-cols-1 gap-x-[25px] gap-y-10 sm:grid-cols-2 lg:mt-[35px] lg:grid-cols-3 lg:gap-y-[70px]">
             {projects.map((project) => (
               <ProjectCard
                 key={project.id}
@@ -279,6 +312,8 @@ export function ProjectsPage() {
           </div>
         </div>
       )}
+
+      <Footer />
     </HeroLayout>
   )
 }
