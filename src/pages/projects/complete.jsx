@@ -1,15 +1,53 @@
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router'
 import checkBadge from '@/assets/icons/check-badge.svg'
 import { ArrowRight, Copy } from '@/components/icons'
 import { Header } from '@/components/layout'
-import { HEADER_PRESETS, projectPath } from '@/lib'
+import { API_BASE_URL, HEADER_PRESETS, projectPath } from '@/lib'
 
 export function ProjectCompletePage() {
   const { projectId = '' } = useParams()
   const { state } = useLocation()
   const navigate = useNavigate()
 
-  const joinCode = state?.joinCode ?? ''
+  const [joinCode, setJoinCode] = useState(state?.joinCode ?? '')
+
+  useEffect(() => {
+    if (joinCode || !projectId) return
+
+    let cancelled = false
+
+    const fetchJoinCode = async () => {
+      try {
+        const accessToken = localStorage.getItem('accessToken')
+
+        const response = await fetch(
+          `${API_BASE_URL}/api/v1/projects/${projectId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          },
+        )
+
+        const result = await response.json()
+
+        if (!response.ok || !result.success || !result.data?.joinCode) return
+
+        if (!cancelled) {
+          setJoinCode(result.data.joinCode)
+        }
+      } catch (error) {
+        console.error('참여코드 조회 실패:', error)
+      }
+    }
+
+    fetchJoinCode()
+
+    return () => {
+      cancelled = true
+    }
+  }, [joinCode, projectId])
 
   const handleCopyJoinCode = () => {
     if (!joinCode) return
@@ -45,11 +83,11 @@ export function ProjectCompletePage() {
           />
 
           <div className="flex flex-col items-center gap-[12px]">
-            <h1 className="text-28 text-center font-semibold text-black sm:text-34 lg:text-48 lg:whitespace-nowrap">
+            <h1 className="text-28 text-center font-bold text-[#1c232b] sm:text-34 lg:text-48 lg:whitespace-nowrap">
               프로젝트가 생성되었습니다!
             </h1>
 
-            <p className="text-18 text-center font-semibold text-[#606060] sm:text-20 lg:text-24">
+            <p className="text-16 text-center font-medium text-[#858894] sm:text-18 lg:text-20">
               팀원에게 아래 참여코드를 공유해주세요.
             </p>
           </div>
@@ -59,7 +97,7 @@ export function ProjectCompletePage() {
               type="button"
               onClick={handleCopyJoinCode}
               aria-label={`참여코드 ${joinCode} 복사`}
-              className="text-20 flex cursor-pointer items-center gap-[10px] rounded-[33px] border border-solid border-[#606060] px-[18px] py-[14px] font-semibold whitespace-nowrap text-[#606060] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#606060]"
+              className="text-20 flex cursor-pointer items-center gap-[10px] rounded-[33px] border border-solid border-[#1c232b] px-[18px] py-[14px] font-semibold whitespace-nowrap text-[#1c232b] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1c232b]"
             >
               {joinCode}
               <Copy className="h-[22px] w-[20px]" />
@@ -70,7 +108,7 @@ export function ProjectCompletePage() {
               onClick={() =>
                 navigate(projectPath('DETAIL', projectId))
               }
-              className="text-20 flex cursor-pointer items-center gap-[10px] rounded-[33px] border border-solid border-white bg-[#606060] px-[18px] py-[14px] font-semibold whitespace-nowrap text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#606060]"
+              className="text-20 flex cursor-pointer items-center gap-[10px] rounded-[33px] border border-solid border-white bg-[#1c232b] px-[18px] py-[14px] font-semibold whitespace-nowrap text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1c232b]"
             >
               프로젝트 보러가기
               <ArrowRight />
