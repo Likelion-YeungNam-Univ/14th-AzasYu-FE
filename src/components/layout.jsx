@@ -190,6 +190,7 @@ export function Hero({
   title,
   description,
   footer,
+  decoration,
   size = 'lg',
   align = 'center',
   surface = 'gradient',
@@ -209,6 +210,8 @@ export function Hero({
         surface === 'gradient' ? { backgroundImage: HERO_FILL } : undefined
       }
     >
+      {decoration}
+
       <div
         className={cn(
           'absolute flex flex-col gap-[40px] px-5 sm:px-8 lg:px-0',
