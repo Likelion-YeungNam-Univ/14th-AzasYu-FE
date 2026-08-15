@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router'
 import emptyMeetings from '@/assets/icons/empty-meetings.svg'
 import { Copy, Plus } from '@/components/icons'
 import { Header } from '@/components/layout'
+import { StateView } from '@/components/states'
 import { AvatarStack, Button, MeetingCard } from '@/components/ui'
 import { API_BASE_URL, HEADER_PRESETS, projectPath } from '@/lib'
 
@@ -161,18 +162,16 @@ export function ProjectDetailPage() {
   }
 
   if (loading) {
-    return (
-      <div className="text-18 flex min-h-svh items-center justify-center font-medium text-[#858894]">
-        프로젝트를 불러오는 중입니다...
-      </div>
-    )
+    return <StateView size="screen" title="프로젝트를 불러오는 중입니다" />
   }
 
   if (error || !project) {
     return (
-      <div className="text-18 flex min-h-svh items-center justify-center font-medium text-[#da1e51]">
-        {error || '프로젝트를 찾을 수 없습니다.'}
-      </div>
+      <StateView
+        variant="error"
+        size="screen"
+        title={error || '프로젝트를 찾을 수 없습니다.'}
+      />
     )
   }
 
@@ -223,23 +222,19 @@ export function ProjectDetailPage() {
           ))}
         </div>
       ) : (
-        <div className="flex flex-col items-center gap-[32px] px-5 pt-24 pb-20 text-center sm:px-8 lg:pt-[208px] lg:pb-[244px]">
-          <img
-            src={emptyMeetings}
-            alt=""
-            className="block h-[48.036px] w-[62.997px] max-w-none shrink-0"
-          />
-
-          <div className="flex flex-col items-center gap-[12px]">
-            <p className="text-28 font-semibold text-[#858894] sm:text-34 lg:text-48">
-              아직 회의가 없어요
-            </p>
-
-            <p className="text-16 font-medium text-[#858894] lg:text-20">
-              첫 회의를 만들어 프로젝트를 시작해보세요!
-            </p>
-          </div>
-        </div>
+        <StateView
+          variant="empty"
+          size="page"
+          icon={
+            <img
+              src={emptyMeetings}
+              alt=""
+              className="block h-[48.036px] w-[62.997px] max-w-none shrink-0"
+            />
+          }
+          title="아직 회의가 없어요"
+          description="첫 회의를 만들어 프로젝트를 시작해보세요!"
+        />
       )}
     </div>
   )

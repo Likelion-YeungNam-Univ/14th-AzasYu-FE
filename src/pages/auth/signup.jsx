@@ -2,6 +2,7 @@ import { useNavigate } from "react-router";
 import { useState } from "react";
 import { SIGNUP_COMPLETE_KEY } from "@/components/guards";
 import { Header } from "@/components/layout";
+import { Spinner } from "@/components/states";
 import { Button, TextField } from "@/components/ui";
 import { API_BASE_URL, HEADER_PRESETS, PATHS } from "@/lib";
 
@@ -140,7 +141,7 @@ export function SignUpPage() {
           aria-label="회원가입 처리 중"
           className="fixed inset-0 z-50 flex items-center justify-center bg-white/70"
         >
-          <span className="block size-[56px] animate-spin rounded-full border-4 border-solid border-[#d0d0d0] border-t-[#606060]" />
+          <Spinner className="size-[56px]" />
         </div>
       )}
     </div>

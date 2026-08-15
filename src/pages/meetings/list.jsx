@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import clockIcon from "@/assets/icons/clock.svg";
 import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
+import { StateView } from "@/components/states";
 import { Table } from "@/components/ui";
 import {
   API_BASE_URL,
@@ -167,32 +168,27 @@ export function MeetingsPage() {
       <div className="mx-auto w-full max-w-[1460px] px-5 pb-16 sm:px-8 lg:px-0 lg:pb-[186px]">
         <div className="mt-[40px] lg:mt-[82px]">
           {loading ? (
-            <p className="text-18 font-medium text-[#858894]">
-              회의 목록을 불러오는 중...
-            </p>
+            <StateView title="회의 목록을 불러오는 중입니다" />
           ) : error ? (
-            <p className="text-18 font-medium text-[#da1e51]">{error}</p>
+            <StateView variant="error" title={error} />
           ) : meetings.length === 0 ? (
-            <div className="flex flex-col items-center py-20 text-center">
-              <p className="text-24 font-semibold text-[#858894]">
-                아직 등록된 회의가 없어요.
-              </p>
-
-              <p className="text-16 mt-3 font-medium text-[#858894]">
-                새로운 회의를 생성해보세요.
-              </p>
-
-              <Link
-                to={
-                  projectId
-                    ? projectPath("MEETING_NEW", projectId)
-                    : PATHS.PROJECTS
-                }
-                className="text-18 mt-8 rounded-[8px] bg-[#e6f3fe] px-6 py-3 font-semibold text-[#0075d3]"
-              >
-                회의 생성하기
-              </Link>
-            </div>
+            <StateView
+              variant="empty"
+              title="아직 등록된 회의가 없어요"
+              description="새로운 회의를 생성해보세요."
+              action={
+                <Link
+                  to={
+                    projectId
+                      ? projectPath("MEETING_NEW", projectId)
+                      : PATHS.PROJECTS
+                  }
+                  className="text-18 rounded-[8px] bg-[#e6f3fe] px-6 py-3 font-semibold text-[#0075d3]"
+                >
+                  회의 생성하기
+                </Link>
+              }
+            />
           ) : (
             <Table columns={TABLE_COLUMNS} rows={tableRows} />
           )}

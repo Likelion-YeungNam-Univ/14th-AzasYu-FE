@@ -4,6 +4,7 @@ import bubbleLarge from "@/assets/icons/board-bubble-lg.svg";
 import bubbleSmall from "@/assets/icons/board-bubble-sm.svg";
 import { Plus } from "@/components/icons";
 import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
+import { StateView } from "@/components/states";
 import { Button } from "@/components/ui";
 import {
   API_BASE_URL,
@@ -145,16 +146,15 @@ export function MeetingBoardPage() {
 
         {/* 데이터 로딩 중이거나 에러/빈 화면 처리 */}
         {loading ? (
-          <p className="text-18 mt-10 font-medium text-[#858894]">
-            팀원들의 아이디어 카드를 불러오는 중입니다... ⏳
-          </p>
+          <StateView title="아이디어 카드를 불러오는 중입니다" />
         ) : error ? (
-          <p className="text-18 mt-10 font-medium text-[#da1e51]">{error}</p>
+          <StateView variant="error" title={error} />
         ) : ideaCards.length === 0 ? (
-          <p className="text-18 mt-10 font-medium text-[#858894]">
-            아직 제출된 아이디어 카드가 없습니다. 첫 번째 카드의 주인공이
-            되어보세요!
-          </p>
+          <StateView
+            variant="empty"
+            title="아직 제출된 아이디어 카드가 없어요"
+            description="첫 번째 카드의 주인공이 되어보세요!"
+          />
         ) : (
           /* 아이디어 카드 렌더링 */
           <ul className="mt-6 grid grid-cols-1 gap-[25px] sm:grid-cols-2 lg:mt-[25px] lg:grid-cols-3">

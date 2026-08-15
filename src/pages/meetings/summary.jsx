@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
+import { StateView } from "@/components/states";
 import { Button } from "@/components/ui";
 import { API_BASE_URL, HEADER_PRESETS } from "@/lib";
 
@@ -163,36 +164,26 @@ export function MeetingSummaryPage() {
         className={`${SUMMARY_CONTAINER} mt-10 flex flex-col gap-[36px] pb-20 lg:mt-[68.62px] lg:gap-[60px] lg:pb-[150px]`}
       >
         {loading ? (
-          <div className="text-18 py-20 text-center font-medium text-[#858894]">
-            요약 데이터를 확인하고 있습니다... ⏳
-          </div>
+          <StateView title="요약 데이터를 확인하고 있습니다" />
         ) : error ? (
-          <div className="text-18 py-20 text-center font-medium text-[#da1e51]">
-            {error}
-          </div>
+          <StateView variant="error" title={error} />
         ) : refreshing ? (
-          <div className="flex flex-col items-center justify-center gap-4 py-32 text-center">
-            <span className="text-20 font-semibold text-[#1c232b]">
-              AI가 팀원들의 모든 아이디어 카드를 꼼꼼히 종합하고 있습니다... 🤖
-            </span>
-            <span className="text-16 text-[#858894]">
-              수 초 정도 소요될 수 있으니 잠시만 기다려주세요.
-            </span>
-          </div>
+          <StateView
+            title="AI가 팀원들의 아이디어 카드를 종합하고 있습니다"
+            description="수 초 정도 소요될 수 있으니 잠시만 기다려주세요."
+          />
         ) : !summary ? (
           // 💡 한 번도 생성하지 않아 data가 null인 경우
-          <div className="flex flex-col items-center justify-center gap-6 py-32 text-center">
-            <p className="text-20 font-semibold text-[#1c232b]">
-              아직 전체 의견 요약이 생성되지 않았습니다.
-            </p>
-            <p className="text-16 text-[#858894]">
-              팀원들이 아이디어 카드를 제출했다면 아래 버튼을 눌러 요약을
-              확인해보세요.
-            </p>
-            <Button onClick={handleRefreshSummary} className="mt-4 w-fit px-8">
-              AI 전체 의견 요약 생성하기
-            </Button>
-          </div>
+          <StateView
+            variant="empty"
+            title="아직 전체 의견 요약이 생성되지 않았어요"
+            description="팀원들이 아이디어 카드를 제출했다면 아래 버튼을 눌러 요약을 확인해보세요."
+            action={
+              <Button onClick={handleRefreshSummary} size="action">
+                AI 전체 의견 요약 생성하기
+              </Button>
+            }
+          />
         ) : (
           // 💡 요약 데이터가 존재하는 경우 렌더링
           <>
