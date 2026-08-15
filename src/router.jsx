@@ -1,10 +1,8 @@
 import { createBrowserRouter } from 'react-router'
-import {
-  NotFoundPage,
-  SignUpCompletePage,
-  SignUpPage,
-  WelcomePage,
-} from '@/pages/auth'
+import { SignUpCompletePage } from '@/pages/auth/signup-complete'
+import { SignUpPage } from '@/pages/auth/signup'
+import { WelcomePage } from '@/pages/auth/welcome'
+import { NotFoundPage } from '@/pages/not-found'
 import { MeetingBoardPage } from '@/pages/meetings/board'
 import { MeetingInterviewPage } from '@/pages/meetings/interview'
 import { MeetingsPage } from '@/pages/meetings/list'
