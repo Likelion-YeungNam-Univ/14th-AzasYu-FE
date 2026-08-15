@@ -98,15 +98,15 @@ export function MeetingLoadingPage() {
         <img
           src={analyzingIllustration}
           alt=""
-          className="mt-24 block h-[165px] w-[176.084px] max-w-none shrink-0 sm:mt-40 lg:mt-[296px]"
+          className="mt-24 block h-[165px] w-[176.084px] max-w-none shrink-0 sm:mt-40 lg:mt-[295px]"
         />
 
-        <div className="mt-10 flex flex-col items-center gap-[12px] text-center lg:mt-[50px]">
-          <h1 className="text-28 font-semibold text-black sm:text-34 lg:text-48">
-            회의 내용을 꼼꼼히 분석하고 있어요
+        <div className="mt-10 flex flex-col items-center gap-[12px] text-center lg:mt-[51px]">
+          <h1 className="text-28 font-bold text-[#1c232b] sm:text-34 lg:text-48">
+            회의 내용을 꼼꼼히 분석하고 있어요.
           </h1>
 
-          <p className="text-18 font-semibold text-[#606060] sm:text-20 lg:text-24">
+          <p className="text-18 font-medium text-[#858894] sm:text-20 lg:text-24">
             회의 내용에 따라 최대 @분 정도 소요될 수 있어요.
           </p>
         </div>
