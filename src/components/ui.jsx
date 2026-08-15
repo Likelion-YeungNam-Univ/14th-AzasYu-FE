@@ -408,25 +408,53 @@ export function AvatarStack({ members = [], className }) {
   )
 }
 
-export function MeetingCard({ projectId, meeting }) {
+export function MeetingCard({
+  projectId,
+  meeting,
+  currentUserId,
+}) {
   const {
     id,
     title,
     startsAt,
+    meetingDate,
+    startTime,
     participantsDone = 0,
     participantsTotal = 0,
     hasRecord = false,
+    hasResult = false,
+    participants = [],
+    interviewStatus,
   } = meeting
+
   const navigate = useNavigate()
+
+  const mySubmitted =
+    interviewStatus?.mySubmitted ?? false
+
+  const isParticipant = participants.some(
+    (participant) =>
+      String(
+        participant.userId ??
+          participant.id ??
+          participant.memberId,
+      ) === String(currentUserId),
+  )
+
   const ratio = participantsTotal
-    ? (participantsDone / participantsTotal) * 100
+    ? Math.min(
+        100,
+        Math.max(
+          0,
+          (participantsDone / participantsTotal) * 100,
+        ),
+      )
     : 0
 
-  const shortcuts = [
-    { label: 'AI 사전 인터뷰 하기', section: 'INTERVIEW' },
-    { label: '익명 아이디어 보드 보기', section: 'BOARD' },
-    { label: '전체 의견 요약 보기', section: 'SUMMARY' },
-  ]
+  const displayDate =
+    meetingDate && startTime
+      ? `${meetingDate}T${startTime}`
+      : startsAt || meetingDate
 
   return (
     <Card
@@ -434,10 +462,14 @@ export function MeetingCard({ projectId, meeting }) {
       className="w-full max-w-[658px] px-6 py-8 sm:px-10 lg:px-[48px] lg:py-[40px]"
     >
       <div className="flex w-full flex-col gap-[30px]">
+
         <div className="flex flex-col gap-[4px]">
-          <p className="text-28 font-bold text-[#1c232b] lg:text-34">{title}</p>
+          <p className="text-28 font-bold text-[#1c232b] lg:text-34">
+            {title}
+          </p>
+
           <p className="text-16 font-medium text-[#858894]">
-            {formatMeetingDate(startsAt)}
+            {formatMeetingDate(displayDate)}
           </p>
         </div>
 
@@ -448,41 +480,85 @@ export function MeetingCard({ projectId, meeting }) {
             <p className="text-16 absolute top-0 left-0 font-medium text-[#858894]">
               참여 현황
             </p>
+
             <p className="text-16 absolute top-0 right-0 font-medium text-[#858894]">
               {participantsDone}/{participantsTotal}명 완료
             </p>
+
             <div className="absolute top-[31.5px] left-0 h-[9px] w-full overflow-clip rounded-[33px] bg-[#f5f5f5]">
               <div
                 className="h-full rounded-[33px] bg-[#0075d3]"
-                style={{ width: `${ratio}%` }}
+                style={{
+                  width: `${ratio}%`,
+                }}
               />
             </div>
           </div>
 
           <div className="flex flex-wrap gap-[16px]">
-            {shortcuts.map((shortcut) => (
+
+            {isParticipant && !mySubmitted && (
               <Button
-                key={shortcut.section}
                 size="pill"
                 variant="secondary"
                 onClick={() =>
-                  navigate(meetingPath(shortcut.section, projectId, id))
+                  navigate(
+                    meetingPath(
+                      'INTERVIEW',
+                      projectId,
+                      id,
+                    ),
+                  )
                 }
               >
-                {shortcut.label}
+                AI 사전 인터뷰 하기
               </Button>
-            ))}
+            )}
+
+            <Button
+              size="pill"
+              variant="secondary"
+              onClick={() =>
+                navigate(
+                  meetingPath(
+                    'BOARD',
+                    projectId,
+                    id,
+                  ),
+                )
+              }
+            >
+              익명 아이디어 보드 보기
+            </Button>
+
+            <Button
+              size="pill"
+              variant="secondary"
+              onClick={() =>
+                navigate(
+                  meetingPath(
+                    'SUMMARY',
+                    projectId,
+                    id,
+                  ),
+                )
+              }
+            >
+              전체 의견 요약 보기
+            </Button>
           </div>
         </div>
 
         <Divider />
 
-        {!hasRecord && (
+        {/* 회의 원문이 아직 없을 때 — 업로드 유도 */}
+        {!hasRecord && !hasResult && (
           <>
             <div className="flex flex-col gap-[4px]">
               <p className="text-20 font-bold text-[#1c232b] lg:text-24">
                 회의가 끝났나요?
               </p>
+
               <p className="text-16 font-medium text-[#858894]">
                 회의 내용을 업로드하면 AI가 분석해드려요.
               </p>
@@ -491,12 +567,83 @@ export function MeetingCard({ projectId, meeting }) {
             <Button
               variant="dark"
               className="w-full"
-              onClick={() => navigate(meetingPath('UPLOAD', projectId, id))}
+              onClick={() =>
+                navigate(
+                  meetingPath(
+                    'UPLOAD',
+                    projectId,
+                    id,
+                  ),
+                )
+              }
             >
               회의 텍스트 업로드
             </Button>
           </>
         )}
+
+        {/* 업로드는 됐지만 분석 결과는 아직 없을 때 — 분석 보기로 전환 */}
+        {hasRecord && !hasResult && (
+          <>
+            <div className="flex flex-col gap-[4px]">
+              <p className="text-20 font-bold text-[#1c232b] lg:text-24">
+                회의 분석이 진행 중이에요.
+              </p>
+
+              <p className="text-16 font-medium text-[#858894]">
+                회의 내용이 업로드되었어요. 분석 상태를 확인해보세요.
+              </p>
+            </div>
+
+            <Button
+              variant="dark"
+              className="w-full"
+              onClick={() =>
+                navigate(
+                  meetingPath(
+                    'LOADING',
+                    projectId,
+                    id,
+                  ),
+                )
+              }
+            >
+              회의 분석 보기
+            </Button>
+          </>
+        )}
+
+        {/* 분석 결과가 만들어진 경우 */}
+        {hasResult && (
+          <>
+            <div className="flex flex-col gap-[4px]">
+              <p className="text-20 font-bold text-[#1c232b] lg:text-24">
+                회의 분석이 완료됐어요.
+              </p>
+
+              <p className="text-16 font-medium text-[#858894]">
+                회의 분석 결과를 다시 확인할 수 있어요.
+              </p>
+            </div>
+
+            <Button
+              variant="dark"
+              className="w-full"
+              onClick={() =>
+                navigate(
+                  meetingPath(
+                    'DETAIL',
+                    projectId,
+                    id,
+                  ),
+                )
+              }
+            >
+              분석 결과 보기
+            </Button>
+          </>
+        )}
+
       </div>
     </Card>
   )
