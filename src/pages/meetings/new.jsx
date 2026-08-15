@@ -13,7 +13,7 @@ import { API_BASE_URL, HEADER_PRESETS, projectPath } from "@/lib";
 const NEW_COLUMN = "w-full max-w-[562px]";
 
 const DATE_FIELD =
-  "text-16 rounded-[8px] border border-solid border-[#b8bccc] bg-white px-[16px] py-[8px] font-medium text-[#1c232b] outline-none";
+  "text-16 cursor-pointer rounded-[8px] border border-solid border-[#b8bccc] bg-white px-[16px] py-[8px] font-medium text-[#1c232b] outline-none";
 
 export function MeetingNewPage() {
   const { projectId = "" } = useParams();

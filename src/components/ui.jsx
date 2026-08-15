@@ -31,7 +31,7 @@ export function Button({
     <button
       type="button"
       className={cn(
-        'flex items-center justify-center overflow-clip whitespace-nowrap',
+        'flex cursor-pointer items-center justify-center overflow-clip whitespace-nowrap disabled:cursor-not-allowed',
         BUTTON_VARIANT[variant],
         BUTTON_SIZE[size],
         className,

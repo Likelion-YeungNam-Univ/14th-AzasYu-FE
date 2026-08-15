@@ -208,7 +208,7 @@ export function WelcomePage() {
                 type="button"
                 onClick={handleLogin}
                 disabled={submitting}
-                className={`text-20 mt-8 flex h-[54px] w-full items-center justify-center rounded-[59px] border border-solid font-medium whitespace-nowrap disabled:opacity-60 lg:mt-[46px] ${
+                className={`text-20 mt-8 flex h-[54px] w-full cursor-pointer items-center justify-center rounded-[59px] border border-solid font-medium whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-60 lg:mt-[46px] ${
                   canSubmit
                     ? "border-[#0075d3] bg-[#0075d3] text-white"
                     : "border-[#1c232b] bg-white text-[#1c232b]"
@@ -220,7 +220,7 @@ export function WelcomePage() {
               <button
                 type="button"
                 onClick={() => navigate(PATHS.SIGNUP)}
-                className={`${LANDING_TEXT} text-20 mt-[14px] flex h-[54px] w-full items-center justify-center rounded-[65px] border border-solid border-[#1c232b] bg-white font-medium whitespace-nowrap`}
+                className={`${LANDING_TEXT} text-20 mt-[14px] flex h-[54px] w-full cursor-pointer items-center justify-center rounded-[65px] border border-solid border-[#1c232b] bg-white font-medium whitespace-nowrap`}
               >
                 회원가입
               </button>
