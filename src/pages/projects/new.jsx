@@ -3,17 +3,11 @@ import { useNavigate } from 'react-router'
 import { Header, Hero, HeroLayout } from '@/components/layout'
 import {
   Button,
-  Card,
   ColorSwatches,
   TextAreaField,
   TextField,
 } from '@/components/ui'
-import {
-  API_BASE_URL,
-  HEADER_PRESETS,
-  HERO_CARD_OVERLAP,
-  projectPath,
-} from '@/lib'
+import { API_BASE_URL, HEADER_PRESETS, projectPath } from '@/lib'
 
 const createProject = async (data) => {
   const accessToken = localStorage.getItem('accessToken')
@@ -80,25 +74,25 @@ export function ProjectNewPage() {
 
   return (
     <HeroLayout
-      overlapHeader
-      cardOverlap={HERO_CARD_OVERLAP}
-      header={<Header {...HEADER_PRESETS.appOnHero} />}
+      header={<Header {...HEADER_PRESETS.appOnLight} />}
       hero={
         <Hero
-          size="lg"
+          size="sm"
           align="center"
-          title="프로젝트 생성"
+          surface="light"
+          title="어떤 일을 함께 하나요?"
           description="함께할 프로젝트의 기본 정보를 입력해주세요."
-          contentTop={220}
+          descriptionWeight="medium"
         />
       }
     >
-      <div className="flex w-full justify-center px-5 pb-16 sm:px-8 lg:pb-[220px]">
-        <Card className="w-full max-w-[869px] px-6 py-10 sm:px-10 lg:px-[152px] lg:py-[88px]">
-          <div className="mx-auto flex w-full max-w-[565px] flex-col items-center gap-[34px]">
+      <div className="flex w-full justify-center px-5 pt-12 pb-16 sm:px-8 lg:pt-[60px] lg:pb-[126px]">
+        <div className="w-full max-w-[562px]">
+          <div className="flex w-full flex-col items-center gap-[34px]">
             <TextField
               tone="form"
               label="프로젝트 이름"
+              required
               placeholder="프로젝트 이름을 입력하세요."
               wrapperClassName={FORM_COLUMN}
               value={projectName}
@@ -115,7 +109,7 @@ export function ProjectNewPage() {
             />
 
             <div className={`${FORM_COLUMN} flex flex-col gap-[18px]`}>
-              <span className="text-20 font-medium text-[#717171]">
+              <span className="text-20 font-medium text-[#1c232b]">
                 프로젝트 색상
               </span>
 
@@ -130,10 +124,10 @@ export function ProjectNewPage() {
               onClick={handleCreateProject}
               disabled={loading}
             >
-              {loading ? '프로젝트 생성 중...' : '프로젝트 생성'}
+              {loading ? '프로젝트 생성 중...' : '프로젝트 만들기'}
             </Button>
           </div>
-        </Card>
+        </div>
       </div>
     </HeroLayout>
   )

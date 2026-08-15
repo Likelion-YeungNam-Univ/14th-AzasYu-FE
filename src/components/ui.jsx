@@ -67,7 +67,7 @@ export function Card({ shadow = 'soft', className, children }) {
 
 const FIELD_LABEL = {
   auth: 'text-16 text-[#1c232b]',
-  form: 'text-20 text-[#717171]',
+  form: 'text-20 text-[#1c232b]',
   login: 'text-20 text-[#717171]',
 }
 
@@ -79,7 +79,7 @@ const FIELD_LABEL_GAP = {
 
 const FIELD_BOX = {
   auth: 'h-[55px] rounded-[20px] border-[#b8bccc] text-[#1c232b] placeholder:text-[#b8bccc]',
-  form: 'h-[66px] rounded-[8px] border-[#606060] text-[#333] placeholder:text-[#606060]',
+  form: 'h-[66px] rounded-[8px] border-[#b8bccc] text-[#1c232b] placeholder:text-[#b8bccc]',
   login: 'h-[54px] rounded-[10px] border-[#bcbcbc] text-[#333] placeholder:text-[#bcbcbc]',
 }
 
@@ -94,7 +94,7 @@ function FieldShell({ label, required, tone, className, children }) {
           className={cn('flex gap-[2px] font-medium', FIELD_LABEL[tone])}
         >
           {label}
-          {required && <span className="text-[#da1e51]">*</span>}
+          {required && <span className="text-16 text-[#da1e51]">*</span>}
         </span>
       )}
       {children}
@@ -244,16 +244,7 @@ export function AgendaList({ items, onRemove, className }) {
   )
 }
 
-const SWATCHES = [
-  '#D9D9D9',
-  '#8B8B8B',
-  '#414141',
-  '#090909',
-  '#5B5B5B',
-  '#8D8D8D',
-  '#D9D9D9',
-  '#D9D9D9',
-]
+const SWATCHES = ['#f74932', '#ffb010', '#01b76a', '#57b8ff', '#1c232b']
 
 export function ColorSwatches({ value, onChange, className }) {
   return (
@@ -272,9 +263,9 @@ export function ColorSwatches({ value, onChange, className }) {
           onClick={() => onChange(index)}
           style={{ backgroundColor: color }}
           className={cn(
-            'size-[40px] shrink-0 cursor-pointer rounded-full opacity-40',
-            'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#606060]',
-            index === value && 'outline outline-2 outline-offset-2 outline-[#606060]',
+            'size-[40px] shrink-0 cursor-pointer rounded-full',
+            'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1c232b]',
+            index === value && 'outline outline-2 outline-offset-2 outline-[#1c232b]',
           )}
         />
       ))}

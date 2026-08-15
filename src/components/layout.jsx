@@ -154,12 +154,24 @@ const HERO_HEIGHT = {
 const HERO_CONTENT_TOP = {
   lg: { center: 229, left: 231 },
   md: { center: 71, left: 71 },
-  sm: { center: 82, left: 82 },
+  sm: { center: 81, left: 82 },
 }
 
 const HERO_SURFACE = {
-  gradient: { band: '', text: 'text-[#f4f4f4]', description: '' },
-  light: { band: 'bg-[#f5f5f5]', text: 'text-[#1c232b]', description: 'text-[#858894]' },
+  gradient: {
+    band: '',
+    text: 'text-[#f4f4f4]',
+    description: '',
+    centerSize: 'text-16 lg:text-18',
+    centerGap: 'gap-[16px]',
+  },
+  light: {
+    band: 'bg-[#f5f5f5]',
+    text: 'text-[#1c232b]',
+    description: 'text-[#858894]',
+    centerSize: 'text-16 sm:text-18 lg:text-20',
+    centerGap: 'gap-[14px]',
+  },
 }
 
 const HERO_DESC_WEIGHT = {
@@ -205,7 +217,7 @@ export function Hero({
           className={cn(
             'flex w-full flex-col',
             isCenter
-              ? 'items-center gap-[16px]'
+              ? `items-center ${skin.centerGap}`
               : 'items-start gap-[14px] lg:w-[634px]',
           )}
         >
@@ -216,7 +228,7 @@ export function Hero({
           {description && (
             <p
               className={cn(
-                isCenter ? 'text-16 lg:text-18' : 'text-18 lg:text-20',
+                isCenter ? skin.centerSize : 'text-18 lg:text-20',
                 HERO_DESC_WEIGHT[weight],
                 skin.description,
               )}
