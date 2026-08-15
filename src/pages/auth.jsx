@@ -390,15 +390,15 @@ export function SignUpCompletePage() {
       <Header {...HEADER_PRESETS.auth} />
 
       <main className="flex flex-col items-center px-5 pb-16 sm:px-8 lg:pb-[140px]">
-        <div className="mt-24 flex flex-col items-center gap-[27px] sm:mt-40 lg:mt-[347px]">
+        <div className="mt-24 flex flex-col items-center gap-[26px] sm:mt-40 lg:mt-[342px]">
           <img
             src={checkBadge}
             alt=""
-            className="block size-[56.186px] shrink-0"
+            className="block size-[56.186px] shrink-0 max-w-none"
           />
 
-          <h1 className="text-28 text-center font-semibold text-black sm:text-34 lg:text-48 lg:whitespace-nowrap">
-            회원가입이 완료되었습니다
+          <h1 className="text-28 text-center font-bold text-[#1c232b] sm:text-34 lg:text-48 lg:whitespace-nowrap">
+            회원가입이 완료되었습니다.
           </h1>
 
           <Button

@@ -4,7 +4,7 @@ import { cn, meetingPath, projectPath } from '@/lib'
 
 const BUTTON_VARIANT = {
   primary: 'bg-[#0075d3] text-white',
-  secondary: 'border border-solid border-[#606060] text-[#606060]',
+  secondary: 'border border-solid border-[#1c232b] text-[#1c232b]',
   secondaryMuted: 'border border-solid border-[#717171] text-[#717171]',
   secondaryOnHero: 'border border-solid border-[#f4f4f4] text-[#f4f4f4]',
   subtle: 'bg-[#e9e9e9] text-black',
