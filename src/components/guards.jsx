@@ -22,6 +22,16 @@ export function RequireAuth({ children }) {
   return children
 }
 
+export function RequireGuest({ children }) {
+  const token = localStorage.getItem('accessToken')
+
+  if (token) {
+    return <Navigate to={PATHS.PROJECTS} replace />
+  }
+
+  return children
+}
+
 export function RootRedirect() {
   const token = localStorage.getItem('accessToken')
 

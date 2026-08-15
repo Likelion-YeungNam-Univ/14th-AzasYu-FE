@@ -17,6 +17,7 @@ import { ProjectsPage } from '@/pages/projects/list'
 import { ProjectNewPage } from '@/pages/projects/new'
 import {
   RequireAuth,
+  RequireGuest,
   RequireSignUpComplete,
   RootRedirect,
 } from '@/components/guards'
@@ -27,11 +28,16 @@ const protectedRoute = (path, element) => ({
   element: <RequireAuth>{element}</RequireAuth>,
 })
 
+const guestRoute = (path, element) => ({
+  path,
+  element: <RequireGuest>{element}</RequireGuest>,
+})
+
 export const router = createBrowserRouter([
   { path: PATHS.ROOT, element: <RootRedirect /> },
 
-  { path: PATHS.WELCOME, element: <WelcomePage /> },
-  { path: PATHS.SIGNUP, element: <SignUpPage /> },
+  guestRoute(PATHS.WELCOME, <WelcomePage />),
+  guestRoute(PATHS.SIGNUP, <SignUpPage />),
   {
     path: PATHS.SIGNUP_COMPLETE,
     element: (
