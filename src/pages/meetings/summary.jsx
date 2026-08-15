@@ -153,7 +153,6 @@ export function MeetingSummaryPage() {
         <Hero
           size="sm"
           align="center"
-          surface="light"
           title="의견을 모아봤어요."
           description="팀원들이 미리 남긴 의견을 확인해보세요."
           descriptionWeight="medium"

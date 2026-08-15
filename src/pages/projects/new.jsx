@@ -79,7 +79,6 @@ export function ProjectNewPage() {
         <Hero
           size="sm"
           align="center"
-          surface="light"
           title="어떤 일을 함께 하나요?"
           description="함께할 프로젝트의 기본 정보를 입력해주세요."
           descriptionWeight="medium"

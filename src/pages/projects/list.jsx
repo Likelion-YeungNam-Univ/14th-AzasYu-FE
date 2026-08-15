@@ -190,7 +190,6 @@ export function ProjectsPage() {
         <Hero
           size="md"
           align="left"
-          surface="light"
           title="내 프로젝트"
           description="진행 중인 프로젝트를 열거나, 참여코드로 새로운 팀에 합류해보세요."
           descriptionWeight="medium"

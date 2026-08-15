@@ -6,8 +6,6 @@ import { cn, meetingPath, projectPath } from '@/lib'
 const BUTTON_VARIANT = {
   primary: 'bg-[#0075d3] text-white',
   secondary: 'border border-solid border-[#1c232b] text-[#1c232b]',
-  secondaryMuted: 'border border-solid border-[#717171] text-[#717171]',
-  secondaryOnHero: 'border border-solid border-[#f4f4f4] text-[#f4f4f4]',
   subtle: 'bg-[#e6f3fe] text-[#0075d3]',
   dark: 'bg-[#1c232b] text-white',
 }
@@ -15,12 +13,8 @@ const BUTTON_VARIANT = {
 const BUTTON_SIZE = {
   block:
     'text-20 h-[66px] gap-[10px] rounded-[59px] px-[16px] py-[14px] font-medium',
-  blockSm:
-    'text-20 h-[54px] gap-[10px] rounded-[59px] px-[16px] py-[14px] font-medium',
   inline:
     'text-20 gap-[12px] rounded-[33px] px-[18px] py-[14px] font-semibold',
-  small:
-    'text-16 h-[42px] gap-[6px] rounded-[8px] px-[16px] py-[8px] font-medium',
   action:
     'text-18 gap-[10px] rounded-[8px] px-[24px] py-[12px] font-semibold',
   pill: 'text-16 h-[44px] gap-[6px] rounded-[59px] px-[16px] py-[14px] font-medium',
@@ -51,7 +45,6 @@ export function Button({
 
 const CARD_SHADOW = {
   soft: 'shadow-[20px_20px_20px_0px_rgba(0,0,0,0.05)]',
-  drop: 'shadow-[0px_4px_20px_0px_rgba(0,0,0,0.14)]',
   meeting: 'shadow-[10px_10px_30px_0px_rgba(0,0,0,0.06)]',
 }
 
@@ -72,19 +65,16 @@ export function Card({ shadow = 'soft', className, children }) {
 const FIELD_LABEL = {
   auth: 'text-16 text-[#1c232b]',
   form: 'text-20 text-[#1c232b]',
-  login: 'text-20 text-[#717171]',
 }
 
 const FIELD_LABEL_GAP = {
   auth: 'gap-[10.6px]',
   form: 'gap-[18px]',
-  login: 'gap-[18px]',
 }
 
 const FIELD_BOX = {
   auth: 'h-[55px] rounded-[20px] border-[#b8bccc] text-[#1c232b] placeholder:text-[#b8bccc]',
   form: 'h-[66px] rounded-[8px] border-[#b8bccc] text-[#1c232b] placeholder:text-[#b8bccc]',
-  login: 'h-[54px] rounded-[10px] border-[#bcbcbc] text-[#333] placeholder:text-[#bcbcbc]',
 }
 
 const FIELD_BASE =
@@ -149,35 +139,6 @@ export function TextAreaField({
   )
 }
 
-export function Checkbox({ label, wrapperClassName, className, ...props }) {
-  return (
-    <label
-      className={cn('flex w-fit cursor-pointer items-center gap-[8px]', wrapperClassName)}
-    >
-      <input type="checkbox" className={cn('peer sr-only', className)} {...props} />
-
-      <span
-        aria-hidden
-        className="flex size-[18px] shrink-0 items-center justify-center rounded-[2px] border border-solid border-[#bcbcbc] text-transparent peer-checked:border-[#606060] peer-checked:text-[#606060] peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#606060]"
-      >
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="block">
-          <path
-            d="M2.5 6.2L4.8 8.6L9.5 3.4"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </span>
-
-      <span className="text-20 font-medium whitespace-nowrap text-[#606060]">
-        {label}
-      </span>
-    </label>
-  )
-}
-
 export function Chip({ label, onRemove, className }) {
   return (
     <span
@@ -198,22 +159,6 @@ export function Chip({ label, onRemove, className }) {
         </button>
       )}
     </span>
-  )
-}
-
-export function FieldBox({ children, icon, className }) {
-  return (
-    <div
-      className={cn(
-        'flex items-center rounded-[8px] border border-solid border-[#606060] px-[16px] py-[8px]',
-        className,
-      )}
-    >
-      <span className="text-16 flex items-center gap-[12px] font-medium whitespace-nowrap text-[#606060]">
-        {children}
-        {icon}
-      </span>
-    </div>
   )
 }
 

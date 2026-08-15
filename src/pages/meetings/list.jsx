@@ -150,7 +150,6 @@ export function MeetingsPage() {
         <Hero
           size="sm"
           align="left"
-          surface="light"
           title={
             <span className="flex items-center gap-[14px]">
               <img

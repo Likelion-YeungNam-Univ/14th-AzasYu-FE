@@ -102,7 +102,6 @@ export function MeetingBoardPage() {
         <Hero
           size="sm"
           align="left"
-          surface="light"
           title="모두의 생각을 한곳에."
           description={`${meetingTitle} · 누가 썼는지는 아무도 알 수 없어요.`}
           descriptionWeight="medium"

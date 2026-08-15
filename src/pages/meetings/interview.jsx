@@ -274,7 +274,6 @@ export function MeetingInterviewPage() {
         <Hero
           size="sm"
           align="center"
-          surface="light"
           title="6개의 질문으로 생각을 정리해요."
           description="답변은 익명으로 모여 회의 자료가 됩니다."
           descriptionWeight="medium"

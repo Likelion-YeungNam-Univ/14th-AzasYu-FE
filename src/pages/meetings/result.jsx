@@ -195,7 +195,6 @@ export function MeetingResultPage() {
         <Hero
           size="sm"
           align="left"
-          surface="light"
           contentTop={79.62}
           title={
             <span className="flex items-center gap-[14px]">
