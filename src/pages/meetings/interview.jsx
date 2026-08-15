@@ -2,6 +2,7 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import sendIcon from "@/assets/icons/send.svg";
 import { Header, Hero, HeroLayout } from "@/components/layout";
+import { StateView } from "@/components/states";
 import { Button, Card } from "@/components/ui";
 import { API_BASE_URL, HEADER_PRESETS, meetingPath } from "@/lib";
 
@@ -299,11 +300,7 @@ export function MeetingInterviewPage() {
 
             {/* 질문 로딩, 생성 중 */}
             {(status === "LOADING" || status === "PENDING") && (
-              <div className="flex flex-col items-center justify-center gap-4 py-20">
-                <span className="text-18 font-medium text-[#858894]">
-                  AI가 회의 안건을 분석하여 질문을 만들고 있습니다... 🤖
-                </span>
-              </div>
+              <StateView title="AI가 회의 안건을 분석하여 질문을 만들고 있습니다" />
             )}
 
             {/* 질문 생성 실패 또는 없음 */}
@@ -311,22 +308,19 @@ export function MeetingInterviewPage() {
               status === "FAILED" ||
               status === "NOT_CONFIGURED" ||
               status === "ERROR") && (
-              <div className="flex flex-col items-center justify-center gap-6 py-20">
-                <p className="text-18 text-center leading-[1.5] font-medium text-[#da1e51]">
-                  {errorMessage}
-                </p>
-                {status !== "NOT_CONFIGURED" && (
-                  <Button
-                    size="pill"
-                    onClick={handleGenerateQuestions}
-                    className="w-fit px-8"
-                  >
-                    {status === "NOT_FOUND"
-                      ? "AI 공통 질문 생성하기"
-                      : "질문 다시 생성하기"}
-                  </Button>
-                )}
-              </div>
+              <StateView
+                variant="error"
+                title={errorMessage}
+                action={
+                  status !== "NOT_CONFIGURED" && (
+                    <Button size="pill" onClick={handleGenerateQuestions}>
+                      {status === "NOT_FOUND"
+                        ? "AI 공통 질문 생성하기"
+                        : "질문 다시 생성하기"}
+                    </Button>
+                  )
+                }
+              />
             )}
 
             {/* 질문 생성 완료 — 답한 만큼만 대화가 쌓인다 */}
@@ -357,26 +351,29 @@ export function MeetingInterviewPage() {
 
             {/* 카드 요약 중 (로딩) */}
             {cardStatus === "LOADING" && (
-              <p className="text-16 py-8 text-center font-medium text-[#858894]">
-                작성해주신 답변을 바탕으로 AI가 핵심 아이디어 카드를 생성하고
-                있습니다... ⏳
-              </p>
+              <StateView
+                size="inline"
+                title="AI가 핵심 아이디어 카드를 생성하고 있습니다"
+                description="작성해주신 답변을 바탕으로 정리하고 있어요."
+              />
             )}
 
             {/* 카드 생성 실패 */}
             {cardStatus === "FAILED" && (
-              <div className="flex flex-col items-center gap-4 py-8">
-                <p className="text-16 font-medium text-[#da1e51]">
-                  {cardErrorMessage}
-                </p>
-                <Button
-                  size="pill"
-                  variant="secondary"
-                  onClick={handleRegenerateCard}
-                >
-                  아이디어 카드 다시 생성하기
-                </Button>
-              </div>
+              <StateView
+                variant="error"
+                size="inline"
+                title={cardErrorMessage}
+                action={
+                  <Button
+                    size="pill"
+                    variant="secondary"
+                    onClick={handleRegenerateCard}
+                  >
+                    아이디어 카드 다시 생성하기
+                  </Button>
+                }
+              />
             )}
 
             {/* 카드 생성 성공 (결과 렌더링) */}

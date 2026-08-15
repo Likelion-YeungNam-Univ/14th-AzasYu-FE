@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { Plus } from '@/components/icons'
 import { Footer, Header, Hero, HeroLayout } from '@/components/layout'
+import { StateView } from '@/components/states'
 import { Button, ProjectCard, TextField } from '@/components/ui'
 import { API_BASE_URL, HEADER_PRESETS, PATHS } from '@/lib'
 
@@ -223,18 +224,10 @@ export function ProjectsPage() {
         </div>
 
         {/* 로딩 */}
-        {loading && (
-          <div className="mt-10 text-center">
-            프로젝트를 불러오는 중입니다...
-          </div>
-        )}
+        {loading && <StateView title="프로젝트를 불러오는 중입니다" />}
 
         {/* 에러 */}
-        {error && (
-          <div className="mt-10 text-center text-red-500">
-            {error}
-          </div>
-        )}
+        {error && <StateView variant="error" title={error} />}
 
         {/* 프로젝트 목록 */}
         {!loading && !error && (
@@ -277,7 +270,7 @@ export function ProjectsPage() {
               />
 
               {joinError && (
-                <p className="text-14 text-red-500">
+                <p role="alert" className="text-14 font-medium text-[#da1e51]">
                   {joinError}
                 </p>
               )}

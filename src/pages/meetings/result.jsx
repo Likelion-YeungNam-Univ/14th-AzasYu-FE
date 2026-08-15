@@ -3,6 +3,7 @@ import { useParams } from "react-router";
 import pencilIcon from "@/assets/icons/pencil.svg";
 import warningIcon from "@/assets/icons/warning-triangle.svg";
 import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
+import { StateView } from "@/components/states";
 import { API_BASE_URL, HEADER_PRESETS, MEETING_TITLE } from "@/lib";
 
 const RESULT_CONTAINER = "mx-auto w-full max-w-[1460px] px-5 sm:px-8 lg:px-0";
@@ -163,26 +164,26 @@ export function MeetingResultPage() {
   }, [meetingId]);
 
   if (loading) {
-    return (
-      <p className="text-18 flex min-h-svh items-center justify-center font-medium text-[#858894]">
-        회의 분석 결과를 불러오는 중...
-      </p>
-    );
+    return <StateView size="screen" title="회의 분석 결과를 불러오는 중입니다" />;
   }
 
   if (error || !result) {
     return (
-      <p className="text-18 flex min-h-svh items-center justify-center font-medium text-[#da1e51]">
-        {error || "회의 분석 결과가 없습니다."}
-      </p>
+      <StateView
+        variant="error"
+        size="screen"
+        title={error || "회의 분석 결과가 없습니다."}
+      />
     );
   }
 
   if (result.status !== "GENERATED") {
     return (
-      <p className="text-18 flex min-h-svh items-center justify-center font-medium text-[#da1e51]">
-        {result.failureMessage || "회의 분석에 실패했습니다."}
-      </p>
+      <StateView
+        variant="error"
+        size="screen"
+        title={result.failureMessage || "회의 분석에 실패했습니다."}
+      />
     );
   }
 
