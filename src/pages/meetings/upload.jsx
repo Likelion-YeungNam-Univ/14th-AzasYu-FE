@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import uploadIcon from "@/assets/icons/upload.svg";
-import { Header, Hero, HeroLayout } from "@/components/layout";
+import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
 import { Button, Card } from "@/components/ui";
 import {
   API_BASE_URL,
@@ -172,6 +172,8 @@ export function MeetingUploadPage() {
           </div>
         </Card>
       </div>
+
+      <Footer />
     </HeroLayout>
   );
 }

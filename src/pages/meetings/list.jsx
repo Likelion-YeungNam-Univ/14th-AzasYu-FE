@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
-import { Header, Hero, HeroLayout } from "@/components/layout";
+import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
 import { Table } from "@/components/ui";
 import {
   API_BASE_URL,
@@ -162,6 +162,8 @@ export function MeetingsPage() {
           )}
         </div>
       </div>
+
+      <Footer />
     </HeroLayout>
   );
 }

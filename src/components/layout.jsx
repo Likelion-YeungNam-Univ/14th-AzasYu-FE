@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
+import githubIcon from '@/assets/icons/github.svg'
+import instagramIcon from '@/assets/icons/instagram.svg'
+import kakaotalkIcon from '@/assets/icons/kakaotalk.svg'
+import likelionLogo from '@/assets/likelion-logo.svg'
 import { ChevronRight } from '@/components/icons'
 import { API_BASE_URL, buildNavItems, cn, PATHS, SERVICE_NAME } from '@/lib'
 import { clearSession } from '@/session'
@@ -239,5 +243,71 @@ export function HeroLayout({
         {children}
       </div>
     </div>
+  )
+}
+
+const SOCIAL_ICONS = [
+  {
+    src: instagramIcon,
+    label: 'Instagram',
+    href: 'https://www.instagram.com/likelion_yu/?hl=en',
+  },
+  { src: kakaotalkIcon, label: 'KakaoTalk' },
+  {
+    src: githubIcon,
+    label: 'GitHub',
+    href: 'https://github.com/Likelion-YeungNam-Univ',
+  },
+]
+
+export function Footer({ className }) {
+  return (
+    <footer className={cn('w-full bg-white', className)}>
+      <div className="mx-auto flex w-full max-w-[1460px] items-start justify-between px-5 pt-[20px] pb-10 sm:px-8 lg:h-[174px] lg:px-0 lg:pb-0">
+        <div className="flex w-[128px] flex-col gap-[12px]">
+          <img
+            src={likelionLogo}
+            alt=""
+            className="size-[70px] max-w-none shrink-0"
+          />
+
+          <span className="text-18 font-bold whitespace-nowrap text-[#a66822]">
+            LIKELION YU
+          </span>
+        </div>
+
+        <ul className="flex items-center gap-[16px] lg:pt-[25px]">
+          {SOCIAL_ICONS.map((icon) => {
+            const glyph = (
+              <img
+                src={icon.src}
+                alt={icon.label}
+                className="size-[24px] max-w-none"
+              />
+            )
+
+            return (
+              <li
+                key={icon.label}
+                className="flex size-[50px] shrink-0 items-center justify-center rounded-[30px] bg-white/10"
+              >
+                {icon.href ? (
+                  <a
+                    href={icon.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex size-full items-center justify-center"
+                  >
+                    {glyph}
+                  </a>
+                ) : (
+                  glyph
+                )}
+              </li>
+            )
+          })}
+        </ul>
+      </div>
+    </footer>
   )
 }

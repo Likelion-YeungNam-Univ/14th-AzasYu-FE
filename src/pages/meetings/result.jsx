@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import warningIcon from "@/assets/icons/warning-triangle.svg";
-import { Header, Hero, HeroLayout } from "@/components/layout";
+import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
 import { API_BASE_URL, HEADER_PRESETS, MEETING_TITLE } from "@/lib";
 
 const MEETING_TIME = "2026. 08. 12 오후 2:00 - 4:00";
@@ -158,6 +158,8 @@ export function MeetingResultPage() {
       </div>
 
       <div className="h-16 lg:h-[531px]" />
+
+      <Footer />
     </HeroLayout>
   );
 }

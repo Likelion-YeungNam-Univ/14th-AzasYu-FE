@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { Plus } from '@/components/icons'
-import { Header, Hero, HeroLayout } from '@/components/layout'
+import { Footer, Header, Hero, HeroLayout } from '@/components/layout'
 import { Button, ProjectCard, TextField } from '@/components/ui'
 import { API_BASE_URL, HEADER_PRESETS, PATHS } from '@/lib'
 
@@ -279,6 +279,8 @@ export function ProjectsPage() {
           </div>
         </div>
       )}
+
+      <Footer />
     </HeroLayout>
   )
 }

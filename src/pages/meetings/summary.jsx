@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { Header, Hero, HeroLayout } from "@/components/layout";
+import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
 import { Button } from "@/components/ui";
 import { HEADER_PRESETS } from "@/lib";
 
@@ -213,6 +213,8 @@ export function MeetingSummaryPage() {
           </div>
         )}
       </div>
+
+      <Footer />
     </HeroLayout>
   );
 }
