@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
+import clockIcon from "@/assets/icons/clock.svg";
 import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
 import { Table } from "@/components/ui";
 import {
@@ -26,17 +27,49 @@ function formatMeetingDate(value) {
 }
 
 const TABLE_COLUMNS = [
-  { label: "회의명", width: 300 },
+  { label: "회의명", width: 260 },
   { label: "프로젝트", width: 280 },
-  { label: "회의 목적", width: 530 },
+  { label: "주요 안건", width: 530 },
   { label: "날짜", width: 180 },
 ];
 
 export function MeetingsPage() {
   const { projectId = "" } = useParams();
   const [meetings, setMeetings] = useState([]);
+  const [projectName, setProjectName] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!projectId) return;
+
+    let cancelled = false;
+
+    const fetchProjectName = async () => {
+      try {
+        const accessToken = localStorage.getItem("accessToken");
+
+        const response = await fetch(
+          `${API_BASE_URL}/api/v1/projects/${projectId}`,
+          { headers: { Authorization: `Bearer ${accessToken}` } },
+        );
+
+        const result = await response.json();
+
+        if (response.ok && result.success && result.data?.name && !cancelled) {
+          setProjectName(result.data.name);
+        }
+      } catch (error) {
+        console.error("프로젝트 이름 조회 실패:", error);
+      }
+    };
+
+    fetchProjectName();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [projectId]);
 
   useEffect(() => {
     if (!projectId) {
@@ -96,10 +129,13 @@ export function MeetingsPage() {
         to={projectPath("DETAIL", projectId)}
         className="relative z-20 hover:underline"
       >
-        프로젝트
+        {projectName || "프로젝트"}
       </Link>,
 
-      meeting.purpose,
+      // 목록 API에 안건이 없으면 회의 목적으로 대신 채운다
+      meeting.agendas?.length
+        ? meeting.agendas.map((agenda) => agenda.content ?? agenda).join(", ")
+        : meeting.purpose,
 
       formatMeetingDate(meeting.meetingDate),
     ],
@@ -114,24 +150,36 @@ export function MeetingsPage() {
         <Hero
           size="sm"
           align="left"
-          title="지난 회의"
+          surface="light"
+          title={
+            <span className="flex items-center gap-[14px]">
+              <img
+                src={clockIcon}
+                alt=""
+                className="block h-[47px] w-[46px] max-w-none shrink-0"
+              />
+              지난 회의
+            </span>
+          }
           description="회의를 클릭하면 회의 결과와 다르게 이해될 수 있는 부분을 다시 확인할 수 있어요."
         />
       }
     >
-      <div className="mx-auto w-full max-w-[1460px] px-5 pb-16 sm:px-8 lg:px-0 lg:pb-[92px]">
+      <div className="mx-auto w-full max-w-[1460px] px-5 pb-16 sm:px-8 lg:px-0 lg:pb-[186px]">
         <div className="mt-[40px] lg:mt-[82px]">
           {loading ? (
-            <p>회의 목록을 불러오는 중...</p>
+            <p className="text-18 font-medium text-[#858894]">
+              회의 목록을 불러오는 중...
+            </p>
           ) : error ? (
-            <p>{error}</p>
+            <p className="text-18 font-medium text-[#da1e51]">{error}</p>
           ) : meetings.length === 0 ? (
             <div className="flex flex-col items-center py-20 text-center">
-              <p className="text-24 font-semibold text-[#717171]">
+              <p className="text-24 font-semibold text-[#858894]">
                 아직 등록된 회의가 없어요.
               </p>
 
-              <p className="mt-3 text-16 font-medium text-[#878787]">
+              <p className="text-16 mt-3 font-medium text-[#858894]">
                 새로운 회의를 생성해보세요.
               </p>
 
@@ -141,24 +189,13 @@ export function MeetingsPage() {
                     ? projectPath("MEETING_NEW", projectId)
                     : PATHS.PROJECTS
                 }
-                className="mt-8 rounded-[8px] bg-[#d0d0d0] px-6 py-3 text-16 font-semibold text-[#717171]"
+                className="text-18 mt-8 rounded-[8px] bg-[#e6f3fe] px-6 py-3 font-semibold text-[#0075d3]"
               >
                 회의 생성하기
               </Link>
             </div>
           ) : (
-            <div className="flex flex-col">
-              <div className="mb-8 flex justify-end">
-                <Link
-                  to={projectPath("MEETING_NEW", projectId)}
-                  className="rounded-[8px] bg-[#d0d0d0] px-6 py-3 text-16 font-semibold text-[#717171]"
-                >
-                  다음 회의 생성하기
-                </Link>
-              </div>
-
-              <Table columns={TABLE_COLUMNS} rows={tableRows} />
-            </div>
+            <Table columns={TABLE_COLUMNS} rows={tableRows} />
           )}
         </div>
       </div>

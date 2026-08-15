@@ -272,8 +272,8 @@ export function ColorSwatches({ value, onChange, className }) {
   )
 }
 
-const TABLE_CONTAINER_WIDTH = 1452
-const TABLE_INNER_WIDTH = TABLE_CONTAINER_WIDTH - 2
+const TABLE_CONTAINER_WIDTH = 1460
+const TABLE_INNER_WIDTH = 1334
 const TABLE_CELL = 'shrink-0 overflow-hidden pr-4 text-ellipsis whitespace-nowrap'
 
 function tableCellWidth(col) {
@@ -284,17 +284,15 @@ export function Table({ columns, rows, className }) {
   return (
     <div
       className={cn(
-        'w-full overflow-hidden rounded-[35px] border border-solid border-[#717171] bg-white',
+        'w-full overflow-hidden rounded-[35px] border-[0.4px] border-solid border-[#b8bccc] bg-white',
+        CARD_SHADOW.meeting,
         className,
       )}
       style={{ maxWidth: TABLE_CONTAINER_WIDTH }}
     >
       <div className="overflow-x-auto">
-        <div
-          className="px-6 py-[29px] sm:px-10 lg:px-[70px]"
-          style={{ minWidth: TABLE_INNER_WIDTH }}
-        >
-          <div className="text-20 flex h-[76px] items-center border-b border-solid border-[#717171] font-semibold text-[#717171]">
+        <div style={{ minWidth: TABLE_INNER_WIDTH }}>
+          <div className="text-20 flex h-[76px] items-center border-b-[0.5px] border-solid border-[#b8bccc] bg-[#e6f3fe] px-6 font-semibold text-[#1c232b] sm:px-10 lg:px-[42px]">
             {columns.map((col) => (
               <p
                 key={col.label}
@@ -306,13 +304,10 @@ export function Table({ columns, rows, className }) {
             ))}
           </div>
 
-          {rows.map((row, i) => (
+          {rows.map((row) => (
             <div
               key={row.id}
-              className={cn(
-                'text-20 relative flex h-[70px] items-center font-medium text-[#717171]',
-                i < rows.length - 1 && 'border-b border-solid border-[#717171]',
-              )}
+              className="text-20 relative flex h-[76px] items-center border-b-[0.5px] border-solid border-[#b8bccc] px-6 font-bold text-[#1c232b] sm:px-10 lg:px-[42px]"
             >
               {row.cells.map((cell, j) => (
                 <div
