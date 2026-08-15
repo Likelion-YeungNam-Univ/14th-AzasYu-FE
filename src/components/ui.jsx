@@ -3,7 +3,7 @@ import { ChevronRight, Close } from '@/components/icons'
 import { cn, meetingPath, projectPath } from '@/lib'
 
 const BUTTON_VARIANT = {
-  primary: 'bg-[#606060] text-white',
+  primary: 'bg-[#0075d3] text-white',
   secondary: 'border border-solid border-[#606060] text-[#606060]',
   secondaryMuted: 'border border-solid border-[#717171] text-[#717171]',
   secondaryOnHero: 'border border-solid border-[#f4f4f4] text-[#f4f4f4]',
@@ -66,9 +66,9 @@ export function Card({ shadow = 'soft', className, children }) {
 }
 
 const FIELD_LABEL = {
-  auth: 'text-16',
-  form: 'text-20',
-  login: 'text-20',
+  auth: 'text-16 text-[#1c232b]',
+  form: 'text-20 text-[#717171]',
+  login: 'text-20 text-[#717171]',
 }
 
 const FIELD_LABEL_GAP = {
@@ -78,20 +78,20 @@ const FIELD_LABEL_GAP = {
 }
 
 const FIELD_BOX = {
-  auth: 'h-[55px] rounded-[8px] border-[#d0d0d0] placeholder:text-[#d0d0d0]',
-  form: 'h-[66px] rounded-[8px] border-[#606060] placeholder:text-[#606060]',
-  login: 'h-[54px] rounded-[10px] border-[#bcbcbc] placeholder:text-[#bcbcbc]',
+  auth: 'h-[55px] rounded-[20px] border-[#b8bccc] text-[#1c232b] placeholder:text-[#b8bccc]',
+  form: 'h-[66px] rounded-[8px] border-[#606060] text-[#333] placeholder:text-[#606060]',
+  login: 'h-[54px] rounded-[10px] border-[#bcbcbc] text-[#333] placeholder:text-[#bcbcbc]',
 }
 
 const FIELD_BASE =
-  'text-20 w-full border border-solid px-[16px] py-[14px] font-medium text-[#333] outline-none'
+  'text-20 w-full border border-solid px-[16px] py-[14px] font-medium outline-none'
 
 function FieldShell({ label, required, tone, className, children }) {
   return (
     <label className={cn('flex flex-col', label && FIELD_LABEL_GAP[tone], className)}>
       {label && (
         <span
-          className={cn('flex gap-[2px] font-medium text-[#717171]', FIELD_LABEL[tone])}
+          className={cn('flex gap-[2px] font-medium', FIELD_LABEL[tone])}
         >
           {label}
           {required && <span className="text-[#da1e51]">*</span>}

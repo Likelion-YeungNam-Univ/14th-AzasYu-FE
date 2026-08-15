@@ -336,11 +336,11 @@ export function SignUpPage() {
       <Header {...HEADER_PRESETS.auth} />
 
       <main className="flex flex-col items-center px-5 pb-16 sm:px-8 lg:pb-[193px]">
-        <h1 className="text-28 mt-16 font-semibold whitespace-nowrap text-black sm:mt-24 sm:text-34 lg:mt-[113px] lg:text-48">
+        <h1 className="text-28 mt-16 font-semibold whitespace-nowrap text-[#1c232b] sm:mt-24 sm:text-34 lg:mt-[113px] lg:text-48">
           회원가입
         </h1>
 
-        <div className="mt-8 flex w-full max-w-[501px] flex-col items-center gap-[22px] rounded-[10px] border border-solid border-[#d0d0d0] px-5 py-[28px] sm:px-[26px] lg:mt-[50.8px]">
+        <div className="mt-8 flex w-full max-w-[501px] flex-col items-center gap-[22px] rounded-[30px] border border-solid border-[#b8bccc] px-5 py-[28px] sm:px-[26px] lg:mt-[50.8px]">
           {SIGNUP_FIELDS.map((field) => (
             <TextField
               key={field.label}
