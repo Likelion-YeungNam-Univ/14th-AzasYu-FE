@@ -13,6 +13,10 @@ export function MeetingLoadingPage() {
 
     let stopped = false;
 
+    // 최소 대기 시간 (3초) — 로딩 화면이 충분히 보이도록
+    const MIN_DISPLAY_MS = 3000;
+    const enteredAt = Date.now();
+
     const checkResult = async () => {
       try {
         const accessToken = localStorage.getItem("accessToken");
@@ -51,9 +55,17 @@ export function MeetingLoadingPage() {
         if (status === "GENERATED") {
           if (stopped) return;
 
-          navigate(meetingPath("DETAIL", projectId, meetingId), {
-            replace: true,
-          });
+          // 최소 대기 시간이 지나지 않았으면 남은 시간만큼 기다린 후 이동
+          const elapsed = Date.now() - enteredAt;
+          const remaining = Math.max(0, MIN_DISPLAY_MS - elapsed);
+
+          setTimeout(() => {
+            if (!stopped) {
+              navigate(meetingPath("DETAIL", projectId, meetingId), {
+                replace: true,
+              });
+            }
+          }, remaining);
 
           return;
         }
