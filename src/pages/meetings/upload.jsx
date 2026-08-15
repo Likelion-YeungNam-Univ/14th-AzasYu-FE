@@ -106,7 +106,6 @@ export function MeetingUploadPage() {
         <Hero
           size="sm"
           align="center"
-          surface="light"
           title="회의 내용을 분석해볼까요?"
           description="회의 대화를 올리면 주요 결과와 모호한 부분을 확인할 수 있어요."
           descriptionWeight="medium"

@@ -9,7 +9,6 @@ import { API_BASE_URL, buildNavItems, cn, PATHS, SERVICE_NAME } from '@/lib'
 import { clearSession } from '@/session'
 
 const TONE = {
-  onHero: 'text-[#f4f4f4]',
   onLight: 'text-[#1c232b]',
   onDark: 'text-[#1c232b]',
 }
@@ -76,7 +75,7 @@ function useProjectName(projectId) {
 }
 
 export function Header({
-  tone = 'onHero',
+  tone = 'onLight',
   nav = false,
   action = DEFAULT_ACTION,
   projectName,
@@ -148,36 +147,14 @@ export function Header({
   )
 }
 
-const HERO_FILL =
-  'linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%), linear-gradient(90deg, rgb(141, 141, 141) 0%, rgb(141, 141, 141) 100%)'
-
 const HERO_HEIGHT = {
-  lg: 'h-[670px]',
   md: 'h-[350px]',
   sm: 'h-[270px]',
 }
 
 const HERO_CONTENT_TOP = {
-  lg: { center: 229, left: 231 },
   md: { center: 71, left: 71 },
   sm: { center: 81, left: 82 },
-}
-
-const HERO_SURFACE = {
-  gradient: {
-    band: '',
-    text: 'text-[#f4f4f4]',
-    description: '',
-    centerSize: 'text-16 lg:text-18',
-    centerGap: 'gap-[16px]',
-  },
-  light: {
-    band: 'bg-[#f5f5f5]',
-    text: 'text-[#1c232b]',
-    description: 'text-[#858894]',
-    centerSize: 'text-16 sm:text-18 lg:text-20',
-    centerGap: 'gap-[14px]',
-  },
 }
 
 const HERO_DESC_WEIGHT = {
@@ -191,9 +168,8 @@ export function Hero({
   description,
   footer,
   decoration,
-  size = 'lg',
+  size = 'sm',
   align = 'center',
-  surface = 'gradient',
   descriptionWeight,
   contentTop,
   className,
@@ -201,21 +177,20 @@ export function Hero({
   const isCenter = align === 'center'
   const top = contentTop ?? HERO_CONTENT_TOP[size][align]
   const weight = descriptionWeight ?? (isCenter ? 'semibold' : 'normal')
-  const skin = HERO_SURFACE[surface]
 
   return (
     <div
-      className={cn('relative w-full', HERO_HEIGHT[size], skin.band, className)}
-      style={
-        surface === 'gradient' ? { backgroundImage: HERO_FILL } : undefined
-      }
+      className={cn(
+        'relative w-full bg-[#f5f5f5]',
+        HERO_HEIGHT[size],
+        className,
+      )}
     >
       {decoration}
 
       <div
         className={cn(
-          'absolute flex flex-col gap-[40px] px-5 sm:px-8 lg:px-0',
-          skin.text,
+          'absolute flex flex-col gap-[40px] px-5 text-[#1c232b] sm:px-8 lg:px-0',
           isCenter
             ? 'left-1/2 w-full -translate-x-1/2 items-center text-center lg:w-max'
             : 'inset-x-0 mx-auto w-full max-w-[1460px] items-start',
@@ -226,7 +201,7 @@ export function Hero({
           className={cn(
             'flex w-full flex-col',
             isCenter
-              ? `items-center ${skin.centerGap}`
+              ? 'items-center gap-[14px]'
               : 'items-start gap-[14px] lg:w-[634px]',
           )}
         >
@@ -237,9 +212,11 @@ export function Hero({
           {description && (
             <p
               className={cn(
-                isCenter ? skin.centerSize : 'text-18 lg:text-20',
+                isCenter
+                  ? 'text-16 sm:text-18 lg:text-20'
+                  : 'text-18 lg:text-20',
                 HERO_DESC_WEIGHT[weight],
-                skin.description,
+                'text-[#858894]',
               )}
             >
               {description}
@@ -257,33 +234,15 @@ export function HeroLayout({
   header,
   hero,
   children,
-  overlapHeader = false,
-  cardOverlap,
   background = 'bg-white',
   className,
 }) {
   return (
     <div className={cn('min-h-svh w-full', background, className)}>
-      <div className="relative w-full">
-        {overlapHeader ? (
-          <>
-            {hero}
-            <div className="absolute inset-x-0 top-0">{header}</div>
-          </>
-        ) : (
-          <>
-            {header}
-            {hero}
-          </>
-        )}
-      </div>
+      {header}
+      {hero}
 
-      <div
-        className="relative w-full"
-        style={cardOverlap ? { marginTop: -cardOverlap } : undefined}
-      >
-        {children}
-      </div>
+      <div className="relative w-full">{children}</div>
     </div>
   )
 }

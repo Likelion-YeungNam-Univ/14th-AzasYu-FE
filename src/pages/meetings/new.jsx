@@ -195,7 +195,6 @@ export function MeetingNewPage() {
         <Hero
           size="sm"
           align="center"
-          surface="light"
           title="무엇을 이야기하나요?"
           description="안건을 적어두면 AI가 회의 전에 팀원들에게 먼저 물어봐요."
           descriptionWeight="medium"

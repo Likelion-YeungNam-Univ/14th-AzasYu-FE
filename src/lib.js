@@ -8,8 +8,6 @@ export const MEETING_TITLE = '회의'
 
 export const API_BASE_URL = import.meta.env.VITE_API_URL
 
-export const HERO_CARD_OVERLAP = 269
-
 export const PATHS = {
   ROOT: '/',
   WELCOME: '/welcome',
@@ -47,7 +45,6 @@ export function meetingPath(section, projectId, meetingId) {
 }
 
 export const HEADER_PRESETS = {
-  appOnHero: { tone: 'onHero', nav: true },
   appOnLight: { tone: 'onLight', nav: true },
   appOnWhite: { tone: 'onDark', nav: true },
   auth: {
