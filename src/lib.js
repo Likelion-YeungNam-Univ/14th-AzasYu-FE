@@ -60,11 +60,7 @@ export const HEADER_PRESETS = {
     nav: false,
     action: { label: '홈', href: PATHS.PROJECTS },
   },
-  landing: {
-    tone: 'onLanding',
-    nav: false,
-    action: { label: '회원가입', href: PATHS.SIGNUP },
-  },
+  landing: { tone: 'onLanding', nav: false, action: null },
 }
 
 export function buildNavItems(projectId, projectName) {

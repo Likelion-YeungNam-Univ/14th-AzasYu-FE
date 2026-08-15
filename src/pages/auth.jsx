@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import checkBadge from "@/assets/icons/check-badge.svg";
-import welcomeBackground from "@/assets/welcome-bg.jpg";
+import welcomeRings from "@/assets/welcome-rings.jpg";
 import { ArrowRight } from "@/components/icons";
 import { SIGNUP_COMPLETE_KEY } from "@/components/guards";
 import { Header } from "@/components/layout";
@@ -14,10 +14,16 @@ console.log("VITE_API_URL =", API_BASE_URL)
 
 const REMEMBERED_EMAIL_KEY = "rememberedEmail";
 
-const LANDING_TEXT = "text-[#1b2a4d]";
+const LANDING_TEXT = "text-[#1c232b]";
+
+const LANDING_GRADIENT =
+  "linear-gradient(-90deg, rgb(255,255,255) 0%, rgba(255,255,255,0) 51.923%, rgb(255,255,255) 100%)";
 
 const LANDING_FIELD =
-  "text-20 h-[54px] w-full rounded-[10px] border border-solid border-white/70 bg-white/70 px-[17px] font-medium text-[#1b2a4d] outline-none backdrop-blur-[2px] placeholder:text-[#bcc2d2] focus:border-[#6d93f8]";
+  "text-20 h-[54px] w-full rounded-[10px] border border-solid bg-white px-[16px] font-medium text-[#1c232b] outline-none placeholder:text-[#b8bccc]";
+
+const landingFieldBorder = (filled) =>
+  filled ? "border-[#1c232b]" : "border-[#b8bccc]";
 
 export function WelcomePage() {
   const navigate = useNavigate();
@@ -85,41 +91,63 @@ export function WelcomePage() {
     }
   };
 
+  const canSubmit = email.trim() !== "" && password.trim() !== "";
+
   return (
-    <div className="relative min-h-svh w-full overflow-hidden bg-[#f4dcec]">
-      <img
-        src={welcomeBackground}
-        alt=""
-        className="pointer-events-none fixed inset-0 block h-full w-full max-w-none object-cover"
-      />
+    <div className="relative min-h-svh w-full overflow-hidden bg-white">
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <img
+          src={welcomeRings}
+          alt=""
+          className="absolute top-[0.56%] left-[7.66%] h-[98.8%] w-[89.74%] max-w-none object-contain"
+        />
 
-      <div className="relative flex min-h-svh flex-col">
-        <Header {...HEADER_PRESETS.landing} />
+        <div
+          className="absolute inset-y-0 right-0 left-[7.66%]"
+          style={{ backgroundImage: LANDING_GRADIENT }}
+        />
+      </div>
 
-        <div className="flex flex-1 items-center py-12 lg:py-0">
-          <div className="mx-auto flex w-full max-w-[1460px] flex-col items-center gap-14 px-5 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10 min-[1524px]:gap-0 min-[1524px]:px-0">
+      <div className="relative min-h-svh w-full">
+        <div className="absolute inset-x-0 top-0 z-10">
+          <Header {...HEADER_PRESETS.landing} />
+        </div>
+
+        <div className="flex min-h-svh items-center py-28 lg:py-0">
+          <div className="mx-auto flex w-full max-w-[1920px] flex-col items-center gap-14 pr-5 pl-5 sm:pr-8 sm:pl-8 lg:flex-row lg:items-center lg:justify-between lg:gap-16 lg:pr-[17.135%] lg:pl-[10.781%]">
             <div
-              className={`${LANDING_TEXT} flex w-full max-w-[635px] flex-col gap-[16px] text-center lg:text-left`}
+              className={`${LANDING_TEXT} flex w-full max-w-[634px] flex-col gap-[16px] text-center lg:-translate-y-[43px] lg:text-left`}
             >
               <h1 className="text-28 font-bold sm:text-34 lg:text-48">
                 우리... 같은 얘기하고 있는 거 맞죠?
               </h1>
 
-              <p className="text-16 font-semibold sm:text-18 lg:text-20">
+              <p className="text-16 font-semibold sm:text-18 lg:text-22">
                 모두가 같은 의미로 이해할 수 있도록, 협업의 시작
               </p>
             </div>
 
-            <div className="w-full max-w-[501px] lg:mr-[31px]">
-              <h2
-                className={`${LANDING_TEXT} text-28 text-center font-bold sm:text-34 lg:text-48`}
-              >
-                로그인
-              </h2>
+            <div className="w-full max-w-[501px] shrink-0 lg:translate-y-[7px]">
+              <div className="flex flex-col items-center gap-[9px]">
+                <h2
+                  className={`${LANDING_TEXT} text-28 font-semibold sm:text-34 lg:text-48`}
+                >
+                  로그인
+                </h2>
+
+                {error && (
+                  <p
+                    role="alert"
+                    className="text-16 w-full text-center font-semibold text-[#da1e51] lg:text-20"
+                  >
+                    {error}
+                  </p>
+                )}
+              </div>
 
               <div className="mt-8 flex flex-col gap-[14px] lg:mt-[51px]">
                 <input
-                  className={LANDING_FIELD}
+                  className={`${LANDING_FIELD} ${landingFieldBorder(Boolean(email))}`}
                   type="email"
                   name="email"
                   value={email}
@@ -133,7 +161,7 @@ export function WelcomePage() {
                 />
 
                 <input
-                  className={LANDING_FIELD}
+                  className={`${LANDING_FIELD} ${landingFieldBorder(Boolean(password))}`}
                   type="password"
                   name="password"
                   value={password}
@@ -147,15 +175,6 @@ export function WelcomePage() {
                 />
               </div>
 
-              {error && (
-                <p
-                  role="alert"
-                  className="text-16 mt-[10px] font-medium text-[#da1e51]"
-                >
-                  {error}
-                </p>
-              )}
-
               <label className="mt-[18px] flex w-fit cursor-pointer items-center gap-[8px]">
                 <input
                   type="checkbox"
@@ -167,7 +186,7 @@ export function WelcomePage() {
 
                 <span
                   aria-hidden
-                  className="flex size-[18px] shrink-0 items-center justify-center rounded-[4px] border border-solid border-[#bcc2d2] bg-white/70 text-transparent peer-checked:border-[#6d93f8] peer-checked:bg-[#6d93f8] peer-checked:text-white peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#6d93f8]"
+                  className="flex size-[18px] shrink-0 items-center justify-center rounded-[2px] border border-solid border-[#1c232b] bg-white text-transparent peer-checked:bg-[#1c232b] peer-checked:text-white peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#1c232b]"
                 >
                   <svg
                     width="12"
@@ -197,7 +216,11 @@ export function WelcomePage() {
                 type="button"
                 onClick={handleLogin}
                 disabled={submitting}
-                className="text-20 mt-8 flex h-[54px] w-full items-center justify-center rounded-[10px] bg-[#6d93f8] font-semibold whitespace-nowrap text-white disabled:opacity-60 lg:mt-[46px]"
+                className={`text-20 mt-8 flex h-[54px] w-full items-center justify-center rounded-[59px] border border-solid font-medium whitespace-nowrap disabled:opacity-60 lg:mt-[46px] ${
+                  canSubmit
+                    ? "border-[#0075d3] bg-[#0075d3] text-white"
+                    : "border-[#1c232b] bg-white text-[#1c232b]"
+                }`}
               >
                 {submitting ? "로그인 중..." : "로그인"}
               </button>
@@ -205,7 +228,7 @@ export function WelcomePage() {
               <button
                 type="button"
                 onClick={() => navigate(PATHS.SIGNUP)}
-                className={`${LANDING_TEXT} text-20 mt-[14px] flex h-[54px] w-full items-center justify-center rounded-[10px] border border-solid border-[#cdceda] bg-white/70 font-semibold whitespace-nowrap backdrop-blur-[2px]`}
+                className={`${LANDING_TEXT} text-20 mt-[14px] flex h-[54px] w-full items-center justify-center rounded-[65px] border border-solid border-[#1c232b] bg-white font-medium whitespace-nowrap`}
               >
                 회원가입
               </button>

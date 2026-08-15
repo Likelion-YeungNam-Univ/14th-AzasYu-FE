@@ -12,7 +12,7 @@ const TONE = {
   onHero: 'text-[#f4f4f4]',
   onLight: 'text-[#717171]',
   onDark: 'text-black',
-  onLanding: 'text-[#1b2a4d]',
+  onLanding: 'text-[#1c232b]',
 }
 
 const DEFAULT_ACTION = { label: '로그아웃', href: PATHS.WELCOME, logout: true }
@@ -119,21 +119,26 @@ export function Header({
         </nav>
       )}
 
-      {action.logout ? (
-        <button
-          type="button"
-          onClick={handleLogout}
-          className="flex cursor-pointer items-center gap-[6px]"
-        >
-          <span className="text-18 font-medium whitespace-nowrap">{action.label}</span>
-          <ChevronRight />
-        </button>
-      ) : (
-        <Link to={action.href} className="flex items-center gap-[6px]">
-          <span className="text-18 font-medium whitespace-nowrap">{action.label}</span>
-          <ChevronRight />
-        </Link>
-      )}
+      {action &&
+        (action.logout ? (
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="flex cursor-pointer items-center gap-[6px]"
+          >
+            <span className="text-18 font-medium whitespace-nowrap">
+              {action.label}
+            </span>
+            <ChevronRight />
+          </button>
+        ) : (
+          <Link to={action.href} className="flex items-center gap-[6px]">
+            <span className="text-18 font-medium whitespace-nowrap">
+              {action.label}
+            </span>
+            <ChevronRight />
+          </Link>
+        ))}
     </header>
   )
 }
