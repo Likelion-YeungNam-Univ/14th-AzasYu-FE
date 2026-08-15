@@ -80,12 +80,18 @@ export function Header({
   nav = false,
   action = DEFAULT_ACTION,
   projectName,
+  omitProjectNav = false,
   className,
 }) {
   const { projectId } = useParams()
   const navigate = useNavigate()
-  const fetchedName = useProjectName(projectName ? '' : projectId)
-  const navItems = buildNavItems(projectId, projectName || fetchedName)
+  const fetchedName = useProjectName(
+    omitProjectNav || projectName ? '' : projectId,
+  )
+  const navItems = buildNavItems(
+    omitProjectNav ? '' : projectId,
+    projectName || fetchedName,
+  )
 
   const handleLogout = () => {
     clearSession()
