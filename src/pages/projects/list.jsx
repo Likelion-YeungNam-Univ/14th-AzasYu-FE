@@ -1,58 +1,52 @@
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router'
-import { Plus } from '@/components/icons'
-import { Footer, Header, Hero, HeroLayout } from '@/components/layout'
-import { StateView } from '@/components/states'
-import { Button, ProjectCard, TextField } from '@/components/ui'
-import { API_BASE_URL, HEADER_PRESETS, PATHS } from '@/lib'
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
+import { Plus } from "@/components/icons";
+import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
+import { StateView } from "@/components/states";
+import { Button, ProjectCard, TextField } from "@/components/ui";
+import { API_BASE_URL, HEADER_PRESETS, PATHS } from "@/lib";
 
 const getMyProjects = async () => {
-  const accessToken = localStorage.getItem('accessToken')
+  const accessToken = localStorage.getItem("accessToken");
 
-  const response = await fetch(
-    `${API_BASE_URL}/api/v1/projects`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
-      },
+  const response = await fetch(`${API_BASE_URL}/api/v1/projects`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
     },
-  )
+  });
 
   if (!response.ok) {
-    throw new Error(`프로젝트 조회 실패: ${response.status}`)
+    throw new Error(`프로젝트 조회 실패: ${response.status}`);
   }
 
-  return response.json()
-}
+  return response.json();
+};
 
 const joinProject = async (joinCode) => {
-  const accessToken = localStorage.getItem('accessToken')
+  const accessToken = localStorage.getItem("accessToken");
 
-  const response = await fetch(
-    `${API_BASE_URL}/api/v1/projects/join`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({
-        joinCode,
-      }),
+  const response = await fetch(`${API_BASE_URL}/api/v1/projects/join`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
     },
-  )
+    body: JSON.stringify({
+      joinCode,
+    }),
+  });
 
   if (!response.ok) {
-    throw new Error(`프로젝트 참여 실패: ${response.status}`)
+    throw new Error(`프로젝트 참여 실패: ${response.status}`);
   }
 
-  return response.json()
-}
+  return response.json();
+};
 
 const getMeetingCount = async (projectId) => {
-  const accessToken = localStorage.getItem('accessToken')
+  const accessToken = localStorage.getItem("accessToken");
 
   const response = await fetch(
     `${API_BASE_URL}/api/v1/projects/${projectId}/meetings`,
@@ -61,39 +55,39 @@ const getMeetingCount = async (projectId) => {
         Authorization: `Bearer ${accessToken}`,
       },
     },
-  )
+  );
 
-  if (!response.ok) return undefined
+  if (!response.ok) return undefined;
 
-  const result = await response.json()
+  const result = await response.json();
 
-  return Array.isArray(result.data) ? result.data.length : undefined
-}
+  return Array.isArray(result.data) ? result.data.length : undefined;
+};
 
 const formatProjectDate = (value) => {
-  const created = new Date(value)
+  const created = new Date(value);
 
-  if (Number.isNaN(created.getTime())) return ''
+  if (Number.isNaN(created.getTime())) return "";
 
-  const pad = (part) => String(part).padStart(2, '0')
+  const pad = (part) => String(part).padStart(2, "0");
 
-  return `${created.getFullYear()}. ${pad(created.getMonth() + 1)}. ${pad(created.getDate())}`
-}
+  return `${created.getFullYear()}. ${pad(created.getMonth() + 1)}. ${pad(created.getDate())}`;
+};
 
 const formatParticipants = (members) => {
-  if (!members?.length) return '참여자 없음'
+  if (!members?.length) return "참여자 없음";
 
   return members.length === 1
     ? members[0].name
-    : `${members[0].name} 외 ${members.length - 1}명`
-}
+    : `${members[0].name} 외 ${members.length - 1}명`;
+};
 
 const toProjectCards = async (rawProjects) => {
   const counts = await Promise.all(
     rawProjects.map((project) =>
       getMeetingCount(project.id).catch(() => undefined),
     ),
-  )
+  );
 
   return rawProjects.map((project, index) => ({
     ...project,
@@ -105,84 +99,84 @@ const toProjectCards = async (rawProjects) => {
     participants: formatParticipants(project.members),
 
     meetingCount: counts[index],
-  }))
-}
+  }));
+};
 
 export function ProjectsPage() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const [projects, setProjects] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // 프로젝트 참여 관련 상태
-  const [isJoinModalOpen, setIsJoinModalOpen] = useState(false)
-  const [joinCode, setJoinCode] = useState('')
-  const [joinLoading, setJoinLoading] = useState(false)
-  const [joinError, setJoinError] = useState('')
+  const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
+  const [joinCode, setJoinCode] = useState("");
+  const [joinLoading, setJoinLoading] = useState(false);
+  const [joinError, setJoinError] = useState("");
 
   // 내 프로젝트 목록 조회
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await getMyProjects()
+        const response = await getMyProjects();
 
-        console.log('프로젝트 API 응답:', response)
+        console.log("프로젝트 API 응답:", response);
 
-        setProjects(await toProjectCards(response.data))
+        setProjects(await toProjectCards(response.data));
       } catch (error) {
-        console.error(error)
-        setError('프로젝트를 불러오지 못했습니다.')
+        console.error(error);
+        setError("프로젝트를 불러오지 못했습니다.");
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchProjects()
-  }, [])
+    fetchProjects();
+  }, []);
 
   const handleJoinProject = async () => {
     if (!joinCode.trim()) {
-      setJoinError('참여코드를 입력해주세요.')
-      return
+      setJoinError("참여코드를 입력해주세요.");
+      return;
     }
 
     try {
-      setJoinLoading(true)
-      setJoinError('')
+      setJoinLoading(true);
+      setJoinError("");
 
-      const response = await joinProject(joinCode.trim())
+      const response = await joinProject(joinCode.trim());
 
-      console.log('프로젝트 참여 응답:', response)
+      console.log("프로젝트 참여 응답:", response);
 
       if (!response.success) {
         setJoinError(
-          response.error?.message || '프로젝트 참여에 실패했습니다.',
-        )
-        return
+          response.error?.message || "프로젝트 참여에 실패했습니다.",
+        );
+        return;
       }
 
-      setIsJoinModalOpen(false)
-      setJoinCode('')
-      setJoinError('')
+      setIsJoinModalOpen(false);
+      setJoinCode("");
+      setJoinError("");
 
       // 프로젝트 목록 다시 조회
-      const projectsResponse = await getMyProjects()
+      const projectsResponse = await getMyProjects();
 
-      setProjects(await toProjectCards(projectsResponse.data))
+      setProjects(await toProjectCards(projectsResponse.data));
     } catch (error) {
-      console.error(error)
-      setJoinError('프로젝트 참여에 실패했습니다.')
+      console.error(error);
+      setJoinError("프로젝트 참여에 실패했습니다.");
     } finally {
-      setJoinLoading(false)
+      setJoinLoading(false);
     }
-  }
+  };
 
   const handleCloseJoinModal = () => {
-    setIsJoinModalOpen(false)
-    setJoinCode('')
-    setJoinError('')
-  }
+    setIsJoinModalOpen(false);
+    setJoinCode("");
+    setJoinError("");
+  };
 
   return (
     <HeroLayout
@@ -200,8 +194,8 @@ export function ProjectsPage() {
               variant="secondary"
               className="bg-white"
               onClick={() => {
-                setIsJoinModalOpen(true)
-                setJoinError('')
+                setIsJoinModalOpen(true);
+                setJoinError("");
               }}
             >
               참여코드 입력
@@ -214,12 +208,16 @@ export function ProjectsPage() {
         {/* 새 프로젝트 만들기 */}
         <div className="mt-10 flex lg:mt-[111px]">
           <Button
-            size="action"
             variant="subtle"
             onClick={() => navigate(PATHS.PROJECT_NEW)}
+            // ✨ className을 덮어씌워서 버튼과 글자, 패딩을 큼직하게 만듭니다.
+            className="flex items-center gap-[10px] rounded-[12px] px-6 py-4 text-18 font-bold text-[#4263eb] sm:px-8 sm:text-20"
           >
-            <Plus />
-            새 프로젝트
+            {/* ✨ 아이콘 크기도 글자에 맞춰서 확실하게 키워줍니다. */}
+            <span className="flex items-center justify-center [&>svg]:h-6 [&>svg]:w-6 sm:[&>svg]:h-7 sm:[&>svg]:w-7">
+              <Plus />
+            </span>
+            새 프로젝트 만들기
           </Button>
         </div>
 
@@ -233,10 +231,7 @@ export function ProjectsPage() {
         {!loading && !error && (
           <div className="mt-6 grid grid-cols-1 gap-x-[25px] gap-y-10 sm:grid-cols-2 lg:mt-[35px] lg:grid-cols-3 lg:gap-y-[70px]">
             {projects.map((project) => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-              />
+              <ProjectCard key={project.id} project={project} />
             ))}
           </div>
         )}
@@ -263,8 +258,8 @@ export function ProjectsPage() {
                 placeholder="참여코드를 입력하세요."
                 value={joinCode}
                 onChange={(e) => {
-                  setJoinCode(e.target.value)
-                  setJoinError('')
+                  setJoinCode(e.target.value);
+                  setJoinError("");
                 }}
                 wrapperClassName="w-full"
               />
@@ -289,7 +284,7 @@ export function ProjectsPage() {
                   onClick={handleJoinProject}
                   disabled={joinLoading}
                 >
-                  {joinLoading ? '참여 중...' : '프로젝트 참여'}
+                  {joinLoading ? "참여 중..." : "프로젝트 참여"}
                 </Button>
               </div>
             </div>
@@ -299,5 +294,5 @@ export function ProjectsPage() {
 
       <Footer />
     </HeroLayout>
-  )
+  );
 }
