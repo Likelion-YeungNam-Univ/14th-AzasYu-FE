@@ -6,6 +6,7 @@ import { StateView } from "@/components/states";
 import { Table } from "@/components/ui";
 import {
   API_BASE_URL,
+  formatDateWithWeekday,
   HEADER_PRESETS,
   PATHS,
   meetingPath,
@@ -15,21 +16,6 @@ import {
 const authHeaders = () => ({
   Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
 });
-
-function formatMeetingDate(value) {
-  if (!value) return "";
-
-  const date = new Date(value);
-
-  return date.toLocaleString("ko-KR", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  });
-}
 
 const toDateTime = (meeting) =>
   meeting.startTime
@@ -150,7 +136,7 @@ export function MeetingsPage() {
         ? meeting.agendas.map((agenda) => agenda.content ?? agenda).join(", ")
         : meeting.purpose,
 
-      formatMeetingDate(toDateTime(meeting)),
+      formatDateWithWeekday(meeting.meetingDate),
     ],
 
     href: meetingPath("DETAIL", meeting.projectId, meeting.id),

@@ -13,7 +13,35 @@ export const FIELD_LIMITS = {
   PROJECT_DESCRIPTION: 1000,
   MEETING_TITLE: 150,
   MEETING_PURPOSE: 1000,
-  AGENDA: 500,
+  AGENDA: 100,
+}
+
+export function alertOnTruncatedPaste(limit) {
+  return (event) => {
+    if (typeof limit !== 'number') return
+
+    const input = event.currentTarget
+    const pasted = event.clipboardData?.getData('text') ?? ''
+    const selected = (input.selectionEnd ?? 0) - (input.selectionStart ?? 0)
+
+    if (input.value.length - selected + pasted.length <= limit) return
+    if (input.dataset.limitNotified) return
+
+    input.dataset.limitNotified = '1'
+    alert(`최대 ${limit}자까지 입력할 수 있어 뒷부분이 잘렸습니다.`)
+  }
+}
+
+const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토']
+
+export function formatDateWithWeekday(value) {
+  const date = new Date(value)
+
+  if (Number.isNaN(date.getTime())) return ''
+
+  const pad = (part) => String(part).padStart(2, '0')
+
+  return `${date.getFullYear()}. ${pad(date.getMonth() + 1)}. ${pad(date.getDate())} (${WEEKDAYS[date.getDay()]})`
 }
 
 export const PATHS = {
