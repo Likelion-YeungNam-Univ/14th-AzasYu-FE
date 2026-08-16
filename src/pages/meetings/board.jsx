@@ -146,7 +146,11 @@ export function MeetingBoardPage() {
           size="sm"
           align="left"
           title="모두의 생각을 한곳에."
-          description={`${meetingTitle} · 누가 썼는지는 아무도 알 수 없어요.`}
+          description={
+            <span className="line-clamp-2 break-words">
+              {meetingTitle} · 누가 썼는지는 아무도 알 수 없어요.
+            </span>
+          }
           descriptionWeight="medium"
           decoration={
             <>
@@ -170,20 +174,32 @@ export function MeetingBoardPage() {
     >
       <div className="mx-auto w-full max-w-[1460px] px-5 pb-16 sm:px-8 lg:px-0 lg:pb-[170px]">
         <div className="mt-10 flex flex-wrap items-center justify-between gap-4 lg:mt-[93px]">
-          <p className="text-24 font-semibold text-[#1c232b] lg:text-28">
+          <p className="text-24 min-w-0 flex-1 break-words font-semibold text-[#1c232b] lg:text-28">
             {meetingTitle}
           </p>
 
-          <Button
-            size="action"
-            variant="subtle"
-            onClick={() =>
-              navigate(meetingPath("INTERVIEW", projectId, meetingId))
-            }
-          >
-            <Plus />
-            아이디어 추가하기
-          </Button>
+          <div className="flex shrink-0 flex-wrap items-center gap-[12px]">
+            <Button
+              size="action"
+              variant="secondary"
+              onClick={() =>
+                navigate(meetingPath("SUMMARY", projectId, meetingId))
+              }
+            >
+              전체 의견 요약 보기
+            </Button>
+
+            <Button
+              size="action"
+              variant="subtle"
+              onClick={() =>
+                navigate(meetingPath("INTERVIEW", projectId, meetingId))
+              }
+            >
+              <Plus />
+              아이디어 추가하기
+            </Button>
+          </div>
         </div>
 
         {/* 데이터 로딩 중이거나 에러/빈 화면 처리 */}
@@ -208,7 +224,7 @@ export function MeetingBoardPage() {
                 }}
                 className="flex h-[265px] items-center justify-center rounded-[14px] px-[24px] py-[36px] sm:px-[40px]"
               >
-                <p className="text-18 h-[168px] w-full overflow-hidden font-medium text-[#1c232b] lg:text-20">
+                <p className="text-18 h-[168px] w-full overflow-y-auto break-words whitespace-pre-line font-medium text-[#1c232b] lg:text-20">
                   {card.coreOpinion}
                 </p>
               </li>
