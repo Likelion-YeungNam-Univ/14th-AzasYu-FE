@@ -109,7 +109,7 @@ export function MeetingLoadingPage() {
           </h1>
 
           <p className="text-18 font-medium text-[#858894] sm:text-20 lg:text-24">
-            회의 내용에 따라 최대 @분 정도 소요될 수 있어요.
+            회의 내용에 따라 최대 5분 정도 소요될 수 있어요.
           </p>
         </div>
       </main>
