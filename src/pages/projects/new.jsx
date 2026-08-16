@@ -7,7 +7,12 @@ import {
   TextAreaField,
   TextField,
 } from '@/components/ui'
-import { API_BASE_URL, HEADER_PRESETS, projectPath } from '@/lib'
+import {
+  API_BASE_URL,
+  FIELD_LIMITS,
+  HEADER_PRESETS,
+  projectPath,
+} from '@/lib'
 
 const createProject = async (data) => {
   const accessToken = localStorage.getItem('accessToken')
@@ -45,6 +50,11 @@ export function ProjectNewPage() {
   const handleCreateProject = async () => {
     if (!projectName.trim()) {
       alert('프로젝트 이름을 입력해주세요.')
+      return
+    }
+
+    if (!description.trim()) {
+      alert('프로젝트 설명을 입력해주세요.')
       return
     }
 
@@ -92,7 +102,8 @@ export function ProjectNewPage() {
               tone="form"
               label="프로젝트 이름"
               required
-              placeholder="프로젝트 이름을 입력하세요."
+              limit={FIELD_LIMITS.PROJECT_NAME}
+              placeholder={`프로젝트 이름을 입력하세요. (${FIELD_LIMITS.PROJECT_NAME}자 이내)`}
               wrapperClassName={FORM_COLUMN}
               value={projectName}
               onChange={(e) => setProjectName(e.target.value)}
@@ -101,7 +112,9 @@ export function ProjectNewPage() {
             <TextAreaField
               tone="form"
               label="프로젝트 설명"
-              placeholder="프로젝트에 대해 간단히 설명해주세요."
+              required
+              limit={FIELD_LIMITS.PROJECT_DESCRIPTION}
+              placeholder={`프로젝트에 대해 간단히 설명해주세요. (${FIELD_LIMITS.PROJECT_DESCRIPTION}자 이내)`}
               wrapperClassName={FORM_COLUMN}
               value={description}
               onChange={(e) => setDescription(e.target.value)}

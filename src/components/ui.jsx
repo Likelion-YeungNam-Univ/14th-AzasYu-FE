@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { ChevronRight, Close } from "@/components/icons";
 import { cn, meetingPath, projectPath } from "@/lib";
@@ -61,8 +61,13 @@ export function Card({ shadow = "soft", className, children }) {
 }
 
 const FIELD_LABEL = {
-  auth: "text-16 text-[#1c232b]",
-  form: "text-20 text-[#1c232b]",
+  auth: "text-16",
+  form: "text-20",
+};
+
+const FIELD_LABEL_TONE = {
+  default: "text-[#1c232b]",
+  muted: "text-[#858894]",
 };
 
 const FIELD_LABEL_GAP = {
@@ -78,30 +83,92 @@ const FIELD_BOX = {
 const FIELD_BASE =
   "text-20 w-full border border-solid px-[16px] py-[14px] font-medium outline-none";
 
+export function FieldLabel({
+  children,
+  required,
+  tone = "form",
+  muted = false,
+  className,
+}) {
+  return (
+    <span
+      className={cn(
+        "flex gap-[2px] font-medium",
+        FIELD_LABEL[tone],
+        FIELD_LABEL_TONE[muted ? "muted" : "default"],
+        className,
+      )}
+    >
+      {children}
+      {required && <span className="text-16 text-[#da1e51]">*</span>}
+    </span>
+  );
+}
+
 function FieldShell({ label, required, tone, className, children }) {
   return (
     <label
       className={cn("flex flex-col", label && FIELD_LABEL_GAP[tone], className)}
     >
       {label && (
-        <span className={cn("flex gap-[2px] font-medium", FIELD_LABEL[tone])}>
+        <FieldLabel required={required} tone={tone}>
           {label}
-          {required && <span className="text-16 text-[#da1e51]">*</span>}
-        </span>
+        </FieldLabel>
       )}
       {children}
     </label>
   );
 }
 
+function FieldBody({ limit, value, children }) {
+  if (typeof limit !== "number") return children;
+
+  const length = String(value ?? "").length;
+
+  return (
+    <span className="flex w-full flex-col gap-[6px]">
+      {children}
+      <span
+        className={cn(
+          "text-14 self-end font-medium",
+          length >= limit ? "text-[#da1e51]" : "text-[#858894]",
+        )}
+      >
+        {length}/{limit}
+      </span>
+    </span>
+  );
+}
+
+function useTruncatedPasteAlert(limit) {
+  const notified = useRef(false);
+
+  return (event) => {
+    if (typeof limit !== "number") return;
+
+    const input = event.currentTarget;
+    const pasted = event.clipboardData?.getData("text") ?? "";
+    const selected = (input.selectionEnd ?? 0) - (input.selectionStart ?? 0);
+
+    if (input.value.length - selected + pasted.length <= limit) return;
+    if (notified.current) return;
+
+    notified.current = true;
+    alert(`최대 ${limit}자까지 입력할 수 있어 뒷부분이 잘렸습니다.`);
+  };
+}
+
 export function TextField({
   label,
   required,
   tone = "auth",
+  limit,
   wrapperClassName,
   className,
   ...props
 }) {
+  const handlePaste = useTruncatedPasteAlert(limit);
+
   return (
     <FieldShell
       label={label}
@@ -109,10 +176,14 @@ export function TextField({
       tone={tone}
       className={wrapperClassName}
     >
-      <input
-        className={cn(FIELD_BASE, FIELD_BOX[tone], className)}
-        {...props}
-      />
+      <FieldBody limit={limit} value={props.value}>
+        <input
+          className={cn(FIELD_BASE, FIELD_BOX[tone], className)}
+          maxLength={limit}
+          onPaste={handlePaste}
+          {...props}
+        />
+      </FieldBody>
     </FieldShell>
   );
 }
@@ -121,10 +192,13 @@ export function TextAreaField({
   label,
   required,
   tone = "form",
+  limit,
   wrapperClassName,
   className,
   ...props
 }) {
+  const handlePaste = useTruncatedPasteAlert(limit);
+
   return (
     <FieldShell
       label={label}
@@ -132,15 +206,19 @@ export function TextAreaField({
       tone={tone}
       className={wrapperClassName}
     >
-      <textarea
-        className={cn(
-          FIELD_BASE,
-          FIELD_BOX[tone],
-          "h-[132px] resize-none",
-          className,
-        )}
-        {...props}
-      />
+      <FieldBody limit={limit} value={props.value}>
+        <textarea
+          className={cn(
+            FIELD_BASE,
+            FIELD_BOX[tone],
+            "h-[132px] resize-none",
+            className,
+          )}
+          maxLength={limit}
+          onPaste={handlePaste}
+          {...props}
+        />
+      </FieldBody>
     </FieldShell>
   );
 }

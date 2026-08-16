@@ -8,6 +8,14 @@ export const MEETING_TITLE = '회의'
 
 export const API_BASE_URL = import.meta.env.VITE_API_URL
 
+export const FIELD_LIMITS = {
+  PROJECT_NAME: 100,
+  PROJECT_DESCRIPTION: 1000,
+  MEETING_TITLE: 150,
+  MEETING_PURPOSE: 1000,
+  AGENDA: 500,
+}
+
 export const PATHS = {
   ROOT: '/',
   WELCOME: '/welcome',

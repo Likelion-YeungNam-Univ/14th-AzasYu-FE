@@ -5,15 +5,49 @@ import {
   AgendaList,
   Button,
   Chip,
+  FieldLabel,
   TextAreaField,
   TextField,
 } from "@/components/ui";
-import { API_BASE_URL, HEADER_PRESETS, projectPath } from "@/lib";
+import {
+  API_BASE_URL,
+  cn,
+  FIELD_LIMITS,
+  HEADER_PRESETS,
+  projectPath,
+} from "@/lib";
 
 const NEW_COLUMN = "w-full max-w-[562px]";
 
 const DATE_FIELD =
-  "text-16 cursor-pointer rounded-[8px] border border-solid border-[#b8bccc] bg-white px-[16px] py-[8px] font-medium text-[#1c232b] outline-none";
+  "text-16 h-[40px] cursor-pointer rounded-[8px] border border-solid border-[#b8bccc] bg-white px-[16px] py-[8px] font-medium outline-none";
+
+const DATE_FIELD_TEXT = {
+  filled: "text-[#1c232b]",
+  empty: "text-transparent",
+};
+
+const HINT_TEXT =
+  "text-16 pointer-events-none absolute inset-y-0 left-0 flex items-center px-[16px] font-medium text-[#b8bccc]";
+
+const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
+
+const pad = (value) => String(value).padStart(2, "0");
+
+const readNow = () => {
+  const now = new Date();
+
+  const hour = now.getHours();
+  const meridiem = hour < 12 ? "오전" : "오후";
+  const hour12 = hour % 12 === 0 ? 12 : hour % 12;
+
+  return {
+    date: `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`,
+    time: `${pad(hour)}:${pad(now.getMinutes())}`,
+    dateHint: `${now.getFullYear()}. ${pad(now.getMonth() + 1)}. ${pad(now.getDate())} (${WEEKDAYS[now.getDay()]})`,
+    timeHint: `${meridiem} ${hour12}:${pad(now.getMinutes())}`,
+  };
+};
 
 export function MeetingNewPage() {
   const { projectId = "" } = useParams();
@@ -25,14 +59,11 @@ export function MeetingNewPage() {
   const [title, setTitle] = useState("");
   const [purpose, setPurpose] = useState("");
 
-  // 오늘 날짜를 기본값으로 사용
-  const today = new Date();
-  const todayString = `${today.getFullYear()}-${String(
-    today.getMonth() + 1,
-  ).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+  // 회의 일시는 비워두고 현재 날짜·시각을 흐리게 안내만 한다
+  const [now] = useState(readNow);
 
-  const [meetingDate, setMeetingDate] = useState(todayString);
-  const [startTime, setStartTime] = useState("10:00");
+  const [meetingDate, setMeetingDate] = useState("");
+  const [startTime, setStartTime] = useState("");
   const [expectedDurationMinutes, setExpectedDurationMinutes] = useState(90);
 
   const [creating, setCreating] = useState(false);
@@ -133,6 +164,16 @@ export function MeetingNewPage() {
       return;
     }
 
+    if (!meetingDate) {
+      alert("회의 날짜를 선택해주세요.");
+      return;
+    }
+
+    if (!startTime) {
+      alert("회의 시작 시각을 선택해주세요.");
+      return;
+    }
+
     try {
       setCreating(true);
 
@@ -209,7 +250,8 @@ export function MeetingNewPage() {
               tone="form"
               label="회의 제목"
               required
-              placeholder="예) 6차 기획 회의"
+              limit={FIELD_LIMITS.MEETING_TITLE}
+              placeholder={`예) 6차 기획 회의 (${FIELD_LIMITS.MEETING_TITLE}자 이내)`}
               wrapperClassName={NEW_COLUMN}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -219,7 +261,9 @@ export function MeetingNewPage() {
             <TextAreaField
               tone="form"
               label="회의 목적"
-              placeholder="이번 회의에서 무엇을 정하고 싶은지 적어주세요."
+              required
+              limit={FIELD_LIMITS.MEETING_PURPOSE}
+              placeholder={`이번 회의에서 무엇을 정하고 싶은지 적어주세요. (${FIELD_LIMITS.MEETING_PURPOSE}자 이내)`}
               wrapperClassName={NEW_COLUMN}
               value={purpose}
               onChange={(e) => setPurpose(e.target.value)}
@@ -227,9 +271,7 @@ export function MeetingNewPage() {
 
             {/* 회의 안건 */}
             <div className={`${NEW_COLUMN} flex flex-col gap-[18px]`}>
-              <span className="text-20 font-medium text-[#1c232b]">
-                회의 안건
-              </span>
+              <FieldLabel required>회의 안건</FieldLabel>
 
               <div className="flex flex-col gap-[10px]">
                 {agenda.length > 0 && (
@@ -252,6 +294,7 @@ export function MeetingNewPage() {
                   }}
                   placeholder="안건을 입력하고 Enter"
                   aria-label="회의 안건 추가"
+                  maxLength={FIELD_LIMITS.AGENDA}
                   className="text-20 w-full rounded-[55px] border border-solid border-[#b8bccc] px-[16px] py-[8px] font-medium text-[#1c232b] outline-none placeholder:text-[#b8bccc]"
                 />
               </div>
@@ -259,26 +302,45 @@ export function MeetingNewPage() {
 
             {/* 회의 일시 */}
             <div className={`${NEW_COLUMN} flex flex-col gap-[18px]`}>
-              <span className="text-20 font-medium text-[#1c232b]">
-                회의 일시
-              </span>
+              <FieldLabel required>회의 일시</FieldLabel>
 
               <div className="flex w-full flex-wrap items-center gap-[22px] lg:w-[565px] lg:flex-nowrap">
-                <input
-                  type="date"
-                  aria-label="회의 날짜"
-                  value={meetingDate}
-                  onChange={(e) => setMeetingDate(e.target.value)}
-                  className={`${DATE_FIELD} w-[217px]`}
-                />
+                <span className="relative inline-flex w-[217px]">
+                  <input
+                    type="date"
+                    aria-label="회의 날짜"
+                    value={meetingDate}
+                    min={now.date}
+                    onChange={(e) => setMeetingDate(e.target.value)}
+                    className={cn(
+                      DATE_FIELD,
+                      DATE_FIELD_TEXT[meetingDate ? "filled" : "empty"],
+                      "w-full",
+                    )}
+                  />
 
-                <input
-                  type="time"
-                  aria-label="시작 시각"
-                  value={startTime}
-                  onChange={(e) => setStartTime(e.target.value)}
-                  className={`${DATE_FIELD} w-[163px]`}
-                />
+                  {!meetingDate && (
+                    <span className={HINT_TEXT}>{now.dateHint}</span>
+                  )}
+                </span>
+
+                <span className="relative inline-flex w-[163px]">
+                  <input
+                    type="time"
+                    aria-label="시작 시각"
+                    value={startTime}
+                    onChange={(e) => setStartTime(e.target.value)}
+                    className={cn(
+                      DATE_FIELD,
+                      DATE_FIELD_TEXT[startTime ? "filled" : "empty"],
+                      "w-full",
+                    )}
+                  />
+
+                  {!startTime && (
+                    <span className={HINT_TEXT}>{now.timeHint}</span>
+                  )}
+                </span>
 
                 <select
                   aria-label="예상 소요 시간"
@@ -286,7 +348,7 @@ export function MeetingNewPage() {
                   onChange={(e) =>
                     setExpectedDurationMinutes(Number(e.target.value))
                   }
-                  className={`${DATE_FIELD} w-[139px]`}
+                  className={cn(DATE_FIELD, DATE_FIELD_TEXT.filled, "w-[139px]")}
                 >
                   <option value={30}>약 30분</option>
                   <option value={60}>약 1시간</option>
@@ -299,9 +361,7 @@ export function MeetingNewPage() {
 
             {/* 참여자 */}
             <div className={`${NEW_COLUMN} flex flex-col gap-[18px]`}>
-              <span className="text-20 font-medium text-[#858894]">
-                참여자
-              </span>
+              <FieldLabel muted>참여자</FieldLabel>
 
               <div className="relative">
                 <input
