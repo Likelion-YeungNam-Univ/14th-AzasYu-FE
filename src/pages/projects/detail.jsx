@@ -279,12 +279,13 @@ export function ProjectDetailPage() {
       {meetings.length > 0 ? (
         <div className="mx-auto flex w-full max-w-[658px] flex-col gap-10 px-5 pt-10 pb-20 sm:px-8 lg:gap-[70px] lg:px-0 lg:pt-[70px] lg:pb-[150px]">
           {meetings.map((meeting) => (
-            <MeetingCard
-              key={meeting.id}
-              projectId={projectId}
-              meeting={meeting}
-              currentUserId={currentUserId}
-            />
+            <div key={meeting.id} className="lg:sticky lg:top-[100px]">
+              <MeetingCard
+                projectId={projectId}
+                meeting={meeting}
+                currentUserId={currentUserId}
+              />
+            </div>
           ))}
         </div>
       ) : (
