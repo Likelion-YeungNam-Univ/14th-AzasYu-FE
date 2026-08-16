@@ -75,6 +75,12 @@ export function MeetingInterviewPage() {
 
   const submittedRef = useRef(false);
 
+  const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [answered, questions, status]);
+
   const intro = buildIntro(localStorage.getItem("userName") ?? "");
 
   // 공통 질문 조회 API (GET)
@@ -339,9 +345,7 @@ export function MeetingInterviewPage() {
                         질문 {index + 1}/{questions.length}
                       </p>
 
-                      <BotMessage bubbleTop={31}>
-                        {question.content}
-                      </BotMessage>
+                      <BotMessage bubbleTop={31}>{question.content}</BotMessage>
                     </div>
 
                     {answered[index] && (
@@ -459,6 +463,7 @@ export function MeetingInterviewPage() {
                 <img src={sendIcon} alt="" className="size-[32px] max-w-none" />
               </button>
             </div>
+            <div ref={messagesEndRef} />
           </div>
         </Card>
       </div>

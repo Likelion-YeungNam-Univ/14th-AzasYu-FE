@@ -126,12 +126,23 @@ export function Header({
       </Link>
 
       {nav && (
-        <nav className="text-16 absolute left-1/2 flex -translate-x-1/2 items-center gap-[20px] sm:gap-[48px] font-medium whitespace-nowrap">
-          {navItems.map((item) => (
-            <Link key={item.label} to={item.href}>
-              {item.label}
-            </Link>
-          ))}
+        <nav className="text-16 absolute left-1/2 flex w-full max-w-[40%] -translate-x-1/2 items-center justify-center gap-[16px] sm:gap-[32px] font-medium">
+          {navItems.map((item) => {
+            const isProjectName = item.label === (projectName || fetchedName);
+
+            return (
+              <Link
+                key={item.label}
+                to={item.href}
+                className={cn(
+                  "block min-w-0",
+                  isProjectName ? "truncate" : "shrink-0 whitespace-nowrap",
+                )}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
       )}
 
