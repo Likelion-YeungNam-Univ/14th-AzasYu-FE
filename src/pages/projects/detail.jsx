@@ -149,6 +149,7 @@ export function ProjectDetailPage() {
   const [error, setError] = useState(null);
 
   const [currentUserId, setCurrentUserId] = useState("");
+  const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
     setCurrentUserId(getCurrentUserId());
@@ -277,16 +278,49 @@ export function ProjectDetailPage() {
       </div>
 
       {meetings.length > 0 ? (
-        <div className="mx-auto flex w-full max-w-[658px] flex-col gap-10 px-5 pt-10 pb-20 sm:px-8 lg:gap-[70px] lg:px-0 lg:pt-[70px] lg:pb-[150px]">
-          {meetings.map((meeting) => (
-            <div key={meeting.id} className="lg:sticky lg:top-[100px]">
-              <MeetingCard
-                projectId={projectId}
-                meeting={meeting}
-                currentUserId={currentUserId}
-              />
-            </div>
-          ))}
+        <div className="mx-auto flex w-full flex-col items-center px-5 pt-20 pb-20 sm:px-8 lg:px-0 lg:pt-[120px] lg:pb-[150px]">
+          <div className="relative flex min-h-[550px] w-full max-w-[1000px] items-center justify-center overflow-visible">
+            {meetings.map((meeting, index) => {
+              const diff = index - activeIndex;
+              const absDiff = Math.abs(diff);
+
+              if (absDiff > 3) return null;
+
+              const translateX = diff * 140;
+              const scale = 1 - absDiff * 0.15;
+              const zIndex = 50 - absDiff;
+
+              const opacity =
+                absDiff === 0 ? 1 : Math.max(0, 0.5 - absDiff * 0.2);
+              const blurStyle =
+                absDiff === 0 ? "none" : `blur(${absDiff * 2}px)`;
+
+              return (
+                <div
+                  key={meeting.id}
+                  onClick={() => setActiveIndex(index)}
+                  className="absolute w-full max-w-[600px] transition-all duration-500 ease-out"
+                  style={{
+                    transform: `translateX(${translateX}px) scale(${scale})`,
+                    zIndex: zIndex,
+                    opacity: opacity,
+                    filter: blurStyle,
+                    cursor: diff === 0 ? "default" : "pointer",
+                  }}
+                >
+                  <div className={diff !== 0 ? "pointer-events-none" : ""}>
+                    <div className="w-full rounded-[24px] bg-white shadow-[0_-8px_30px_-10px_rgba(0,0,0,0.12)] ring-1 ring-black/[0.04]">
+                      <MeetingCard
+                        projectId={projectId}
+                        meeting={meeting}
+                        currentUserId={currentUserId}
+                      />
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       ) : (
         <StateView
