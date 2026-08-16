@@ -12,6 +12,10 @@ import {
   projectPath,
 } from "@/lib";
 
+const authHeaders = () => ({
+  Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+});
+
 function formatMeetingDate(value) {
   if (!value) return "";
 
@@ -27,6 +31,46 @@ function formatMeetingDate(value) {
   });
 }
 
+const toDateTime = (meeting) =>
+  meeting.startTime
+    ? `${meeting.meetingDate}T${meeting.startTime}`
+    : meeting.meetingDate;
+
+const getMyProjects = async () => {
+  const response = await fetch(`${API_BASE_URL}/api/v1/projects`, {
+    headers: authHeaders(),
+  });
+
+  const result = await response.json();
+
+  if (!response.ok || !result.success) {
+    throw new Error(result.error?.message || "프로젝트를 불러오지 못했습니다.");
+  }
+
+  return result.data ?? [];
+};
+
+const getProjectMeetings = async (project) => {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/api/v1/projects/${project.id}/meetings`,
+      { headers: authHeaders() },
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) return [];
+
+    return (result.data ?? []).map((meeting) => ({
+      ...meeting,
+      projectId: project.id,
+      projectName: project.name,
+    }));
+  } catch {
+    return [];
+  }
+};
+
 const TABLE_COLUMNS = [
   { label: "회의명", width: 260 },
   { label: "프로젝트", width: 280 },
@@ -37,88 +81,56 @@ const TABLE_COLUMNS = [
 export function MeetingsPage() {
   const { projectId = "" } = useParams();
   const [meetings, setMeetings] = useState([]);
-  const [projectName, setProjectName] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!projectId) return;
-
     let cancelled = false;
-
-    const fetchProjectName = async () => {
-      try {
-        const accessToken = localStorage.getItem("accessToken");
-
-        const response = await fetch(
-          `${API_BASE_URL}/api/v1/projects/${projectId}`,
-          { headers: { Authorization: `Bearer ${accessToken}` } },
-        );
-
-        const result = await response.json();
-
-        if (response.ok && result.success && result.data?.name && !cancelled) {
-          setProjectName(result.data.name);
-        }
-      } catch (error) {
-        console.error("프로젝트 이름 조회 실패:", error);
-      }
-    };
-
-    fetchProjectName();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [projectId]);
-
-  useEffect(() => {
-    if (!projectId) {
-      setLoading(false);
-      setError("프로젝트 정보가 없습니다.");
-      return;
-    }
 
     const fetchMeetings = async () => {
       try {
         setLoading(true);
         setError("");
 
-        const accessToken = localStorage.getItem("accessToken");
+        const projects = await getMyProjects();
 
-        const response = await fetch(
-          `${API_BASE_URL}/api/v1/projects/${projectId}/meetings`,
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          },
+        const scoped = projectId
+          ? projects.filter(
+              (project) => String(project.id) === String(projectId),
+            )
+          : projects;
+
+        const lists = await Promise.all(scoped.map(getProjectMeetings));
+
+        if (cancelled) return;
+
+        setMeetings(
+          lists
+            .flat()
+            .sort(
+              (a, b) =>
+                new Date(toDateTime(b)).getTime() -
+                new Date(toDateTime(a)).getTime(),
+            ),
         );
-
-        const result = await response.json();
-
-        console.log("회의 목록 조회 응답:", result);
-
-        if (!response.ok || !result.success) {
-          throw new Error(
-            result.error?.message || "회의 목록을 불러오지 못했습니다.",
-          );
-        }
-
-        setMeetings(result.data);
       } catch (error) {
         console.error("회의 목록 조회 실패:", error);
-        setError(error.message);
+
+        if (!cancelled) setError(error.message);
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
 
     fetchMeetings();
+
+    return () => {
+      cancelled = true;
+    };
   }, [projectId]);
 
   const tableRows = meetings.map((meeting) => ({
-    id: meeting.id,
+    id: `${meeting.projectId}-${meeting.id}`,
 
     label: `${meeting.title} 회의 결과 보기`,
 
@@ -127,10 +139,10 @@ export function MeetingsPage() {
 
       <Link
         key="project"
-        to={projectPath("DETAIL", projectId)}
+        to={projectPath("DETAIL", meeting.projectId)}
         className="relative z-20 hover:underline"
       >
-        {projectName || "프로젝트"}
+        {meeting.projectName || "프로젝트"}
       </Link>,
 
       // 목록 API에 안건이 없으면 회의 목적으로 대신 채운다
@@ -138,10 +150,10 @@ export function MeetingsPage() {
         ? meeting.agendas.map((agenda) => agenda.content ?? agenda).join(", ")
         : meeting.purpose,
 
-      formatMeetingDate(meeting.meetingDate),
+      formatMeetingDate(toDateTime(meeting)),
     ],
 
-    href: meetingPath("DETAIL", projectId, meeting.id),
+    href: meetingPath("DETAIL", meeting.projectId, meeting.id),
   }));
 
   return (
