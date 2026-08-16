@@ -15,29 +15,79 @@ import {
 
 const CARD_COLORS = ["#fde2df", "#fef2d8", "#eff7da", "#dbf0ff"];
 
+const getCurrentUserId = () => {
+  const accessToken = localStorage.getItem("accessToken");
+  if (!accessToken) return "";
+
+  try {
+    const base64Url = accessToken.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const paddedBase64 = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
+    const payload = JSON.parse(atob(paddedBase64));
+    return String(payload.userId ?? payload.sub ?? payload.id ?? "");
+  } catch {
+    return "";
+  }
+};
+
 export function MeetingBoardPage() {
   const { projectId = "", meetingId = "" } = useParams();
   const navigate = useNavigate();
 
-  // API에서 받아온 아이디어 카드 목록
   const [ideaCards, setIdeaCards] = useState([]);
   const [meetingTitle, setMeetingTitle] = useState(MEETING_TITLE);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [checking, setChecking] = useState(true);
+  const [isParticipant, setIsParticipant] = useState(false);
 
   useEffect(() => {
     if (!meetingId) return;
 
-    const fetchIdeaCards = async () => {
+    const checkParticipantAndFetch = async () => {
       try {
-        setLoading(true);
-        setError("");
-
         const accessToken = localStorage.getItem("accessToken");
         if (!accessToken) {
           alert("로그인이 필요합니다.");
           return;
         }
+
+        const meetingResponse = await fetch(
+          `${API_BASE_URL}/api/v1/meetings/${meetingId}`,
+          { headers: { Authorization: `Bearer ${accessToken}` } },
+        );
+
+        const meetingResult = await meetingResponse.json();
+
+        if (meetingResponse.ok && meetingResult.success) {
+          if (meetingResult.data?.title) {
+            setMeetingTitle(meetingResult.data.title);
+          }
+
+          const currentUserId = getCurrentUserId();
+          const participants = meetingResult.data?.participants ?? [];
+
+          const participant = participants.some(
+            (p) =>
+              String(p.userId ?? p.id ?? p.memberId) ===
+              String(currentUserId),
+          );
+
+          setIsParticipant(participant);
+
+          if (!participant) {
+            setChecking(false);
+            setLoading(false);
+            return;
+          }
+        } else {
+          setIsParticipant(false);
+          setChecking(false);
+          setLoading(false);
+          return;
+        }
+
+        setChecking(false);
 
         const response = await fetch(
           `${API_BASE_URL}/api/v1/meetings/${meetingId}/idea-cards`,
@@ -49,9 +99,8 @@ export function MeetingBoardPage() {
 
         const result = await response.json();
 
-        //  에러 404 처리
         if (response.status === 404) {
-          setError("아이디어 보드를 찾을 수 없거나 접근 권한이 없습니다.");
+          setError("아이디어 보드를 찾을 수 없습니다.");
           return;
         }
 
@@ -61,40 +110,33 @@ export function MeetingBoardPage() {
           );
         }
 
-        // 받아온 데이터를 상태에 저장
         setIdeaCards(result.data || []);
       } catch (err) {
         console.error("아이디어 카드 조회 실패:", err);
         setError(err.message);
       } finally {
+        setChecking(false);
         setLoading(false);
       }
     };
 
-    const fetchMeetingTitle = async () => {
-      try {
-        const accessToken = localStorage.getItem("accessToken");
-
-        const response = await fetch(
-          `${API_BASE_URL}/api/v1/meetings/${meetingId}`,
-          {
-            headers: { Authorization: `Bearer ${accessToken}` },
-          },
-        );
-
-        const result = await response.json();
-
-        if (response.ok && result.success && result.data?.title) {
-          setMeetingTitle(result.data.title);
-        }
-      } catch (err) {
-        console.error("회의 정보 조회 실패:", err);
-      }
-    };
-
-    fetchIdeaCards();
-    fetchMeetingTitle();
+    checkParticipantAndFetch();
   }, [meetingId]);
+
+  if (checking) {
+    return <StateView size="screen" title="권한을 확인하고 있습니다" />;
+  }
+
+  if (!isParticipant) {
+    return (
+      <StateView
+        variant="error"
+        size="screen"
+        title="회의 참여자만 접근할 수 있습니다"
+        description="이 회의에 참여하지 않아 아이디어 보드를 볼 수 없습니다."
+      />
+    );
+  }
 
   return (
     <HeroLayout

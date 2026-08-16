@@ -1,15 +1,84 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import uploadIcon from "@/assets/icons/upload.svg";
 import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
+import { StateView } from "@/components/states";
 import { Button, Card } from "@/components/ui";
 import { API_BASE_URL, HEADER_PRESETS, meetingPath } from "@/lib";
+
+const getCurrentUserId = () => {
+  const accessToken = localStorage.getItem("accessToken");
+  if (!accessToken) return "";
+
+  try {
+    const base64Url = accessToken.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const paddedBase64 = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
+    const payload = JSON.parse(atob(paddedBase64));
+    return String(payload.userId ?? payload.sub ?? payload.id ?? "");
+  } catch {
+    return "";
+  }
+};
 
 export function MeetingUploadPage() {
   const { projectId = "", meetingId = "" } = useParams();
   const navigate = useNavigate();
   const [content, setContent] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [checking, setChecking] = useState(true);
+  const [isParticipant, setIsParticipant] = useState(false);
+
+  useEffect(() => {
+    if (!meetingId) return;
+
+    const checkParticipant = async () => {
+      try {
+        const accessToken = localStorage.getItem("accessToken");
+        if (!accessToken) return;
+
+        const response = await fetch(
+          `${API_BASE_URL}/api/v1/meetings/${meetingId}`,
+          { headers: { Authorization: `Bearer ${accessToken}` } },
+        );
+
+        const result = await response.json();
+        if (!response.ok || !result.success) return;
+
+        const currentUserId = getCurrentUserId();
+        const participants = result.data?.participants ?? [];
+
+        setIsParticipant(
+          participants.some(
+            (p) =>
+              String(p.userId ?? p.id ?? p.memberId) ===
+              String(currentUserId),
+          ),
+        );
+      } catch {
+        setIsParticipant(false);
+      } finally {
+        setChecking(false);
+      }
+    };
+
+    checkParticipant();
+  }, [meetingId]);
+
+  if (checking) {
+    return <StateView size="screen" title="권한을 확인하고 있습니다" />;
+  }
+
+  if (!isParticipant) {
+    return (
+      <StateView
+        variant="error"
+        size="screen"
+        title="회의 참여자만 접근할 수 있습니다"
+        description="이 회의에 참여하지 않아 업로드 권한이 없습니다."
+      />
+    );
+  }
   const handleTextUpload = async () => {
     if (!content.trim()) {
       alert("회의 내용을 입력해주세요.");

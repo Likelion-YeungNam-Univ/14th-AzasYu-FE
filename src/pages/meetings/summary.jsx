@@ -13,6 +13,21 @@ const toLines = (text) =>
     .map((line) => line.replace(/^[-•\s]+/, "").trim())
     .filter(Boolean);
 
+const getCurrentUserId = () => {
+  const accessToken = localStorage.getItem("accessToken");
+  if (!accessToken) return "";
+
+  try {
+    const base64Url = accessToken.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const paddedBase64 = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
+    const payload = JSON.parse(atob(paddedBase64));
+    return String(payload.userId ?? payload.sub ?? payload.id ?? "");
+  } catch {
+    return "";
+  }
+};
+
 function SectionTitle({ children }) {
   return (
     <h2 className="text-28 font-semibold text-[#1c232b] lg:text-34">
@@ -53,8 +68,45 @@ export function MeetingSummaryPage() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState("");
+  const [checking, setChecking] = useState(true);
+  const [isParticipant, setIsParticipant] = useState(false);
 
-  // 1최신 의견 요약 조회
+  useEffect(() => {
+    if (!meetingId) return;
+
+    const checkParticipant = async () => {
+      try {
+        const accessToken = localStorage.getItem("accessToken");
+        if (!accessToken) return;
+
+        const response = await fetch(
+          `${API_BASE_URL}/api/v1/meetings/${meetingId}`,
+          { headers: { Authorization: `Bearer ${accessToken}` } },
+        );
+
+        const result = await response.json();
+        if (!response.ok || !result.success) return;
+
+        const currentUserId = getCurrentUserId();
+        const participants = result.data?.participants ?? [];
+
+        setIsParticipant(
+          participants.some(
+            (p) =>
+              String(p.userId ?? p.id ?? p.memberId) ===
+              String(currentUserId),
+          ),
+        );
+      } catch {
+        setIsParticipant(false);
+      } finally {
+        setChecking(false);
+      }
+    };
+
+    checkParticipant();
+  }, [meetingId]);
+
   const fetchSummary = async () => {
     try {
       setLoading(true);
@@ -77,7 +129,7 @@ export function MeetingSummaryPage() {
       const result = await response.json();
 
       if (response.status === 404) {
-        setError("아이디어 보드를 찾을 수 없거나 접근 권한이 없습니다.");
+        setError("의견 요약을 찾을 수 없습니다.");
         return;
       }
 
@@ -86,8 +138,6 @@ export function MeetingSummaryPage() {
           result.error?.message || "요약 데이터를 불러오지 못했습니다.",
         );
       }
-
-      // 한 번도 생성 안한 경우
 
       setSummary(result.data);
     } catch (err) {
@@ -99,10 +149,24 @@ export function MeetingSummaryPage() {
   };
 
   useEffect(() => {
-    if (meetingId) fetchSummary();
-  }, [meetingId]);
+    if (meetingId && !checking && isParticipant) fetchSummary();
+  }, [meetingId, checking, isParticipant]);
 
-  // 의견 요약 생성 및 새로고침
+  if (checking) {
+    return <StateView size="screen" title="권한을 확인하고 있습니다" />;
+  }
+
+  if (!isParticipant) {
+    return (
+      <StateView
+        variant="error"
+        size="screen"
+        title="회의 참여자만 접근할 수 있습니다"
+        description="이 회의에 참여하지 않아 전체 의견 요약을 볼 수 없습니다."
+      />
+    );
+  }
+
   const handleRefreshSummary = async () => {
     try {
       setRefreshing(true);
@@ -173,7 +237,6 @@ export function MeetingSummaryPage() {
             description="수 초 정도 소요될 수 있으니 잠시만 기다려주세요."
           />
         ) : !summary ? (
-          // 💡 한 번도 생성하지 않아 data가 null인 경우
           <StateView
             variant="empty"
             title="아직 전체 의견 요약이 생성되지 않았어요"
@@ -185,9 +248,7 @@ export function MeetingSummaryPage() {
             }
           />
         ) : (
-          // 💡 요약 데이터가 존재하는 경우 렌더링
           <>
-            {/* 버전 및 새로고침 영역 */}
             <div className="flex items-center justify-between border-b border-solid border-[#f6f5fa] pb-6">
               <div>
                 <p className="text-18 font-semibold text-[#1c232b]">
