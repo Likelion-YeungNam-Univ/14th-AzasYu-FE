@@ -6,10 +6,12 @@ import { StateView } from "@/components/states";
 import { Button, Card } from "@/components/ui";
 import { API_BASE_URL, HEADER_PRESETS, meetingPath } from "@/lib";
 
-const INTRO = [
+const buildIntro = (userName) => [
   [
-    "안녕하세요, 지혜님! 👋",
-    "회의를 시작하기 전에 @@님의 생각을 먼저 들어볼게요.",
+    userName ? `안녕하세요, ${userName}님! 👋` : "안녕하세요! 👋",
+    userName
+      ? `회의를 시작하기 전에 ${userName}님의 생각을 먼저 들어볼게요.`
+      : "회의를 시작하기 전에 생각을 먼저 들어볼게요.",
   ],
   [
     "이 대화에서 나눈 의견은 익명으로 수집되니 부담 갖지 말고 편하게 이야기해주세요.",
@@ -72,6 +74,8 @@ export function MeetingInterviewPage() {
   const [cardErrorMessage, setCardErrorMessage] = useState("");
 
   const submittedRef = useRef(false);
+
+  const intro = buildIntro(localStorage.getItem("userName") ?? "");
 
   // 공통 질문 조회 API (GET)
   const fetchQuestions = async () => {
@@ -275,7 +279,7 @@ export function MeetingInterviewPage() {
         <Hero
           size="sm"
           align="center"
-          title="6개의 질문으로 생각을 정리해요."
+          title="몇 가지 질문으로 생각을 정리해요."
           description="답변은 익명으로 모여 회의 자료가 됩니다."
           descriptionWeight="medium"
         />
@@ -289,7 +293,7 @@ export function MeetingInterviewPage() {
           <div className="flex w-full flex-col gap-[24px]">
             {/* 상단 인사말 */}
             <BotMessage bubbleTop={34}>
-              {INTRO.map((lines, i) => (
+              {intro.map((lines, i) => (
                 <p key={i}>
                   {lines[0]}
                   <br />
@@ -404,14 +408,26 @@ export function MeetingInterviewPage() {
                   )}
                 </div>
 
-                <Button
-                  className="mt-4 w-full"
-                  onClick={() =>
-                    navigate(meetingPath("BOARD", projectId, meetingId))
-                  }
-                >
-                  익명 아이디어 보드로 이동하기
-                </Button>
+                <div className="mt-4 flex flex-col gap-[10px]">
+                  <Button
+                    className="w-full"
+                    onClick={() =>
+                      navigate(meetingPath("BOARD", projectId, meetingId))
+                    }
+                  >
+                    익명 아이디어 보드로 이동하기
+                  </Button>
+
+                  <Button
+                    variant="secondary"
+                    className="w-full"
+                    onClick={() =>
+                      navigate(meetingPath("SUMMARY", projectId, meetingId))
+                    }
+                  >
+                    전체 의견 요약 보기
+                  </Button>
+                </div>
               </div>
             )}
 
