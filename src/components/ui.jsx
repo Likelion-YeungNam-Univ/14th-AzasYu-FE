@@ -444,13 +444,18 @@ export function AvatarStack({ members = [], className }) {
   if (!shown.length) return null;
 
   return (
-    <div className={cn("relative", className)}>
+    <div
+      className={cn("relative", className)}
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
       <button
         type="button"
-        onClick={() => setOpen((prev) => !prev)}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setOpen(false)}
         aria-expanded={open}
         aria-label={`참여자 ${members.length}명 보기`}
-        className="flex cursor-pointer items-center"
+        className="flex items-center"
       >
         {shown.map((member, index) => (
           <span
@@ -470,25 +475,27 @@ export function AvatarStack({ members = [], className }) {
       </button>
 
       {open && (
-        <ul className="absolute top-[calc(100%+10px)] left-[88px] z-20 flex min-w-[89px] flex-col gap-[10px] rounded-[8px] bg-white px-[16px] py-[12px] shadow-[10px_10px_30px_0px_rgba(0,0,0,0.06)]">
-          {members.map((member, index) => (
-            <li
-              key={member.userId ?? member.id ?? index}
-              className="flex h-[18px] items-center gap-[8px]"
-            >
-              <span
-                style={{
-                  backgroundColor: AVATAR_COLORS[index % AVATAR_COLORS.length],
-                }}
-                className="block size-[18px] shrink-0 rounded-full"
-              />
+        <div className="absolute top-full left-[88px] z-20 pt-[10px]">
+          <ul className="flex min-w-[89px] flex-col gap-[10px] rounded-[8px] bg-white px-[16px] py-[12px] shadow-[10px_10px_30px_0px_rgba(0,0,0,0.06)]">
+            {members.map((member, index) => (
+              <li
+                key={member.userId ?? member.id ?? index}
+                className="flex h-[18px] items-center gap-[8px]"
+              >
+                <span
+                  style={{
+                    backgroundColor: AVATAR_COLORS[index % AVATAR_COLORS.length],
+                  }}
+                  className="block size-[18px] shrink-0 rounded-full"
+                />
 
-              <span className="text-12 font-medium whitespace-nowrap text-[#1c232b]">
-                {member.name}
-              </span>
-            </li>
-          ))}
-        </ul>
+                <span className="text-12 font-medium whitespace-nowrap text-[#1c232b]">
+                  {member.name}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
     </div>
   );
