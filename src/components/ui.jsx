@@ -476,7 +476,7 @@ export function AvatarStack({ members = [], className }) {
 
       {open && (
         <div className="absolute top-full left-[88px] z-20 pt-[10px]">
-          <ul className="flex min-w-[89px] flex-col gap-[10px] rounded-[8px] bg-white px-[16px] py-[12px] shadow-[10px_10px_30px_0px_rgba(0,0,0,0.06)]">
+          <ul className="flex max-h-[154px] min-w-[89px] flex-col gap-[10px] overflow-y-auto rounded-[8px] bg-white px-[16px] py-[12px] shadow-[10px_10px_30px_0px_rgba(0,0,0,0.06)]">
             {members.map((member, index) => (
               <li
                 key={member.userId ?? member.id ?? index}
