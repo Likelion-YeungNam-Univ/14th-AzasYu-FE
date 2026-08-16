@@ -10,6 +10,7 @@ import {
   TextField,
 } from "@/components/ui";
 import {
+  alertOnTruncatedPaste,
   API_BASE_URL,
   cn,
   FIELD_LIMITS,
@@ -294,6 +295,7 @@ export function MeetingNewPage() {
                   placeholder={`안건을 입력하고 Enter (${FIELD_LIMITS.AGENDA}자 이내)`}
                   aria-label="회의 안건 추가"
                   maxLength={FIELD_LIMITS.AGENDA}
+                  onPaste={alertOnTruncatedPaste(FIELD_LIMITS.AGENDA)}
                   className="text-20 w-full rounded-[55px] border border-solid border-[#b8bccc] px-[16px] py-[8px] font-medium text-[#1c232b] outline-none placeholder:text-[#b8bccc]"
                 />
               </div>

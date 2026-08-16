@@ -1,7 +1,12 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { ChevronRight, Close } from "@/components/icons";
-import { cn, meetingPath, projectPath } from "@/lib";
+import {
+  alertOnTruncatedPaste,
+  cn,
+  meetingPath,
+  projectPath,
+} from "@/lib";
 
 const BUTTON_VARIANT = {
   primary: "bg-[#0075d3] text-white",
@@ -140,24 +145,6 @@ function FieldBody({ limit, value, children }) {
   );
 }
 
-function useTruncatedPasteAlert(limit) {
-  const notified = useRef(false);
-
-  return (event) => {
-    if (typeof limit !== "number") return;
-
-    const input = event.currentTarget;
-    const pasted = event.clipboardData?.getData("text") ?? "";
-    const selected = (input.selectionEnd ?? 0) - (input.selectionStart ?? 0);
-
-    if (input.value.length - selected + pasted.length <= limit) return;
-    if (notified.current) return;
-
-    notified.current = true;
-    alert(`최대 ${limit}자까지 입력할 수 있어 뒷부분이 잘렸습니다.`);
-  };
-}
-
 export function TextField({
   label,
   required,
@@ -167,8 +154,6 @@ export function TextField({
   className,
   ...props
 }) {
-  const handlePaste = useTruncatedPasteAlert(limit);
-
   return (
     <FieldShell
       label={label}
@@ -180,7 +165,7 @@ export function TextField({
         <input
           className={cn(FIELD_BASE, FIELD_BOX[tone], className)}
           maxLength={limit}
-          onPaste={handlePaste}
+          onPaste={alertOnTruncatedPaste(limit)}
           {...props}
         />
       </FieldBody>
@@ -197,8 +182,6 @@ export function TextAreaField({
   className,
   ...props
 }) {
-  const handlePaste = useTruncatedPasteAlert(limit);
-
   return (
     <FieldShell
       label={label}
@@ -215,7 +198,7 @@ export function TextAreaField({
             className,
           )}
           maxLength={limit}
-          onPaste={handlePaste}
+          onPaste={alertOnTruncatedPaste(limit)}
           {...props}
         />
       </FieldBody>
