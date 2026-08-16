@@ -174,6 +174,11 @@ export function MeetingNewPage() {
       return;
     }
 
+    if (new Date(`${meetingDate}T${startTime}`).getTime() < Date.now()) {
+      alert("지난 일시는 선택할 수 없어요. 회의 날짜와 시각을 다시 확인해주세요.");
+      return;
+    }
+
     try {
       setCreating(true);
 
@@ -330,6 +335,7 @@ export function MeetingNewPage() {
                     type="time"
                     aria-label="시작 시각"
                     value={startTime}
+                    min={meetingDate === now.date ? now.time : undefined}
                     onChange={(e) => setStartTime(e.target.value)}
                     className={cn(
                       DATE_FIELD,
