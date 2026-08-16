@@ -1,28 +1,26 @@
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router'
-import { ChevronRight, Close } from '@/components/icons'
-import { cn, meetingPath, projectPath } from '@/lib'
+import { useState } from "react";
+import { Link, useNavigate } from "react-router";
+import { ChevronRight, Close } from "@/components/icons";
+import { cn, meetingPath, projectPath } from "@/lib";
 
 const BUTTON_VARIANT = {
-  primary: 'bg-[#0075d3] text-white',
-  secondary: 'border border-solid border-[#1c232b] text-[#1c232b]',
-  subtle: 'bg-[#e6f3fe] text-[#0075d3]',
-  dark: 'bg-[#1c232b] text-white',
-}
+  primary: "bg-[#0075d3] text-white",
+  secondary: "border border-solid border-[#1c232b] text-[#1c232b]",
+  subtle: "bg-[#e6f3fe] text-[#0075d3]",
+  dark: "bg-[#1c232b] text-white",
+};
 
 const BUTTON_SIZE = {
   block:
-    'text-20 h-[66px] gap-[10px] rounded-[59px] px-[16px] py-[14px] font-medium',
-  inline:
-    'text-20 gap-[12px] rounded-[33px] px-[18px] py-[14px] font-semibold',
-  action:
-    'text-18 gap-[10px] rounded-[8px] px-[24px] py-[12px] font-semibold',
-  pill: 'text-16 h-[44px] gap-[6px] rounded-[59px] px-[16px] py-[14px] font-medium',
-}
+    "text-20 h-[66px] gap-[10px] rounded-[59px] px-[16px] py-[14px] font-medium",
+  inline: "text-20 gap-[12px] rounded-[33px] px-[18px] py-[14px] font-semibold",
+  action: "text-18 gap-[10px] rounded-[8px] px-[24px] py-[12px] font-semibold",
+  pill: "text-16 h-[44px] gap-[6px] rounded-[59px] px-[16px] py-[14px] font-medium",
+};
 
 export function Button({
-  variant = 'primary',
-  size = 'block',
+  variant = "primary",
+  size = "block",
   className,
   children,
   ...props
@@ -31,7 +29,7 @@ export function Button({
     <button
       type="button"
       className={cn(
-        'flex cursor-pointer items-center justify-center overflow-clip whitespace-nowrap disabled:cursor-not-allowed',
+        "flex cursor-pointer items-center justify-center overflow-clip whitespace-nowrap disabled:cursor-not-allowed",
         BUTTON_VARIANT[variant],
         BUTTON_SIZE[size],
         className,
@@ -40,66 +38,66 @@ export function Button({
     >
       {children}
     </button>
-  )
+  );
 }
 
 const CARD_SHADOW = {
-  soft: 'shadow-[20px_20px_20px_0px_rgba(0,0,0,0.05)]',
-  meeting: 'shadow-[10px_10px_30px_0px_rgba(0,0,0,0.06)]',
-}
+  soft: "shadow-[20px_20px_20px_0px_rgba(0,0,0,0.05)]",
+  meeting: "shadow-[10px_10px_30px_0px_rgba(0,0,0,0.06)]",
+};
 
-export function Card({ shadow = 'soft', className, children }) {
+export function Card({ shadow = "soft", className, children }) {
   return (
     <div
       className={cn(
-        'relative overflow-clip rounded-[30px] bg-white',
+        "relative overflow-clip rounded-[30px] bg-white",
         CARD_SHADOW[shadow],
         className,
       )}
     >
       {children}
     </div>
-  )
+  );
 }
 
 const FIELD_LABEL = {
-  auth: 'text-16 text-[#1c232b]',
-  form: 'text-20 text-[#1c232b]',
-}
+  auth: "text-16 text-[#1c232b]",
+  form: "text-20 text-[#1c232b]",
+};
 
 const FIELD_LABEL_GAP = {
-  auth: 'gap-[10.6px]',
-  form: 'gap-[18px]',
-}
+  auth: "gap-[10.6px]",
+  form: "gap-[18px]",
+};
 
 const FIELD_BOX = {
-  auth: 'h-[55px] rounded-[20px] border-[#b8bccc] text-[#1c232b] placeholder:text-[#b8bccc]',
-  form: 'h-[66px] rounded-[8px] border-[#b8bccc] text-[#1c232b] placeholder:text-[#b8bccc]',
-}
+  auth: "h-[55px] rounded-[20px] border-[#b8bccc] text-[#1c232b] placeholder:text-[#b8bccc]",
+  form: "h-[66px] rounded-[8px] border-[#b8bccc] text-[#1c232b] placeholder:text-[#b8bccc]",
+};
 
 const FIELD_BASE =
-  'text-20 w-full border border-solid px-[16px] py-[14px] font-medium outline-none'
+  "text-20 w-full border border-solid px-[16px] py-[14px] font-medium outline-none";
 
 function FieldShell({ label, required, tone, className, children }) {
   return (
-    <label className={cn('flex flex-col', label && FIELD_LABEL_GAP[tone], className)}>
+    <label
+      className={cn("flex flex-col", label && FIELD_LABEL_GAP[tone], className)}
+    >
       {label && (
-        <span
-          className={cn('flex gap-[2px] font-medium', FIELD_LABEL[tone])}
-        >
+        <span className={cn("flex gap-[2px] font-medium", FIELD_LABEL[tone])}>
           {label}
           {required && <span className="text-16 text-[#da1e51]">*</span>}
         </span>
       )}
       {children}
     </label>
-  )
+  );
 }
 
 export function TextField({
   label,
   required,
-  tone = 'auth',
+  tone = "auth",
   wrapperClassName,
   className,
   ...props
@@ -111,15 +109,18 @@ export function TextField({
       tone={tone}
       className={wrapperClassName}
     >
-      <input className={cn(FIELD_BASE, FIELD_BOX[tone], className)} {...props} />
+      <input
+        className={cn(FIELD_BASE, FIELD_BOX[tone], className)}
+        {...props}
+      />
     </FieldShell>
-  )
+  );
 }
 
 export function TextAreaField({
   label,
   required,
-  tone = 'form',
+  tone = "form",
   wrapperClassName,
   className,
   ...props
@@ -132,18 +133,23 @@ export function TextAreaField({
       className={wrapperClassName}
     >
       <textarea
-        className={cn(FIELD_BASE, FIELD_BOX[tone], 'h-[132px] resize-none', className)}
+        className={cn(
+          FIELD_BASE,
+          FIELD_BOX[tone],
+          "h-[132px] resize-none",
+          className,
+        )}
         {...props}
       />
     </FieldShell>
-  )
+  );
 }
 
 export function Chip({ label, onRemove, className }) {
   return (
     <span
       className={cn(
-        'text-16 flex h-[41px] w-fit items-center justify-center gap-[6px] rounded-[8px] bg-[#e6f3fe] px-[16px] py-[8px] font-medium whitespace-nowrap text-[#0075d3]',
+        "text-16 flex h-[41px] w-fit items-center justify-center gap-[6px] rounded-[8px] bg-[#e6f3fe] px-[16px] py-[8px] font-medium whitespace-nowrap text-[#0075d3]",
         className,
       )}
     >
@@ -159,12 +165,12 @@ export function Chip({ label, onRemove, className }) {
         </button>
       )}
     </span>
-  )
+  );
 }
 
 export function AgendaList({ items, onRemove, className }) {
   return (
-    <ul className={cn('flex w-full flex-col gap-[10px]', className)}>
+    <ul className={cn("flex w-full flex-col gap-[10px]", className)}>
       {items.map((item) => (
         <li
           key={item.id}
@@ -185,17 +191,17 @@ export function AgendaList({ items, onRemove, className }) {
         </li>
       ))}
     </ul>
-  )
+  );
 }
 
-const SWATCHES = ['#f74932', '#ffb010', '#01b76a', '#57b8ff', '#1c232b']
+const SWATCHES = ["#f74932", "#ffb010", "#01b76a", "#57b8ff", "#1c232b"];
 
 export function ColorSwatches({ value, onChange, className }) {
   return (
     <div
       role="radiogroup"
       aria-label="프로젝트 색상"
-      className={cn('flex flex-wrap items-center gap-[34px]', className)}
+      className={cn("flex flex-wrap items-center gap-[34px]", className)}
     >
       {SWATCHES.map((color, index) => (
         <button
@@ -207,29 +213,31 @@ export function ColorSwatches({ value, onChange, className }) {
           onClick={() => onChange(index)}
           style={{ backgroundColor: color }}
           className={cn(
-            'size-[40px] shrink-0 cursor-pointer rounded-full',
-            'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1c232b]',
-            index === value && 'outline outline-2 outline-offset-2 outline-[#1c232b]',
+            "size-[40px] shrink-0 cursor-pointer rounded-full",
+            "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1c232b]",
+            index === value &&
+              "outline outline-2 outline-offset-2 outline-[#1c232b]",
           )}
         />
       ))}
     </div>
-  )
+  );
 }
 
-const TABLE_CONTAINER_WIDTH = 1460
-const TABLE_INNER_WIDTH = 1334
-const TABLE_CELL = 'shrink-0 overflow-hidden pr-4 text-ellipsis whitespace-nowrap'
+const TABLE_CONTAINER_WIDTH = 1460;
+const TABLE_INNER_WIDTH = 1334;
+const TABLE_CELL =
+  "shrink-0 overflow-hidden pr-4 text-ellipsis whitespace-nowrap";
 
 function tableCellWidth(col) {
-  return col.width ? { width: col.width } : undefined
+  return col.width ? { width: col.width } : undefined;
 }
 
 export function Table({ columns, rows, className }) {
   return (
     <div
       className={cn(
-        'w-full overflow-hidden rounded-[35px] border-[0.4px] border-solid border-[#b8bccc] bg-white',
+        "w-full overflow-hidden rounded-[35px] border-[0.4px] border-solid border-[#b8bccc] bg-white",
         CARD_SHADOW.meeting,
         className,
       )}
@@ -241,7 +249,7 @@ export function Table({ columns, rows, className }) {
             {columns.map((col) => (
               <p
                 key={col.label}
-                className={cn(TABLE_CELL, !col.width && 'flex-1')}
+                className={cn(TABLE_CELL, !col.width && "flex-1")}
                 style={tableCellWidth(col)}
               >
                 {col.label}
@@ -257,7 +265,7 @@ export function Table({ columns, rows, className }) {
               {row.cells.map((cell, j) => (
                 <div
                   key={columns[j]?.label ?? j}
-                  className={cn(TABLE_CELL, !columns[j]?.width && 'flex-1')}
+                  className={cn(TABLE_CELL, !columns[j]?.width && "flex-1")}
                   style={tableCellWidth(columns[j] ?? {})}
                 >
                   {cell}
@@ -278,33 +286,33 @@ export function Table({ columns, rows, className }) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 const PROJECT_CARD_GRADIENTS = [
-  'linear-gradient(124.58deg, rgb(155, 213, 255) 5.3878%, rgb(35, 162, 255) 94.612%)',
-  'linear-gradient(124.58deg, rgb(109, 219, 172) 5.3878%, rgb(1, 183, 106) 94.612%)',
-  'linear-gradient(124.58deg, rgb(238, 126, 111) 5.3878%, rgb(247, 73, 50) 94.612%)',
-  'linear-gradient(124.58deg, rgb(255, 217, 141) 5.3878%, rgb(255, 176, 16) 94.612%)',
-]
+  "linear-gradient(124.58deg, rgb(155, 213, 255) 5.3878%, rgb(35, 162, 255) 94.612%)",
+  "linear-gradient(124.58deg, rgb(109, 219, 172) 5.3878%, rgb(1, 183, 106) 94.612%)",
+  "linear-gradient(124.58deg, rgb(238, 126, 111) 5.3878%, rgb(247, 73, 50) 94.612%)",
+  "linear-gradient(124.58deg, rgb(255, 217, 141) 5.3878%, rgb(255, 176, 16) 94.612%)",
+];
 
 export function ProjectCard({ project, className }) {
-  const palette = PROJECT_CARD_GRADIENTS.length
+  const palette = PROJECT_CARD_GRADIENTS.length;
   const gradient =
     PROJECT_CARD_GRADIENTS[
-      (((Number(project.id) || 0) - 1) % palette + palette) % palette
-    ]
+      ((((Number(project.id) || 0) - 1) % palette) + palette) % palette
+    ];
 
   return (
     <Link
-      to={projectPath('DETAIL', project.id)}
-      className={cn('flex flex-col', className)}
+      to={projectPath("DETAIL", project.id)}
+      className={cn("flex flex-col", className)}
     >
       <div
         className="flex aspect-[470/275] w-full items-start rounded-[14px] px-[18px] py-[14px]"
         style={{ backgroundImage: gradient }}
       >
-        {typeof project.meetingCount === 'number' && (
+        {typeof project.meetingCount === "number" && (
           <span className="text-12 flex items-center justify-center rounded-[8px] bg-white px-[13px] py-[8px] font-bold whitespace-nowrap text-[#1c232b]">
             {project.meetingCount}개 회의
           </span>
@@ -314,12 +322,14 @@ export function ProjectCard({ project, className }) {
       <p className="text-18 mt-[22px] font-medium text-[#858894]">
         {project.participants}
       </p>
-      <p className="text-24 mt-[4px] h-[65px] overflow-hidden font-semibold text-[#1c232b]">
-        {project.name}
+      <p className="text-24 mt-[4px] h-[65px] truncate font-semibold text-[#1c232b]">
+        {project.name.length > 10
+          ? `${project.name.slice(0, 10)}...`
+          : project.name}
       </p>
       <p className="text-18 font-medium text-[#d7d7d7]">{project.date}</p>
     </Link>
-  )
+  );
 }
 
 function Divider() {
@@ -327,38 +337,38 @@ function Divider() {
     <div className="relative h-0 w-full">
       <span className="absolute inset-x-0 -top-px block border-t border-[#f6f5fa]" />
     </div>
-  )
+  );
 }
 
 function formatMeetingDate(value) {
-  if (!value) return ''
+  if (!value) return "";
 
-  const date = new Date(value)
+  const date = new Date(value);
 
-  return date.toLocaleString('ko-KR', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: 'numeric',
-    minute: '2-digit',
+  return date.toLocaleString("ko-KR", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "numeric",
+    minute: "2-digit",
     hour12: true,
-  })
+  });
 }
 
-const AVATAR_COLORS = ['#f74932', '#01b76a', '#ffb010', '#57b8ff']
+const AVATAR_COLORS = ["#f74932", "#01b76a", "#ffb010", "#57b8ff"];
 
-const AVATAR_VISIBLE = 4
+const AVATAR_VISIBLE = 4;
 
 export function AvatarStack({ members = [], className }) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
-  const shown = members.slice(0, AVATAR_VISIBLE)
-  const rest = members.length - shown.length
+  const shown = members.slice(0, AVATAR_VISIBLE);
+  const rest = members.length - shown.length;
 
-  if (!shown.length) return null
+  if (!shown.length) return null;
 
   return (
-    <div className={cn('relative', className)}>
+    <div className={cn("relative", className)}>
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
@@ -405,14 +415,10 @@ export function AvatarStack({ members = [], className }) {
         </ul>
       )}
     </div>
-  )
+  );
 }
 
-export function MeetingCard({
-  projectId,
-  meeting,
-  currentUserId,
-}) {
+export function MeetingCard({ projectId, meeting, currentUserId }) {
   const {
     id,
     title,
@@ -425,36 +431,26 @@ export function MeetingCard({
     hasResult = false,
     participants = [],
     interviewStatus,
-  } = meeting
+  } = meeting;
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const mySubmitted =
-    interviewStatus?.mySubmitted ?? false
+  const mySubmitted = interviewStatus?.mySubmitted ?? false;
 
   const isParticipant = participants.some(
     (participant) =>
-      String(
-        participant.userId ??
-          participant.id ??
-          participant.memberId,
-      ) === String(currentUserId),
-  )
+      String(participant.userId ?? participant.id ?? participant.memberId) ===
+      String(currentUserId),
+  );
 
   const ratio = participantsTotal
-    ? Math.min(
-        100,
-        Math.max(
-          0,
-          (participantsDone / participantsTotal) * 100,
-        ),
-      )
-    : 0
+    ? Math.min(100, Math.max(0, (participantsDone / participantsTotal) * 100))
+    : 0;
 
   const displayDate =
     meetingDate && startTime
       ? `${meetingDate}T${startTime}`
-      : startsAt || meetingDate
+      : startsAt || meetingDate;
 
   return (
     <Card
@@ -462,11 +458,8 @@ export function MeetingCard({
       className="w-full max-w-[658px] px-6 py-8 sm:px-10 lg:px-[48px] lg:py-[40px]"
     >
       <div className="flex w-full flex-col gap-[30px]">
-
         <div className="flex flex-col gap-[4px]">
-          <p className="text-28 font-bold text-[#1c232b] lg:text-34">
-            {title}
-          </p>
+          <p className="text-28 font-bold text-[#1c232b] lg:text-34">{title}</p>
 
           <p className="text-16 font-medium text-[#858894]">
             {formatMeetingDate(displayDate)}
@@ -496,19 +489,12 @@ export function MeetingCard({
           </div>
 
           <div className="flex flex-wrap gap-[16px]">
-
             {isParticipant && !mySubmitted && (
               <Button
                 size="pill"
                 variant="secondary"
                 onClick={() =>
-                  navigate(
-                    meetingPath(
-                      'INTERVIEW',
-                      projectId,
-                      id,
-                    ),
-                  )
+                  navigate(meetingPath("INTERVIEW", projectId, id))
                 }
               >
                 AI 사전 인터뷰 하기
@@ -518,15 +504,7 @@ export function MeetingCard({
             <Button
               size="pill"
               variant="secondary"
-              onClick={() =>
-                navigate(
-                  meetingPath(
-                    'BOARD',
-                    projectId,
-                    id,
-                  ),
-                )
-              }
+              onClick={() => navigate(meetingPath("BOARD", projectId, id))}
             >
               익명 아이디어 보드 보기
             </Button>
@@ -534,15 +512,7 @@ export function MeetingCard({
             <Button
               size="pill"
               variant="secondary"
-              onClick={() =>
-                navigate(
-                  meetingPath(
-                    'SUMMARY',
-                    projectId,
-                    id,
-                  ),
-                )
-              }
+              onClick={() => navigate(meetingPath("SUMMARY", projectId, id))}
             >
               전체 의견 요약 보기
             </Button>
@@ -566,15 +536,7 @@ export function MeetingCard({
             <Button
               variant="dark"
               className="w-full"
-              onClick={() =>
-                navigate(
-                  meetingPath(
-                    'UPLOAD',
-                    projectId,
-                    id,
-                  ),
-                )
-              }
+              onClick={() => navigate(meetingPath("UPLOAD", projectId, id))}
             >
               회의 텍스트 업로드
             </Button>
@@ -596,15 +558,7 @@ export function MeetingCard({
             <Button
               variant="dark"
               className="w-full"
-              onClick={() =>
-                navigate(
-                  meetingPath(
-                    'LOADING',
-                    projectId,
-                    id,
-                  ),
-                )
-              }
+              onClick={() => navigate(meetingPath("LOADING", projectId, id))}
             >
               회의 분석 보기
             </Button>
@@ -626,22 +580,13 @@ export function MeetingCard({
             <Button
               variant="dark"
               className="w-full"
-              onClick={() =>
-                navigate(
-                  meetingPath(
-                    'DETAIL',
-                    projectId,
-                    id,
-                  ),
-                )
-              }
+              onClick={() => navigate(meetingPath("DETAIL", projectId, id))}
             >
               분석 결과 보기
             </Button>
           </>
         )}
-
       </div>
     </Card>
-  )
+  );
 }
