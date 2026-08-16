@@ -9,11 +9,11 @@ export const MEETING_TITLE = '회의'
 export const API_BASE_URL = import.meta.env.VITE_API_URL
 
 export const FIELD_LIMITS = {
-  PROJECT_NAME: 100,
+  PROJECT_NAME: 30,
   PROJECT_DESCRIPTION: 1000,
-  MEETING_TITLE: 150,
-  MEETING_PURPOSE: 1000,
-  AGENDA: 100,
+  MEETING_TITLE: 30,
+  MEETING_PURPOSE: 40,
+  AGENDA: 30,
 }
 
 export function alertOnTruncatedPaste(limit) {
