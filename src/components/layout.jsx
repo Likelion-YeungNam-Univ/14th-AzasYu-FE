@@ -91,6 +91,18 @@ export function Header({
     projectName || fetchedName,
   );
 
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // 스크롤이 맨 위 0
+      setIsScrolled(window.scrollY > 0);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const handleLogout = () => {
     clearSession();
     projectNameCache.clear();
@@ -100,7 +112,8 @@ export function Header({
   return (
     <header
       className={cn(
-        "relative flex h-[80px] w-full items-center justify-between px-5 sm:px-8 lg:px-[52px]",
+        "sticky top-0 z-50 flex h-[80px] w-full items-center justify-between px-5 sm:px-8 lg:px-[52px] transition-all duration-300",
+        isScrolled ? "bg-white/30 backdrop-blur-md shadow-sm" : "bg-white",
         TONE[tone],
         className,
       )}
