@@ -79,15 +79,13 @@ export function Close({ className }) {
   )
 }
 
-export function Plus({ className }) {
+export function Plus({ size = 14.142, className }) {
   return (
     <span
-      className={cn(
-        'flex size-[14.142px] shrink-0 items-center justify-center',
-        className,
-      )}
+      style={{ width: size, height: size }}
+      className={cn('flex shrink-0 items-center justify-center', className)}
     >
-      <Close className="size-[10px] -rotate-45" />
+      <Close className="size-[70.71%] -rotate-45" />
     </span>
   )
 }

@@ -322,10 +322,8 @@ export function ProjectCard({ project, className }) {
       <p className="text-18 mt-[22px] font-medium text-[#858894]">
         {project.participants}
       </p>
-      <p className="text-24 mt-[4px] h-[65px] truncate font-semibold text-[#1c232b]">
-        {project.name.length > 10
-          ? `${project.name.slice(0, 10)}...`
-          : project.name}
+      <p className="text-24 mt-[4px] line-clamp-2 h-[65px] font-semibold break-all text-[#1c232b]">
+        {project.name}
       </p>
       <p className="text-18 font-medium text-[#d7d7d7]">{project.date}</p>
     </Link>
@@ -459,7 +457,9 @@ export function MeetingCard({ projectId, meeting, currentUserId }) {
     >
       <div className="flex w-full flex-col gap-[30px]">
         <div className="flex flex-col gap-[4px]">
-          <p className="text-28 font-bold text-[#1c232b] lg:text-34">{title}</p>
+          <p className="text-28 line-clamp-2 font-bold break-all text-[#1c232b] lg:text-34">
+            {title}
+          </p>
 
           <p className="text-16 font-medium text-[#858894]">
             {formatMeetingDate(displayDate)}
