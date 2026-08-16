@@ -214,9 +214,7 @@ export function ProjectsPage() {
             className="flex items-center gap-[10px] rounded-[12px] px-6 py-4 text-18 font-bold text-[#4263eb] sm:px-8 sm:text-20"
           >
             {/* ✨ 아이콘 크기도 글자에 맞춰서 확실하게 키워줍니다. */}
-            <span className="flex items-center justify-center [&>svg]:h-6 [&>svg]:w-6 sm:[&>svg]:h-7 sm:[&>svg]:w-7">
-              <Plus />
-            </span>
+            <Plus size={24} />
             새 프로젝트 만들기
           </Button>
         </div>

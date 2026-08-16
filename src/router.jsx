@@ -59,6 +59,7 @@ export const router = createBrowserRouter([
   protectedRoute(MEETING_PATTERNS.UPLOAD, <MeetingUploadPage />),
   protectedRoute(MEETING_PATTERNS.LOADING, <MeetingLoadingPage />),
   protectedRoute(MEETING_PATTERNS.SUMMARY, <MeetingSummaryPage />),
+  protectedRoute(PATHS.MEETINGS, <MeetingsPage />),
   protectedRoute(PROJECT_PATTERNS.MEETINGS, <MeetingsPage />),
 
   { path: '*', element: <NotFoundPage /> },

@@ -4,6 +4,8 @@ const SESSION_KEYS = ['accessToken', 'userId', 'userName']
 
 const AUTH_ENDPOINT = '/api/v1/auth/'
 
+const UNAUTHORIZED_STATUSES = [401, 403]
+
 let handling = false
 
 export function clearSession() {
@@ -34,8 +36,9 @@ export function installUnauthorizedHandler() {
     const response = await originalFetch(...args)
 
     if (
-      response.status === 401 &&
-      !requestUrl(args[0]).includes(AUTH_ENDPOINT)
+      UNAUTHORIZED_STATUSES.includes(response.status) &&
+      !requestUrl(args[0]).includes(AUTH_ENDPOINT) &&
+      localStorage.getItem('accessToken')
     ) {
       handleUnauthorized()
     }
