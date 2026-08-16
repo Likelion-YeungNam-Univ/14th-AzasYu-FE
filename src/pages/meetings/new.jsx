@@ -13,6 +13,7 @@ import {
   API_BASE_URL,
   cn,
   FIELD_LIMITS,
+  formatDateWithWeekday,
   HEADER_PRESETS,
   projectPath,
 } from "@/lib";
@@ -30,8 +31,6 @@ const DATE_FIELD_TEXT = {
 const HINT_TEXT =
   "text-16 pointer-events-none absolute inset-y-0 left-0 flex items-center px-[16px] font-medium text-[#b8bccc]";
 
-const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
-
 const pad = (value) => String(value).padStart(2, "0");
 
 const readNow = () => {
@@ -44,7 +43,7 @@ const readNow = () => {
   return {
     date: `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`,
     time: `${pad(hour)}:${pad(now.getMinutes())}`,
-    dateHint: `${now.getFullYear()}. ${pad(now.getMonth() + 1)}. ${pad(now.getDate())} (${WEEKDAYS[now.getDay()]})`,
+    dateHint: formatDateWithWeekday(now),
     timeHint: `${meridiem} ${hour12}:${pad(now.getMinutes())}`,
   };
 };
@@ -292,7 +291,7 @@ export function MeetingNewPage() {
                       setNewAgenda("");
                     }
                   }}
-                  placeholder="안건을 입력하고 Enter"
+                  placeholder={`안건을 입력하고 Enter (${FIELD_LIMITS.AGENDA}자 이내)`}
                   aria-label="회의 안건 추가"
                   maxLength={FIELD_LIMITS.AGENDA}
                   className="text-20 w-full rounded-[55px] border border-solid border-[#b8bccc] px-[16px] py-[8px] font-medium text-[#1c232b] outline-none placeholder:text-[#b8bccc]"
