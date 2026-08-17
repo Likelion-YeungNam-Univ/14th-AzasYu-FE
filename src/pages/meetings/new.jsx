@@ -335,8 +335,8 @@ export function MeetingNewPage() {
             <div className={`${NEW_COLUMN} flex flex-col gap-[18px]`}>
               <FieldLabel required>회의 일시</FieldLabel>
 
-              <div className="flex w-full flex-wrap items-center gap-[12px] sm:gap-[22px] lg:w-[565px] lg:flex-nowrap">
-                <span className="inline-flex w-full sm:w-[217px]">
+              <div className="flex w-full flex-wrap items-center gap-[12px] sm:gap-[16px] lg:w-full lg:flex-nowrap">
+                <span className="inline-flex w-full sm:min-w-0 sm:flex-1">
                   <DatePicker
                     value={meetingDate}
                     onChange={setMeetingDate}
@@ -353,7 +353,7 @@ export function MeetingNewPage() {
                   />
                 </span>
 
-                <span className="relative inline-flex w-[calc(50%-6px)] sm:w-[163px]">
+                <span className="relative inline-flex w-[calc(50%-6px)] sm:w-[154px] sm:shrink-0">
                   <input
                     type="time"
                     aria-label="시작 시각"
@@ -380,7 +380,7 @@ export function MeetingNewPage() {
                   </span>
                 </span>
 
-                <span className="inline-flex w-[calc(50%-6px)] sm:w-[139px]">
+                <span className="inline-flex w-[calc(50%-6px)] sm:w-[160px] sm:shrink-0">
                   <Dropdown
                     value={expectedDurationMinutes}
                     onChange={setExpectedDurationMinutes}
