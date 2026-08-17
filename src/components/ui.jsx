@@ -21,6 +21,8 @@ const BUTTON_SIZE = {
   inline: "text-20 gap-[12px] rounded-[33px] px-[18px] py-[14px] font-semibold",
   action: "text-18 gap-[10px] rounded-[8px] px-[24px] py-[12px] font-semibold",
   pill: "text-16 h-[44px] gap-[6px] rounded-[59px] px-[16px] py-[14px] font-medium",
+  pillCompact:
+    "text-16 h-[44px] gap-[6px] rounded-[59px] px-[12px] py-[14px] font-medium",
 };
 
 export function Button({
@@ -556,10 +558,10 @@ export function MeetingCard({ projectId, meeting, currentUserId }) {
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-[16px]">
+          <div className="flex flex-wrap gap-[14px]">
             {isParticipant && !mySubmitted && (
               <Button
-                size="pill"
+                size="pillCompact"
                 variant="secondary"
                 onClick={() =>
                   navigate(meetingPath("INTERVIEW", projectId, id))
@@ -570,7 +572,7 @@ export function MeetingCard({ projectId, meeting, currentUserId }) {
             )}
 
             <Button
-              size="pill"
+              size="pillCompact"
               variant="secondary"
               onClick={() => navigate(meetingPath("BOARD", projectId, id))}
             >
@@ -578,7 +580,7 @@ export function MeetingCard({ projectId, meeting, currentUserId }) {
             </Button>
 
             <Button
-              size="pill"
+              size="pillCompact"
               variant="secondary"
               onClick={() => navigate(meetingPath("SUMMARY", projectId, id))}
             >
