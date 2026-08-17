@@ -9,7 +9,7 @@ import {
   RisingBlock,
   RisingWords,
 } from "@/components/motion";
-import { API_BASE_URL, buildNavItems, cn, PATHS, SERVICE_NAME } from "@/lib";
+import { buildNavItems, cn, PATHS, SERVICE_NAME } from "@/lib";
 import { clearSession } from "@/session";
 
 const TONE = {
@@ -19,107 +19,16 @@ const TONE = {
 
 const DEFAULT_ACTION = { label: "로그아웃", href: PATHS.WELCOME, logout: true };
 
-const projectNameCache = new Map();
-
-function resolveActiveNavHref(pathname, navItems) {
-  if (pathname === PATHS.MEETINGS || pathname.endsWith("/meetings")) {
-    return PATHS.MEETINGS;
-  }
-
-  if (pathname === PATHS.PROJECTS) {
-    return PATHS.PROJECTS;
-  }
-
-  const projectItem = navItems.find(
-    (item) => item.href !== PATHS.PROJECTS && item.href !== PATHS.MEETINGS,
-  );
-
-  if (
-    projectItem &&
-    (pathname === projectItem.href ||
-      pathname.startsWith(`${projectItem.href}/`))
-  ) {
-    return projectItem.href;
-  }
-
-  return null;
-}
-
-function useProjectName(projectId) {
-  const [name, setName] = useState(() => projectNameCache.get(projectId) ?? "");
-
-  useEffect(() => {
-    if (!projectId) {
-      setName("");
-      return;
-    }
-
-    const cached = projectNameCache.get(projectId);
-
-    if (cached) {
-      setName(cached);
-      return;
-    }
-
-    let cancelled = false;
-
-    const fetchProjectName = async () => {
-      try {
-        const accessToken = localStorage.getItem("accessToken");
-
-        if (!accessToken) return;
-
-        const response = await fetch(
-          `${API_BASE_URL}/api/v1/projects/${projectId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          },
-        );
-
-        const result = await response.json();
-
-        if (!response.ok || !result.success || !result.data?.name) return;
-
-        projectNameCache.set(projectId, result.data.name);
-
-        if (!cancelled) {
-          setName(result.data.name);
-        }
-      } catch (error) {
-        console.error("헤더 프로젝트 이름 조회 실패:", error);
-      }
-    };
-
-    fetchProjectName();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [projectId]);
-
-  return name;
-}
-
 export function Header({
   tone = "onLight",
   nav = false,
   action = DEFAULT_ACTION,
-  projectName,
-  omitProjectNav = false,
   className,
 }) {
   const { projectId } = useParams();
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const fetchedName = useProjectName(
-    omitProjectNav || projectName ? "" : projectId,
-  );
-  const navItems = buildNavItems(
-    omitProjectNav ? "" : projectId,
-    projectName || fetchedName,
-  );
+  const navItems = buildNavItems(projectId);
 
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -135,7 +44,6 @@ export function Header({
 
   const handleLogout = () => {
     clearSession();
-    projectNameCache.clear();
     navigate(PATHS.WELCOME, { replace: true });
   };
 
@@ -144,8 +52,10 @@ export function Header({
   return (
     <header
       className={cn(
-        "sticky top-0 z-100 flex h-[80px] w-full items-center justify-between px-5 sm:px-8 lg:px-[52px] transition-all duration-300",
-        isScrolled ? "bg-white/30 backdrop-blur-md shadow-sm" : "bg-white",
+        "sticky top-0 z-100 flex h-[80px] w-full items-center justify-between border-b border-solid px-5 sm:px-8 lg:px-[52px] transition-all duration-300",
+        isScrolled
+          ? "border-[#e6e8ef] bg-white/80 shadow-[0_2px_12px_0_rgba(28,35,43,0.08)] backdrop-blur-md"
+          : "border-[#f6f5fa] bg-white",
         TONE[tone],
         className,
       )}
@@ -160,7 +70,6 @@ export function Header({
       {nav && (
         <nav className="text-16 absolute left-1/2 flex w-full max-w-[40%] -translate-x-1/2 items-center justify-center gap-[16px] sm:gap-[32px] font-medium">
           {navItems.map((item) => {
-            const isProjectName = item.label === (projectName || fetchedName);
             const isActive = item.href === activeNavHref;
 
             return (
@@ -174,12 +83,10 @@ export function Header({
                   isActive
                     ? "font-semibold after:opacity-100"
                     : "after:opacity-0",
-                  isProjectName ? "" : "shrink-0 whitespace-nowrap",
+                  "shrink-0 whitespace-nowrap",
                 )}
               >
-                <span className={cn("block", isProjectName && "truncate")}>
-                  {item.label}
-                </span>
+                <span className="block">{item.label}</span>
               </Link>
             );
           })}

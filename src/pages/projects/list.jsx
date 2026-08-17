@@ -5,6 +5,7 @@ import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
 import { StateView } from "@/components/states";
 import { ProjectCard } from "@/components/cards";
 import { RevealOnScroll } from "@/components/motion";
+import { Pagination } from "@/components/pagination";
 import { Button, TextField } from "@/components/ui";
 import { API_BASE_URL, HEADER_PRESETS, PATHS } from "@/lib";
 
@@ -104,6 +105,8 @@ const toProjectCards = async (rawProjects) => {
   }));
 };
 
+const PROJECTS_PER_PAGE = 9;
+
 export function ProjectsPage() {
   const navigate = useNavigate();
 
@@ -134,6 +137,15 @@ export function ProjectsPage() {
 
     fetchProjects();
   }, []);
+
+  const [page, setPage] = useState(1);
+
+  const totalPages = Math.max(1, Math.ceil(projects.length / PROJECTS_PER_PAGE));
+  const currentPage = Math.min(page, totalPages);
+  const pageProjects = projects.slice(
+    (currentPage - 1) * PROJECTS_PER_PAGE,
+    currentPage * PROJECTS_PER_PAGE,
+  );
 
   const handleJoinProject = async () => {
     if (!joinCode.trim()) {
@@ -221,7 +233,7 @@ export function ProjectsPage() {
 
         {!loading && !error && (
           <div className="mt-6 grid grid-cols-1 gap-x-[25px] gap-y-10 sm:grid-cols-2 lg:mt-[35px] lg:grid-cols-3 lg:gap-y-[70px]">
-            {projects.map((project, index) => (
+            {pageProjects.map((project, index) => (
               <RevealOnScroll
                 key={project.id}
                 after={700}
@@ -231,6 +243,15 @@ export function ProjectsPage() {
               </RevealOnScroll>
             ))}
           </div>
+        )}
+
+        {!loading && !error && (
+          <Pagination
+            page={currentPage}
+            totalPages={totalPages}
+            onChange={setPage}
+            className="mt-12 lg:mt-[70px]"
+          />
         )}
       </div>
 
