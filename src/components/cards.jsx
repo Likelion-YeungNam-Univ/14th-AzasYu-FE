@@ -103,7 +103,7 @@ export function AvatarStack({ members = [], className }) {
             style={{
               backgroundColor: AVATAR_COLORS[index % AVATAR_COLORS.length],
             }}
-            className="mr-[-13px] block size-[33px] shrink-0 rounded-full"
+            className="mr-[-13px] block size-[33px] shrink-0 rounded-full border-2 border-solid border-white"
           />
         ))}
 
@@ -121,7 +121,7 @@ export function AvatarStack({ members = [], className }) {
           }}
           className="absolute top-full z-20 pt-[10px]"
         >
-          <ul className="flex max-h-[154px] min-w-[89px] flex-col gap-[10px] overflow-y-auto rounded-[8px] bg-white px-[16px] py-[12px] shadow-[10px_10px_30px_0px_rgba(0,0,0,0.06)]">
+          <ul className="flex max-h-[126px] min-w-[89px] flex-col gap-[10px] overflow-y-auto rounded-[8px] bg-white px-[16px] py-[12px] shadow-[10px_10px_30px_0px_rgba(0,0,0,0.06)]">
             {members.map((member, index) => (
               <li
                 key={member.userId ?? member.id ?? index}
