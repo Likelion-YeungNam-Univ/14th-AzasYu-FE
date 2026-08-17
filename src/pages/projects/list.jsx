@@ -234,7 +234,7 @@ export function ProjectsPage() {
         {!loading && !error && (
           <div className="mt-6 grid grid-cols-1 gap-x-[25px] gap-y-10 sm:grid-cols-2 lg:mt-[35px] lg:grid-cols-3 lg:gap-y-[70px]">
             {projects.map((project, index) => (
-              <RevealOnScroll key={project.id} delay={(index % 3) * 90}>
+              <RevealOnScroll key={project.id} delay={(index % 3) * 150}>
                 <ProjectCard project={project} />
               </RevealOnScroll>
             ))}

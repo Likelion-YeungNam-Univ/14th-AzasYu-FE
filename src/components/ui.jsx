@@ -422,10 +422,8 @@ export function RevealOnScroll({ children, delay = 0, className }) {
       ref={ref}
       style={{ transitionDelay: shown ? `${delay}ms` : "0ms" }}
       className={cn(
-        "transition-[opacity,filter,translate] duration-[600ms] ease-out",
-        shown
-          ? "translate-y-0 opacity-100 blur-none"
-          : "translate-y-[18px] opacity-0 blur-[10px]",
+        "transition-[opacity,translate] duration-[600ms] ease-out",
+        shown ? "translate-y-0 opacity-100" : "translate-y-[36px] opacity-0",
         className,
       )}
     >
