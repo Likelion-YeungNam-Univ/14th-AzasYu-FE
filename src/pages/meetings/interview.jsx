@@ -57,6 +57,8 @@ function UserMessage({ children, tone = "primary" }) {
   );
 }
 
+const HERO_INTRO_MS = 1300;
+
 export function MeetingInterviewPage() {
   const { projectId = "", meetingId = "" } = useParams();
   const navigate = useNavigate();
@@ -81,9 +83,28 @@ export function MeetingInterviewPage() {
   const submittedRef = useRef(false);
 
   const messagesEndRef = useRef(null);
+  const firstScrollRef = useRef(true);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    const target = messagesEndRef.current;
+
+    if (!target) return;
+
+    if (!firstScrollRef.current) {
+      target.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+
+    firstScrollRef.current = false;
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const timer = window.setTimeout(
+      () => target.scrollIntoView({ behavior: "smooth" }),
+      reduced ? 0 : HERO_INTRO_MS,
+    );
+
+    return () => window.clearTimeout(timer);
   }, [answered, questions, status]);
 
   const intro = buildIntro(localStorage.getItem("userName") ?? "");
