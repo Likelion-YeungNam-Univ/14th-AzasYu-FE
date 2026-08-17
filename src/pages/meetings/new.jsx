@@ -3,6 +3,8 @@ import { useNavigate, useParams } from "react-router";
 import calendarIcon from "@/assets/icons/calendar.svg";
 import clockIcon from "@/assets/icons/clock.svg";
 import { Header, Hero, HeroLayout } from "@/components/layout";
+import { ChevronRight } from "@/components/icons";
+import { DatePicker, Dropdown } from "@/components/picker";
 import {
   AgendaList,
   Button,
@@ -21,6 +23,14 @@ import {
   projectPath,
   toUserMessage,
 } from "@/lib";
+
+const DURATION_OPTIONS = [
+  { value: 30, label: "약 30분" },
+  { value: 60, label: "약 1시간" },
+  { value: 90, label: "약 1시간 30분" },
+  { value: 120, label: "약 2시간" },
+  { value: 180, label: "약 3시간" },
+];
 
 const NEW_COLUMN = "w-full max-w-[562px] md:max-w-[620px] lg:max-w-[562px]";
 
@@ -325,35 +335,25 @@ export function MeetingNewPage() {
             <div className={`${NEW_COLUMN} flex flex-col gap-[18px]`}>
               <FieldLabel required>회의 일시</FieldLabel>
 
-              <div className="flex w-full flex-wrap items-center gap-[12px] sm:gap-[22px] lg:w-[565px] lg:flex-nowrap">
-                <span className="relative inline-flex w-full sm:w-[217px]">
-                  <input
-                    type="date"
-                    aria-label="회의 날짜"
+              <div className="flex w-full flex-wrap items-center gap-[12px] sm:gap-[16px] lg:w-full lg:flex-nowrap">
+                <span className="inline-flex w-full sm:min-w-0 sm:flex-1">
+                  <DatePicker
                     value={meetingDate}
-                    min={now.date}
-                    onChange={(e) => setMeetingDate(e.target.value)}
-                    className={cn(
-                      PICKER_FIELD,
-                      DATE_FIELD_TEXT[meetingDate ? "filled" : "empty"],
-                    )}
+                    onChange={setMeetingDate}
+                    placeholder={now.dateHint}
+                    ariaLabel="회의 날짜"
+                    icon={
+                      <img
+                        src={calendarIcon}
+                        alt=""
+                        aria-hidden
+                        className="block size-[20px] max-w-none shrink-0"
+                      />
+                    }
                   />
-
-                  {!meetingDate && (
-                    <span className={HINT_TEXT}>{now.dateHint}</span>
-                  )}
-
-                  <span className={FIELD_ICON}>
-                    <img
-                      src={calendarIcon}
-                      alt=""
-                      aria-hidden
-                      className="block size-[20px] max-w-none"
-                    />
-                  </span>
                 </span>
 
-                <span className="relative inline-flex w-[calc(50%-6px)] sm:w-[163px]">
+                <span className="relative inline-flex w-[calc(50%-6px)] sm:w-[154px] sm:shrink-0">
                   <input
                     type="time"
                     aria-label="시작 시각"
@@ -380,20 +380,15 @@ export function MeetingNewPage() {
                   </span>
                 </span>
 
-                <select
-                  aria-label="예상 소요 시간"
-                  value={expectedDurationMinutes}
-                  onChange={(e) =>
-                    setExpectedDurationMinutes(Number(e.target.value))
-                  }
-                  className={cn(DATE_FIELD, DATE_FIELD_TEXT.filled, "w-[calc(50%-6px)] sm:w-[139px]")}
-                >
-                  <option value={30}>약 30분</option>
-                  <option value={60}>약 1시간</option>
-                  <option value={90}>약 1시간 30분</option>
-                  <option value={120}>약 2시간</option>
-                  <option value={180}>약 3시간</option>
-                </select>
+                <span className="inline-flex w-[calc(50%-6px)] sm:w-[160px] sm:shrink-0">
+                  <Dropdown
+                    value={expectedDurationMinutes}
+                    onChange={setExpectedDurationMinutes}
+                    ariaLabel="예상 소요 시간"
+                    options={DURATION_OPTIONS}
+                    icon={<ChevronRight className="rotate-90 text-[#858894]" />}
+                  />
+                </span>
               </div>
             </div>
 
