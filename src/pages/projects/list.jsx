@@ -123,8 +123,6 @@ export function ProjectsPage() {
       try {
         const response = await getMyProjects();
 
-        console.log("프로젝트 API 응답:", response);
-
         setProjects(await toProjectCards(response.data));
       } catch (error) {
         console.error(error);
@@ -148,8 +146,6 @@ export function ProjectsPage() {
       setJoinError("");
 
       const response = await joinProject(joinCode.trim());
-
-      console.log("프로젝트 참여 응답:", response);
 
       if (!response.success) {
         setJoinError(

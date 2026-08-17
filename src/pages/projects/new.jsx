@@ -66,8 +66,6 @@ export function ProjectNewPage() {
         description,
       })
 
-      console.log('프로젝트 생성 응답:', response)
-
       const projectId = response.data.id
       const joinCode = response.data.joinCode
 
