@@ -12,10 +12,35 @@ export function Pagination({ page, totalPages, onChange, className }) {
   const goTo = (next) => {
     if (next === page) return;
 
-    // 목록이 바뀌면서 문서 높이가 줄면 부드러운 스크롤이 중간에 끊긴다
-    window.scrollTo({ top: 0, behavior: "auto" });
+    const start = window.scrollY;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    onChange(next);
+    if (start <= 0 || reduced) {
+      window.scrollTo({ top: 0, behavior: "auto" });
+      onChange(next);
+      return;
+    }
+
+    // 목록을 먼저 바꾸면 문서가 짧아지면서 스크롤이 끊긴다.
+    // 위로 다 올라간 뒤에 바꾼다.
+    const duration = Math.min(700, 260 + start * 0.4);
+    const startedAt = performance.now();
+
+    const step = (now) => {
+      const progress = Math.min(1, (now - startedAt) / duration);
+      const eased = 1 - (1 - progress) ** 3;
+
+      window.scrollTo(0, Math.round(start * (1 - eased)));
+
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+        return;
+      }
+
+      onChange(next);
+    };
+
+    window.requestAnimationFrame(step);
   };
 
   return (
