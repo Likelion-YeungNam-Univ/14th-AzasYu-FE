@@ -48,12 +48,27 @@
   --text-48--letter-spacing: -0.025em;
 
   --animate-rise-in: rise-in 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-drop-in: drop-in 1.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @keyframes rise-in {
   from {
     opacity: 0;
     transform: translateY(0.42em);
+    filter: blur(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes drop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5em);
     filter: blur(8px);
   }
 

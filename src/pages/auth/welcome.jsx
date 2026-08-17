@@ -8,6 +8,18 @@ const REMEMBERED_EMAIL_KEY = "rememberedEmail";
 
 const LANDING_TEXT = "text-[#1c232b]";
 
+function DroppingChars({ text, delay = 0, step = 45 }) {
+  return [...text].map((char, index) => (
+    <span
+      key={`${char}-${index}`}
+      className="animate-drop-in inline-block whitespace-pre"
+      style={{ animationDelay: `${delay + index * step}ms` }}
+    >
+      {char}
+    </span>
+  ));
+}
+
 function RisingWords({ text, delay = 0, step = 70 }) {
   const words = text.split(" ");
 
@@ -122,10 +134,10 @@ export function WelcomePage() {
         <div className="flex min-h-svh items-center py-28 lg:py-0">
           <div className="mx-auto flex w-full max-w-[1920px] flex-col items-center gap-14 pr-5 pl-5 sm:pr-8 sm:pl-8 lg:flex-row lg:items-center lg:justify-between lg:gap-16 lg:pr-[17.135%] lg:pl-[10.781%]">
             <div
-              className={`${LANDING_TEXT} flex w-full max-w-[634px] flex-col gap-[16px] text-center lg:-translate-y-[43px] lg:text-left`}
+              className={`${LANDING_TEXT} @container flex w-full max-w-[634px] flex-col gap-[16px] text-center lg:-translate-y-[43px] lg:text-left`}
             >
-              <h1 className="text-28 font-bold sm:text-34 lg:text-48">
-                <RisingWords text="우리... 같은 얘기하고 있는 거 맞죠?" />
+              <h1 className="text-[clamp(12px,7.1cqw,48px)] font-bold whitespace-nowrap">
+                <DroppingChars text="우리... 같은 얘기하고 있는 거 맞죠?" />
               </h1>
 
               <p className="text-16 font-semibold sm:text-18 lg:text-22">
