@@ -225,7 +225,8 @@ export function MeetingSummaryPage() {
       }
     >
       <div
-        className={`${SUMMARY_CONTAINER} mt-10 flex flex-col gap-[36px] pb-20 lg:mt-[68.62px] lg:gap-[60px] lg:pb-[150px]`}
+        style={{ animationDelay: "1200ms" }}
+        className={`animate-lift-in ${SUMMARY_CONTAINER} mt-10 flex flex-col gap-[36px] pb-20 lg:mt-[68.62px] lg:gap-[60px] lg:pb-[150px]`}
       >
         {loading ? (
           <StateView title="요약 데이터를 확인하고 있습니다" />

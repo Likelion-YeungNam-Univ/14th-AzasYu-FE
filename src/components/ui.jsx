@@ -376,9 +376,15 @@ const PROJECT_CARD_GRADIENTS = [
   "linear-gradient(124.58deg, rgb(255, 217, 141) 5.3878%, rgb(255, 176, 16) 94.612%)",
 ];
 
-export function RevealOnScroll({ children, delay = 0, className }) {
+export function RevealOnScroll({ children, delay = 0, after = 0, className }) {
   const ref = useRef(null);
   const [shown, setShown] = useState(false);
+  const [wait, setWait] = useState(delay);
+  const mountedAtRef = useRef(0);
+
+  if (mountedAtRef.current === 0) {
+    mountedAtRef.current = performance.now();
+  }
 
   useEffect(() => {
     const target = ref.current;
@@ -394,6 +400,9 @@ export function RevealOnScroll({ children, delay = 0, className }) {
       ([entry]) => {
         if (!entry.isIntersecting) return;
 
+        const elapsed = performance.now() - mountedAtRef.current;
+
+        setWait(Math.max(0, after - elapsed) + delay);
         setShown(true);
         observer.disconnect();
       },
@@ -407,6 +416,7 @@ export function RevealOnScroll({ children, delay = 0, className }) {
 
       if (box.top >= window.innerHeight || box.bottom <= 0) return;
 
+      setWait(Math.max(0, after - (performance.now() - mountedAtRef.current)) + delay);
       setShown(true);
       observer.disconnect();
     }, 1200);
@@ -415,12 +425,12 @@ export function RevealOnScroll({ children, delay = 0, className }) {
       observer.disconnect();
       window.clearTimeout(fallback);
     };
-  }, []);
+  }, [after, delay]);
 
   return (
     <div
       ref={ref}
-      style={{ transitionDelay: shown ? `${delay}ms` : "0ms" }}
+      style={{ transitionDelay: shown ? `${wait}ms` : "0ms" }}
       className={cn(
         "transition-[opacity,translate] duration-[600ms] ease-out",
         shown ? "translate-y-0 opacity-100" : "translate-y-[36px] opacity-0",
