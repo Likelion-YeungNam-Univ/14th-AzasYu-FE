@@ -88,9 +88,12 @@ const FIELD_LABEL_GAP = {
 };
 
 const FIELD_BOX = {
-  auth: "h-[55px] rounded-[20px] border-[#b8bccc] text-[#1c232b] placeholder:text-[#b8bccc]",
+  auth: "h-[55px] rounded-[20px] text-[#1c232b] placeholder:text-[#b8bccc]",
   form: "h-[66px] rounded-[8px] border-[#b8bccc] text-[#1c232b] placeholder:text-[#b8bccc]",
 };
+
+const authFieldBorder = (filled) =>
+  filled ? "border-[#1c232b]" : "border-[#b8bccc]";
 
 const FIELD_BASE =
   "text-20 w-full border border-solid px-[16px] py-[14px] font-medium outline-none transition-colors duration-150 focus:border-[#0075d3]";
@@ -170,7 +173,13 @@ export function TextField({
     >
       <FieldBody limit={limit} value={props.value}>
         <input
-          className={cn(FIELD_BASE, FIELD_BOX[tone], className)}
+          className={cn(
+            FIELD_BASE,
+            FIELD_BOX[tone],
+            tone === "auth" &&
+              authFieldBorder(String(props.value ?? "").length > 0),
+            className,
+          )}
           maxLength={limit}
           onPaste={alertOnTruncatedPaste(limit)}
           {...props}
