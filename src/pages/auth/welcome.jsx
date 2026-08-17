@@ -12,7 +12,7 @@ const LANDING_GRADIENT =
   "linear-gradient(-90deg, rgb(255,255,255) 0%, rgba(255,255,255,0) 51.923%, rgb(255,255,255) 100%)";
 
 const LANDING_FIELD =
-  "text-20 h-[54px] w-full rounded-[10px] border border-solid bg-white px-[16px] font-medium text-[#1c232b] outline-none placeholder:text-[#b8bccc]";
+  "text-20 h-[54px] w-full rounded-[10px] border border-solid bg-white px-[16px] font-medium text-[#1c232b] outline-none transition-colors duration-150 placeholder:text-[#b8bccc] focus:border-[#0075d3]";
 
 const landingFieldBorder = (filled) =>
   filled ? "border-[#1c232b]" : "border-[#b8bccc]";

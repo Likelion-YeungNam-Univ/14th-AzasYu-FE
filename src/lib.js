@@ -16,6 +16,53 @@ export const FIELD_LIMITS = {
   AGENDA: 30,
 }
 
+export function toUserMessage(error) {
+  if (error instanceof TypeError) {
+    return '서버에 연결할 수 없습니다. 잠시 후 다시 시도해 주세요.'
+  }
+
+  if (error instanceof SyntaxError) {
+    return '서버 응답을 읽지 못했습니다. 잠시 후 다시 시도해 주세요.'
+  }
+
+  return error?.message || '알 수 없는 오류가 발생했습니다.'
+}
+
+export async function copyText(value) {
+  if (!value) return false
+
+  if (navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(value)
+      return true
+    } catch {
+      // 보안 컨텍스트가 아니거나 권한이 없으면 아래 폴백으로 내려간다
+    }
+  }
+
+  const textarea = document.createElement('textarea')
+
+  textarea.value = value
+  textarea.setAttribute('readonly', '')
+  textarea.style.position = 'fixed'
+  textarea.style.opacity = '0'
+
+  document.body.appendChild(textarea)
+  textarea.select()
+
+  let copied = false
+
+  try {
+    copied = document.execCommand('copy')
+  } catch {
+    copied = false
+  }
+
+  document.body.removeChild(textarea)
+
+  return copied
+}
+
 export function alertOnTruncatedPaste(limit) {
   return (event) => {
     if (typeof limit !== 'number') return

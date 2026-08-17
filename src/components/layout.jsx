@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router";
+import { Link, useLocation, useNavigate, useParams } from "react-router";
 import githubIcon from "@/assets/icons/github.svg";
 import instagramIcon from "@/assets/icons/instagram.svg";
 import likelionLogo from "@/assets/likelion-logo.svg";
@@ -15,6 +15,30 @@ const TONE = {
 const DEFAULT_ACTION = { label: "로그아웃", href: PATHS.WELCOME, logout: true };
 
 const projectNameCache = new Map();
+
+function resolveActiveNavHref(pathname, navItems) {
+  if (pathname === PATHS.MEETINGS || pathname.endsWith("/meetings")) {
+    return PATHS.MEETINGS;
+  }
+
+  if (pathname === PATHS.PROJECTS) {
+    return PATHS.PROJECTS;
+  }
+
+  const projectItem = navItems.find(
+    (item) => item.href !== PATHS.PROJECTS && item.href !== PATHS.MEETINGS,
+  );
+
+  if (
+    projectItem &&
+    (pathname === projectItem.href ||
+      pathname.startsWith(`${projectItem.href}/`))
+  ) {
+    return projectItem.href;
+  }
+
+  return null;
+}
 
 function useProjectName(projectId) {
   const [name, setName] = useState(() => projectNameCache.get(projectId) ?? "");
@@ -82,6 +106,7 @@ export function Header({
   className,
 }) {
   const { projectId } = useParams();
+  const { pathname } = useLocation();
   const navigate = useNavigate();
   const fetchedName = useProjectName(
     omitProjectNav || projectName ? "" : projectId,
@@ -109,6 +134,8 @@ export function Header({
     navigate(PATHS.WELCOME, { replace: true });
   };
 
+  const activeNavHref = resolveActiveNavHref(pathname, navItems);
+
   return (
     <header
       className={cn(
@@ -120,7 +147,7 @@ export function Header({
     >
       <Link
         to={nav ? PATHS.PROJECTS : PATHS.WELCOME}
-        className="text-18 font-semibold whitespace-nowrap sm:text-20 lg:text-24"
+        className="text-18 font-semibold whitespace-nowrap transition-opacity duration-150 hover:opacity-70 sm:text-20 lg:text-24"
       >
         {SERVICE_NAME}
       </Link>
@@ -129,17 +156,25 @@ export function Header({
         <nav className="text-16 absolute left-1/2 flex w-full max-w-[40%] -translate-x-1/2 items-center justify-center gap-[16px] sm:gap-[32px] font-medium">
           {navItems.map((item) => {
             const isProjectName = item.label === (projectName || fetchedName);
+            const isActive = item.href === activeNavHref;
 
             return (
               <Link
                 key={item.label}
                 to={item.href}
+                aria-current={isActive ? "page" : undefined}
                 className={cn(
-                  "block min-w-0",
-                  isProjectName ? "truncate" : "shrink-0 whitespace-nowrap",
+                  "relative block min-w-0 transition-opacity duration-150 hover:opacity-70",
+                  "after:absolute after:inset-x-0 after:-bottom-[6px] after:h-[2px] after:rounded-full after:bg-current after:transition-opacity after:duration-150",
+                  isActive
+                    ? "font-semibold after:opacity-100"
+                    : "after:opacity-0",
+                  isProjectName ? "" : "shrink-0 whitespace-nowrap",
                 )}
               >
-                {item.label}
+                <span className={cn("block", isProjectName && "truncate")}>
+                  {item.label}
+                </span>
               </Link>
             );
           })}
@@ -151,7 +186,7 @@ export function Header({
           <button
             type="button"
             onClick={handleLogout}
-            className="flex cursor-pointer items-center gap-[6px]"
+            className="flex cursor-pointer items-center gap-[6px] transition-opacity duration-150 hover:opacity-70"
           >
             <span className="text-18 font-medium whitespace-nowrap">
               {action.label}
@@ -159,7 +194,10 @@ export function Header({
             <ChevronRight />
           </button>
         ) : (
-          <Link to={action.href} className="flex items-center gap-[6px]">
+          <Link
+            to={action.href}
+            className="flex items-center gap-[6px] transition-opacity duration-150 hover:opacity-70"
+          >
             <span className="text-18 font-medium whitespace-nowrap">
               {action.label}
             </span>
@@ -319,7 +357,7 @@ export function Footer({ className }) {
                     href={icon.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex size-full items-center justify-center"
+                    className="flex size-full items-center justify-center transition-opacity duration-150 hover:opacity-70"
                   >
                     {glyph}
                   </a>

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { Navigate } from 'react-router'
+import { Navigate, Outlet, ScrollRestoration } from 'react-router'
 import { PATHS } from '@/lib'
 
 export const SIGNUP_COMPLETE_KEY = 'signupCompleted'
@@ -46,4 +46,13 @@ export function RequireSignUpComplete({ children }) {
   }
 
   return children
+}
+
+export function ScrollToTop() {
+  return (
+    <>
+      <ScrollRestoration />
+      <Outlet />
+    </>
+  )
 }

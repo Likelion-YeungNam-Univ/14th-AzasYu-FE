@@ -4,7 +4,12 @@ import uploadIcon from "@/assets/icons/upload.svg";
 import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
 import { StateView } from "@/components/states";
 import { Button, Card } from "@/components/ui";
-import { API_BASE_URL, HEADER_PRESETS, meetingPath } from "@/lib";
+import {
+  API_BASE_URL,
+  HEADER_PRESETS,
+  meetingPath,
+  toUserMessage,
+} from "@/lib";
 
 const getCurrentUserId = () => {
   const accessToken = localStorage.getItem("accessToken");
@@ -120,7 +125,7 @@ export function MeetingUploadPage() {
       navigate(meetingPath("LOADING", projectId, meetingId));
     } catch (error) {
       console.error("회의 원문 등록 실패:", error);
-      alert(error.message);
+      alert(toUserMessage(error));
     } finally {
       setUploading(false);
     }
@@ -161,7 +166,7 @@ export function MeetingUploadPage() {
       navigate(meetingPath("LOADING", projectId, meetingId));
     } catch (error) {
       console.error("회의 파일 업로드 실패:", error);
-      alert(error.message);
+      alert(toUserMessage(error));
     } finally {
       setUploading(false);
     }
@@ -222,7 +227,7 @@ export function MeetingUploadPage() {
               placeholder="텍스트 직접 입력하기"
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              className="text-14 h-[491px] w-full max-w-[514px] resize-none rounded-[8px] bg-[#f5f5f5] px-[24px] py-[20px] font-semibold text-[#1c232b] outline-none placeholder:text-[#858894]"
+              className="text-14 h-[491px] w-full max-w-[514px] resize-none rounded-[8px] bg-[#f5f5f5] px-[24px] py-[20px] font-semibold text-[#1c232b] outline-none placeholder:text-[#858894] focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-[#0075d3]"
             />
 
             <Button

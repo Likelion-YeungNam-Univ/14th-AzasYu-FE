@@ -4,8 +4,15 @@ import emptyMeetings from "@/assets/icons/empty-meetings.svg";
 import { Copy, Plus } from "@/components/icons";
 import { Header } from "@/components/layout";
 import { StateView } from "@/components/states";
+import { Toast } from "@/components/toast";
 import { AvatarStack, Button, MeetingCard } from "@/components/ui";
-import { API_BASE_URL, HEADER_PRESETS, projectPath } from "@/lib";
+import {
+  API_BASE_URL,
+  copyText,
+  HEADER_PRESETS,
+  projectPath,
+  toUserMessage,
+} from "@/lib";
 
 const authHeaders = () => ({
   "Content-Type": "application/json",
@@ -151,6 +158,8 @@ export function ProjectDetailPage() {
   const [currentUserId, setCurrentUserId] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
 
+  const [copyMessage, setCopyMessage] = useState("");
+
   const carouselRef = useRef(null);
   const activeIndexRef = useRef(0);
   const wheelLockRef = useRef(false);
@@ -247,7 +256,7 @@ export function ProjectDetailPage() {
       } catch (error) {
         console.error("프로젝트 상세 조회 실패:", error);
 
-        setError(error.message);
+        setError(toUserMessage(error));
       } finally {
         setLoading(false);
       }
@@ -258,31 +267,16 @@ export function ProjectDetailPage() {
     }
   }, [projectId]);
 
-  const handleCopyJoinCode = () => {
+  const handleCopyJoinCode = async () => {
     const joinCode = project?.joinCode;
 
     if (!joinCode) {
       return;
     }
 
-    if (navigator.clipboard?.writeText) {
-      navigator.clipboard.writeText(joinCode);
-      return;
-    }
+    const copied = await copyText(joinCode);
 
-    const textarea = document.createElement("textarea");
-
-    textarea.value = joinCode;
-    textarea.setAttribute("readonly", "");
-    textarea.style.position = "fixed";
-    textarea.style.opacity = "0";
-
-    document.body.appendChild(textarea);
-    textarea.select();
-
-    document.execCommand("copy");
-
-    document.body.removeChild(textarea);
+    setCopyMessage(copied ? "참여코드를 복사했습니다." : "복사하지 못했습니다.");
   };
 
   if (loading) {
@@ -402,6 +396,8 @@ export function ProjectDetailPage() {
           description="첫 회의를 만들어 프로젝트를 시작해보세요!"
         />
       )}
+
+      <Toast message={copyMessage} onDone={() => setCopyMessage("")} />
     </div>
   );
 }

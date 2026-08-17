@@ -4,7 +4,12 @@ import pencilIcon from "@/assets/icons/pencil.svg";
 import warningIcon from "@/assets/icons/warning-triangle.svg";
 import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
 import { StateView } from "@/components/states";
-import { API_BASE_URL, HEADER_PRESETS, MEETING_TITLE } from "@/lib";
+import {
+  API_BASE_URL,
+  HEADER_PRESETS,
+  MEETING_TITLE,
+  toUserMessage,
+} from "@/lib";
 
 const RESULT_CONTAINER = "mx-auto w-full max-w-[1460px] px-5 sm:px-8 lg:px-0";
 
@@ -154,7 +159,7 @@ export function MeetingResultPage() {
         }
       } catch (error) {
         console.error("회의 분석 결과 조회 실패:", error);
-        setError(error.message);
+        setError(toUserMessage(error));
       } finally {
         setLoading(false);
       }

@@ -2,7 +2,12 @@ import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 import analyzingIllustration from "@/assets/icons/analyzing.svg";
 import { Header } from "@/components/layout";
-import { API_BASE_URL, HEADER_PRESETS, meetingPath } from "@/lib";
+import {
+  API_BASE_URL,
+  HEADER_PRESETS,
+  meetingPath,
+  toUserMessage,
+} from "@/lib";
 
 export function MeetingLoadingPage() {
   const { projectId = "", meetingId = "" } = useParams();
@@ -74,7 +79,7 @@ export function MeetingLoadingPage() {
         console.error("회의 분석 상태 확인 실패:", error);
 
         if (!stopped) {
-          alert(error.message);
+          alert(toUserMessage(error));
         }
       }
     };

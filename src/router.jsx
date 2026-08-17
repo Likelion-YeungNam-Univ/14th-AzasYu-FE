@@ -20,6 +20,7 @@ import {
   RequireGuest,
   RequireSignUpComplete,
   RootRedirect,
+  ScrollToTop,
 } from '@/components/guards'
 import { MEETING_PATTERNS, PATHS, PROJECT_PATTERNS } from '@/lib'
 
@@ -34,33 +35,38 @@ const guestRoute = (path, element) => ({
 })
 
 export const router = createBrowserRouter([
-  { path: PATHS.ROOT, element: <RootRedirect /> },
-
-  guestRoute(PATHS.WELCOME, <WelcomePage />),
-  guestRoute(PATHS.SIGNUP, <SignUpPage />),
   {
-    path: PATHS.SIGNUP_COMPLETE,
-    element: (
-      <RequireSignUpComplete>
-        <SignUpCompletePage />
-      </RequireSignUpComplete>
-    ),
+    element: <ScrollToTop />,
+    children: [
+      { path: PATHS.ROOT, element: <RootRedirect /> },
+
+      guestRoute(PATHS.WELCOME, <WelcomePage />),
+      guestRoute(PATHS.SIGNUP, <SignUpPage />),
+      {
+        path: PATHS.SIGNUP_COMPLETE,
+        element: (
+          <RequireSignUpComplete>
+            <SignUpCompletePage />
+          </RequireSignUpComplete>
+        ),
+      },
+
+      protectedRoute(PATHS.PROJECTS, <ProjectsPage />),
+      protectedRoute(PATHS.PROJECT_NEW, <ProjectNewPage />),
+      protectedRoute(PROJECT_PATTERNS.DETAIL, <ProjectDetailPage />),
+      protectedRoute(PROJECT_PATTERNS.COMPLETE, <ProjectCompletePage />),
+
+      protectedRoute(PROJECT_PATTERNS.MEETING_NEW, <MeetingNewPage />),
+      protectedRoute(MEETING_PATTERNS.DETAIL, <MeetingResultPage />),
+      protectedRoute(MEETING_PATTERNS.INTERVIEW, <MeetingInterviewPage />),
+      protectedRoute(MEETING_PATTERNS.BOARD, <MeetingBoardPage />),
+      protectedRoute(MEETING_PATTERNS.UPLOAD, <MeetingUploadPage />),
+      protectedRoute(MEETING_PATTERNS.LOADING, <MeetingLoadingPage />),
+      protectedRoute(MEETING_PATTERNS.SUMMARY, <MeetingSummaryPage />),
+      protectedRoute(PATHS.MEETINGS, <MeetingsPage />),
+      protectedRoute(PROJECT_PATTERNS.MEETINGS, <MeetingsPage />),
+
+      { path: '*', element: <NotFoundPage /> },
+    ],
   },
-
-  protectedRoute(PATHS.PROJECTS, <ProjectsPage />),
-  protectedRoute(PATHS.PROJECT_NEW, <ProjectNewPage />),
-  protectedRoute(PROJECT_PATTERNS.DETAIL, <ProjectDetailPage />),
-  protectedRoute(PROJECT_PATTERNS.COMPLETE, <ProjectCompletePage />),
-
-  protectedRoute(PROJECT_PATTERNS.MEETING_NEW, <MeetingNewPage />),
-  protectedRoute(MEETING_PATTERNS.DETAIL, <MeetingResultPage />),
-  protectedRoute(MEETING_PATTERNS.INTERVIEW, <MeetingInterviewPage />),
-  protectedRoute(MEETING_PATTERNS.BOARD, <MeetingBoardPage />),
-  protectedRoute(MEETING_PATTERNS.UPLOAD, <MeetingUploadPage />),
-  protectedRoute(MEETING_PATTERNS.LOADING, <MeetingLoadingPage />),
-  protectedRoute(MEETING_PATTERNS.SUMMARY, <MeetingSummaryPage />),
-  protectedRoute(PATHS.MEETINGS, <MeetingsPage />),
-  protectedRoute(PROJECT_PATTERNS.MEETINGS, <MeetingsPage />),
-
-  { path: '*', element: <NotFoundPage /> },
 ])
