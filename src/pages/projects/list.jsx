@@ -209,28 +209,22 @@ export function ProjectsPage() {
         />
       }
     >
-      <div className="mx-auto w-full max-w-[1460px] px-5 pb-20 sm:px-8 lg:px-0 lg:pb-[151px]">
-        {/* 새 프로젝트 만들기 */}
+      <div className="mx-auto w-full max-w-[1460px] px-5 pb-20 sm:px-8 lg:px-8 xl:px-12 lg:pb-[151px]">
         <div className="mt-10 flex lg:mt-[111px]">
           <Button
             variant="subtle"
             onClick={() => navigate(PATHS.PROJECT_NEW)}
-            // ✨ className을 덮어씌워서 버튼과 글자, 패딩을 큼직하게 만듭니다.
             className="flex items-center gap-[10px] rounded-[12px] px-6 py-4 text-18 font-bold text-[#4263eb] sm:px-8 sm:text-20"
           >
-            {/* ✨ 아이콘 크기도 글자에 맞춰서 확실하게 키워줍니다. */}
             <Plus size={24} />
             새 프로젝트 만들기
           </Button>
         </div>
 
-        {/* 로딩 */}
         {loading && <StateView title="프로젝트를 불러오는 중입니다" />}
 
-        {/* 에러 */}
         {error && <StateView variant="error" title={error} />}
 
-        {/* 프로젝트 목록 */}
         {!loading && !error && (
           <div className="mt-6 grid grid-cols-1 gap-x-[25px] gap-y-10 sm:grid-cols-2 lg:mt-[35px] lg:grid-cols-3 lg:gap-y-[70px]">
             {projects.map((project, index) => (
@@ -242,7 +236,6 @@ export function ProjectsPage() {
         )}
       </div>
 
-      {/* 프로젝트 참여 모달 */}
       {isJoinModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-5">
           <div className="w-full max-w-[500px] rounded-[24px] bg-white p-8">

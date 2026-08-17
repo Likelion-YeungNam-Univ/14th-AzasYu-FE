@@ -5,7 +5,7 @@ import { StateView } from "@/components/states";
 import { Button } from "@/components/ui";
 import { API_BASE_URL, HEADER_PRESETS, toUserMessage } from "@/lib";
 
-const SUMMARY_CONTAINER = "mx-auto w-full max-w-[976px] px-5 sm:px-8 lg:px-0";
+const SUMMARY_CONTAINER = "mx-auto w-full max-w-[976px] px-5 sm:px-8 lg:px-8";
 
 const toLines = (text) =>
   String(text ?? "")

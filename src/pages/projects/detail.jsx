@@ -298,14 +298,11 @@ export function ProjectDetailPage() {
       <Header {...HEADER_PRESETS.appOnLight} omitProjectNav />
 
       <div className="w-full bg-[#f5f5f5] py-10 lg:min-h-[300px] lg:pt-0 lg:pb-12">
-        {/* ✨ 가로 크기는 원래대로 562px로 돌려서 버튼 위치를 고정합니다. */}
-        <div className="mx-auto flex w-full max-w-[562px] flex-col items-start px-5 sm:px-8 lg:px-0 lg:pt-[70px]">
-          {/* ✨ 1. 제목을 버튼과 분리하여 제일 위로 올립니다. 이제 562px 가로폭을 온전히 다 씁니다! */}
+        <div className="mx-auto flex w-full max-w-[562px] flex-col items-start px-5 sm:px-8 lg:px-8 lg:pt-[70px]">
           <p className="mb-[16px] w-full break-all line-clamp-3 text-34 font-bold text-[#1c232b] lg:text-48">
             {project.name}
           </p>
 
-          {/* ✨ 2. 참여코드/아바타(좌)와 새 회의 버튼(우)을 그 아래 한 줄로 배치합니다. */}
           <div className="flex w-full flex-col items-start gap-8 lg:flex-row lg:items-end lg:justify-between lg:gap-6">
             <div className="flex flex-col items-start gap-[16px]">
               <button
@@ -334,7 +331,7 @@ export function ProjectDetailPage() {
       </div>
 
       {meetings.length > 0 ? (
-        <div className="mx-auto flex w-full flex-col items-center overflow-x-clip px-5 pt-20 pb-20 sm:px-8 lg:px-0 lg:pt-[120px] lg:pb-[150px]">
+        <div className="mx-auto flex w-full flex-col items-center overflow-x-clip px-5 pt-20 pb-20 sm:px-8 lg:px-8 lg:pt-[120px] lg:pb-[150px]">
           <div
             ref={carouselRef}
             className="relative flex min-h-[550px] w-full max-w-[1000px] items-center justify-center overflow-visible"
@@ -358,7 +355,7 @@ export function ProjectDetailPage() {
                 <div
                   key={meeting.id}
                   onClick={() => setActiveIndex(index)}
-                  className="absolute w-full max-w-[600px] transition-all duration-500 ease-out"
+                  className="absolute w-full max-w-[calc(100%-40px)] sm:max-w-[600px] transition-all duration-500 ease-out"
                   style={{
                     transform: `translateX(${translateX}px) scale(${scale})`,
                     zIndex: zIndex,

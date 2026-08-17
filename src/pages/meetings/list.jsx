@@ -164,7 +164,7 @@ export function MeetingsPage() {
         />
       }
     >
-      <div className="mx-auto w-full max-w-[1460px] px-5 pb-16 sm:px-8 lg:px-0 lg:pb-[186px]">
+      <div className="mx-auto w-full max-w-[1460px] px-5 pb-16 sm:px-8 lg:px-8 xl:px-12 lg:pb-[186px]">
         <div className="mt-[40px] lg:mt-[82px]">
           {loading ? (
             <StateView title="회의 목록을 불러오는 중입니다" />

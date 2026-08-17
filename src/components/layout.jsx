@@ -251,7 +251,7 @@ export function Hero({
 
       <div
         className={cn(
-          "absolute flex flex-col gap-[40px] px-5 text-[#1c232b] sm:px-8 lg:px-0",
+          "absolute flex flex-col gap-[40px] px-5 text-[#1c232b] sm:px-8 lg:px-8",
           isCenter
             ? "left-1/2 w-full -translate-x-1/2 items-center text-center lg:w-max"
             : "inset-x-0 mx-auto w-full max-w-[1460px] items-start",

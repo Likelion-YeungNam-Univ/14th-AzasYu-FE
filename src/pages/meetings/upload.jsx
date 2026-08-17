@@ -227,7 +227,7 @@ export function MeetingUploadPage() {
               placeholder="텍스트 직접 입력하기"
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              className="text-14 h-[491px] w-full max-w-[514px] resize-none rounded-[8px] bg-[#f5f5f5] px-[24px] py-[20px] font-semibold text-[#1c232b] outline-none placeholder:text-[#858894] focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-[#0075d3]"
+              className="text-14 h-[491px] w-full max-w-[516px] resize-none rounded-[8px] bg-[#f5f5f5] px-[24px] py-[20px] font-semibold text-[#1c232b] outline-none placeholder:text-[#858894] focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-[#0075d3]"
             />
 
             <Button
