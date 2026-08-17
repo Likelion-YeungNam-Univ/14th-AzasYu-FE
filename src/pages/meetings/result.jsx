@@ -11,7 +11,7 @@ import {
   toUserMessage,
 } from "@/lib";
 
-const RESULT_CONTAINER = "mx-auto w-full max-w-[1460px] px-5 sm:px-8 lg:px-0";
+const RESULT_CONTAINER = "mx-auto w-full max-w-[1460px] px-5 sm:px-8 lg:px-8 xl:px-12";
 
 const toLines = (text) =>
   String(text ?? "")

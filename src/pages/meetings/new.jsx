@@ -20,7 +20,7 @@ import {
   toUserMessage,
 } from "@/lib";
 
-const NEW_COLUMN = "w-full max-w-[562px]";
+const NEW_COLUMN = "w-full max-w-[562px] md:max-w-[620px] lg:max-w-[562px]";
 
 const DATE_FIELD =
   "text-16 h-[40px] cursor-pointer rounded-[8px] border border-solid border-[#b8bccc] bg-white px-[16px] py-[8px] font-medium outline-none transition-colors duration-150 focus:border-[#0075d3]";
@@ -251,7 +251,6 @@ export function MeetingNewPage() {
       <div className="flex w-full justify-center px-5 pt-12 pb-16 sm:px-8 lg:pt-[60px] lg:pb-[81px]">
         <div className={NEW_COLUMN}>
           <div className="flex w-full flex-col items-center gap-[34px]">
-            {/* 회의 제목 */}
             <TextField
               tone="form"
               label="회의 제목"
@@ -263,7 +262,6 @@ export function MeetingNewPage() {
               onChange={(e) => setTitle(e.target.value)}
             />
 
-            {/* 회의 목적 */}
             <TextAreaField
               tone="form"
               label="회의 목적"
@@ -275,7 +273,6 @@ export function MeetingNewPage() {
               onChange={(e) => setPurpose(e.target.value)}
             />
 
-            {/* 회의 안건 */}
             <div className={`${NEW_COLUMN} flex flex-col gap-[18px]`}>
               <FieldLabel required>회의 안건</FieldLabel>
 
@@ -307,12 +304,11 @@ export function MeetingNewPage() {
               </div>
             </div>
 
-            {/* 회의 일시 */}
             <div className={`${NEW_COLUMN} flex flex-col gap-[18px]`}>
               <FieldLabel required>회의 일시</FieldLabel>
 
-              <div className="flex w-full flex-wrap items-center gap-[22px] lg:w-[565px] lg:flex-nowrap">
-                <span className="relative inline-flex w-[217px]">
+              <div className="flex w-full flex-wrap items-center gap-[12px] sm:gap-[22px] lg:w-[565px] lg:flex-nowrap">
+                <span className="relative inline-flex w-full sm:w-[217px]">
                   <input
                     type="date"
                     aria-label="회의 날짜"
@@ -331,7 +327,7 @@ export function MeetingNewPage() {
                   )}
                 </span>
 
-                <span className="relative inline-flex w-[163px]">
+                <span className="relative inline-flex w-[calc(50%-6px)] sm:w-[163px]">
                   <input
                     type="time"
                     aria-label="시작 시각"
@@ -356,7 +352,7 @@ export function MeetingNewPage() {
                   onChange={(e) =>
                     setExpectedDurationMinutes(Number(e.target.value))
                   }
-                  className={cn(DATE_FIELD, DATE_FIELD_TEXT.filled, "w-[139px]")}
+                  className={cn(DATE_FIELD, DATE_FIELD_TEXT.filled, "w-[calc(50%-6px)] sm:w-[139px]")}
                 >
                   <option value={30}>약 30분</option>
                   <option value={60}>약 1시간</option>
@@ -367,7 +363,6 @@ export function MeetingNewPage() {
               </div>
             </div>
 
-            {/* 참여자 */}
             <div className={`${NEW_COLUMN} flex flex-col gap-[18px]`}>
               <FieldLabel muted>참여자</FieldLabel>
 
@@ -420,7 +415,6 @@ export function MeetingNewPage() {
               )}
             </div>
 
-            {/* 회의 생성 */}
             <Button
               className={NEW_COLUMN}
               onClick={handleCreateMeeting}

@@ -600,7 +600,7 @@ export function MeetingCard({ projectId, meeting, currentUserId }) {
   return (
     <Card
       shadow="meeting"
-      className="w-full max-w-[658px] px-6 py-8 sm:px-10 lg:min-h-[589px] lg:px-[48px] lg:py-[40px]"
+      className="w-full max-w-[658px] px-6 py-8 sm:px-10 lg:px-[48px] lg:py-[40px]"
     >
       <div className="flex w-full flex-col gap-[30px]">
         <div className="flex flex-col gap-[4px]">
