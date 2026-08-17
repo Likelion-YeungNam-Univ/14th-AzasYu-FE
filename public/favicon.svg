@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="이해했습니다! (아님)">
-  <rect width="32" height="32" rx="7" fill="#606060"/>
-  <text
-    x="16" y="16"
-    font-family="Pretendard, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif"
-    font-size="20" font-weight="600" fill="#f4f4f4"
-    text-anchor="middle" dominant-baseline="central"
-  >이</text>
-</svg>
