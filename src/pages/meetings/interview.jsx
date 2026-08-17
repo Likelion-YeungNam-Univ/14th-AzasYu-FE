@@ -83,25 +83,36 @@ export function MeetingInterviewPage() {
   const submittedRef = useRef(false);
 
   const messagesEndRef = useRef(null);
-  const firstScrollRef = useRef(true);
+  const mountedAtRef = useRef(0);
+
+  if (mountedAtRef.current === 0) {
+    mountedAtRef.current = performance.now();
+  }
 
   useEffect(() => {
     const target = messagesEndRef.current;
 
     if (!target) return;
 
-    if (!firstScrollRef.current) {
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    const remaining = reduced
+      ? 0
+      : Math.max(
+          0,
+          FIRST_SCROLL_DELAY_MS - (performance.now() - mountedAtRef.current),
+        );
+
+    if (remaining === 0) {
       target.scrollIntoView({ behavior: "smooth" });
       return;
     }
 
-    firstScrollRef.current = false;
-
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
     const timer = window.setTimeout(
       () => target.scrollIntoView({ behavior: "smooth" }),
-      reduced ? 0 : FIRST_SCROLL_DELAY_MS,
+      remaining,
     );
 
     return () => window.clearTimeout(timer);
