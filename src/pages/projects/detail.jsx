@@ -275,7 +275,7 @@ export function ProjectDetailPage() {
 
   return (
     <div className="min-h-svh w-full bg-white">
-      <Header {...HEADER_PRESETS.appOnLight} omitProjectNav />
+      <Header {...HEADER_PRESETS.appOnLight} />
 
       <div className="w-full bg-[#f5f5f5] py-10 lg:min-h-[256px] lg:pt-0 lg:pb-12">
         <div className="mx-auto flex w-full max-w-[562px] flex-col items-start px-5 sm:px-8 lg:px-8 lg:pt-[48px]">

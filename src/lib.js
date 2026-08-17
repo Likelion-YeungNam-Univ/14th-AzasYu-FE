@@ -160,11 +160,11 @@ export const HEADER_PRESETS = {
   landing: { tone: 'onDark', nav: false, action: null },
 }
 
-export function buildNavItems(projectId, projectName) {
+export function buildNavItems(projectId) {
   const items = [{ label: '홈', href: PATHS.PROJECTS }]
 
-  if (projectId && projectName) {
-    items.push({ label: projectName, href: projectPath('DETAIL', projectId) })
+  if (projectId) {
+    items.push({ label: '프로젝트 홈', href: projectPath('DETAIL', projectId) })
   }
 
   items.push({ label: '지난 회의', href: PATHS.MEETINGS })
