@@ -19,6 +19,30 @@ const TONE = {
 
 const DEFAULT_ACTION = { label: "로그아웃", href: PATHS.WELCOME, logout: true };
 
+function resolveActiveNavHref(pathname, navItems) {
+  if (pathname === PATHS.MEETINGS || pathname.endsWith("/meetings")) {
+    return PATHS.MEETINGS;
+  }
+
+  if (pathname === PATHS.PROJECTS) {
+    return PATHS.PROJECTS;
+  }
+
+  const projectItem = navItems.find(
+    (item) => item.href !== PATHS.PROJECTS && item.href !== PATHS.MEETINGS,
+  );
+
+  if (
+    projectItem &&
+    (pathname === projectItem.href ||
+      pathname.startsWith(`${projectItem.href}/`))
+  ) {
+    return projectItem.href;
+  }
+
+  return null;
+}
+
 export function Header({
   tone = "onLight",
   nav = false,
