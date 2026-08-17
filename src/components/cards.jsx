@@ -103,7 +103,7 @@ export function AvatarStack({ members = [], className }) {
             style={{
               backgroundColor: AVATAR_COLORS[index % AVATAR_COLORS.length],
             }}
-            className="mr-[-13px] block size-[33px] shrink-0 rounded-full"
+            className="mr-[-13px] block size-[33px] shrink-0 rounded-full border-2 border-solid border-white"
           />
         ))}
 
