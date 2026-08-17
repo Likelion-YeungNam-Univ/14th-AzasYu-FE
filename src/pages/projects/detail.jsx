@@ -277,38 +277,40 @@ export function ProjectDetailPage() {
     <div className="min-h-svh w-full bg-white">
       <Header {...HEADER_PRESETS.appOnLight} />
 
-      <div className="w-full bg-[#f5f5f5] py-10 lg:min-h-[176px] lg:pt-0 lg:pb-10">
-        <div className="mx-auto flex w-full max-w-[1000px] flex-col items-start gap-6 px-5 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:px-8 lg:pt-[40px]">
-          <p className="line-clamp-2 w-full min-w-0 flex-1 text-34 font-bold break-all text-[#1c232b] lg:text-48">
+      <div className="w-full bg-[#f5f5f5] py-10 lg:min-h-[256px] lg:pt-0 lg:pb-12">
+        <div className="mx-auto flex w-full max-w-[562px] flex-col items-start px-5 sm:px-8 lg:px-8 lg:pt-[48px]">
+          <p className="mb-[16px] w-full break-all line-clamp-3 text-34 font-bold text-[#1c232b] lg:text-48">
             <DroppingChars text={project.name ?? ""} step={22} speed="fast" />
           </p>
 
           <RisingBlock
             delay={(project.name?.length ?? 0) * 22 + 200}
-            className="w-full shrink-0 lg:w-auto"
+            className="w-full"
           >
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-4 lg:justify-end">
+          <div className="flex w-full flex-col items-start gap-8 lg:flex-row lg:items-end lg:justify-between lg:gap-6">
+            <div className="flex flex-col items-start gap-[16px]">
               <button
                 type="button"
                 onClick={handleCopyJoinCode}
                 aria-label={`참여코드 ${project.joinCode} 복사`}
-                className="text-18 flex cursor-pointer items-center gap-[8px] font-medium text-[#858894] transition-opacity duration-150 hover:opacity-70 lg:text-20"
+                className="text-18 flex cursor-pointer items-center gap-[8px] font-medium text-[#858894] lg:text-20"
               >
                 참여코드 {project.joinCode}
                 <Copy className="h-[15px] w-[14px]" />
               </button>
 
               <AvatarStack members={project.members ?? []} />
-
-              <Button
-                size="action"
-                variant="subtle"
-                className="shrink-0"
-                onClick={() => navigate(projectPath("MEETING_NEW", projectId))}
-              >
-                <Plus size={26} />새 회의
-              </Button>
             </div>
+
+            <Button
+              size="action"
+              variant="subtle"
+              className="shrink-0"
+              onClick={() => navigate(projectPath("MEETING_NEW", projectId))}
+            >
+              <Plus size={26} />새 회의
+            </Button>
+          </div>
           </RisingBlock>
         </div>
       </div>
