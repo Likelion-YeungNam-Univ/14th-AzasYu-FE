@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import clockIcon from "@/assets/icons/clock.svg";
 import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
+import { Pagination } from "@/components/pagination";
 import { StateView } from "@/components/states";
 import { Table } from "@/components/ui";
 import {
@@ -57,6 +58,8 @@ const getProjectMeetings = async (project) => {
     return [];
   }
 };
+
+const MEETINGS_PER_PAGE = 8;
 
 const TABLE_COLUMNS = [
   { label: "회의명", width: 260 },
@@ -143,6 +146,15 @@ export function MeetingsPage() {
     href: meetingPath("DETAIL", meeting.projectId, meeting.id),
   }));
 
+  const [page, setPage] = useState(1);
+
+  const totalPages = Math.max(1, Math.ceil(tableRows.length / MEETINGS_PER_PAGE));
+  const currentPage = Math.min(page, totalPages);
+  const pageRows = tableRows.slice(
+    (currentPage - 1) * MEETINGS_PER_PAGE,
+    currentPage * MEETINGS_PER_PAGE,
+  );
+
   return (
     <HeroLayout
       header={<Header {...HEADER_PRESETS.appOnLight} />}
@@ -190,7 +202,16 @@ export function MeetingsPage() {
               }
             />
           ) : (
-            <Table columns={TABLE_COLUMNS} rows={tableRows} />
+            <>
+              <Table columns={TABLE_COLUMNS} rows={pageRows} />
+
+              <Pagination
+                page={currentPage}
+                totalPages={totalPages}
+                onChange={setPage}
+                className="mt-10 lg:mt-[56px]"
+              />
+            </>
           )}
         </div>
       </div>
