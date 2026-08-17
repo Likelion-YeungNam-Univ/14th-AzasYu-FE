@@ -9,6 +9,15 @@ export function Pagination({ page, totalPages, onChange, className }) {
 
   const pages = Array.from({ length: totalPages }, (_, index) => index + 1);
 
+  const goTo = (next) => {
+    if (next === page) return;
+
+    // 목록이 바뀌면서 문서 높이가 줄면 부드러운 스크롤이 중간에 끊긴다
+    window.scrollTo({ top: 0, behavior: "auto" });
+
+    onChange(next);
+  };
+
   return (
     <nav
       aria-label="페이지"
@@ -16,7 +25,7 @@ export function Pagination({ page, totalPages, onChange, className }) {
     >
       <button
         type="button"
-        onClick={() => onChange(page - 1)}
+        onClick={() => goTo(page - 1)}
         disabled={page === 1}
         aria-label="이전 페이지"
         className={ARROW}
@@ -28,7 +37,7 @@ export function Pagination({ page, totalPages, onChange, className }) {
         <button
           key={value}
           type="button"
-          onClick={() => onChange(value)}
+          onClick={() => goTo(value)}
           aria-current={value === page ? "page" : undefined}
           className={cn(
             "text-16 flex size-[36px] shrink-0 cursor-pointer items-center justify-center rounded-[8px] font-medium transition-colors duration-150",
@@ -43,7 +52,7 @@ export function Pagination({ page, totalPages, onChange, className }) {
 
       <button
         type="button"
-        onClick={() => onChange(page + 1)}
+        onClick={() => goTo(page + 1)}
         disabled={page === totalPages}
         aria-label="다음 페이지"
         className={ARROW}
