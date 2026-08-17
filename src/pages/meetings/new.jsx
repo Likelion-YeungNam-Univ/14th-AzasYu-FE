@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
+import calendarIcon from "@/assets/icons/calendar.svg";
+import clockIcon from "@/assets/icons/clock.svg";
 import { Header, Hero, HeroLayout } from "@/components/layout";
 import {
   AgendaList,
@@ -23,7 +25,15 @@ import {
 const NEW_COLUMN = "w-full max-w-[562px] md:max-w-[620px] lg:max-w-[562px]";
 
 const DATE_FIELD =
-  "text-16 h-[40px] cursor-pointer rounded-[8px] border border-solid border-[#b8bccc] bg-white px-[16px] py-[8px] font-medium outline-none transition-colors duration-150 focus:border-[#0075d3]";
+  "text-18 h-[56px] w-full cursor-pointer appearance-none rounded-[8px] border border-solid border-[#b8bccc] bg-white pr-[44px] pl-[16px] font-medium outline-none transition-colors duration-150 hover:border-[#858894] focus:border-[#0075d3]";
+
+const PICKER_FIELD = cn(
+  DATE_FIELD,
+  "[&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:m-0 [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0",
+);
+
+const FIELD_ICON =
+  "pointer-events-none absolute inset-y-0 right-[16px] flex items-center";
 
 const DATE_FIELD_TEXT = {
   filled: "text-[#1c232b]",
@@ -31,7 +41,7 @@ const DATE_FIELD_TEXT = {
 };
 
 const HINT_TEXT =
-  "text-16 pointer-events-none absolute inset-y-0 left-0 flex items-center px-[16px] font-medium text-[#b8bccc]";
+  "text-18 pointer-events-none absolute inset-y-0 left-0 flex items-center px-[16px] font-medium text-[#b8bccc]";
 
 const pad = (value) => String(value).padStart(2, "0");
 
@@ -175,7 +185,12 @@ export function MeetingNewPage() {
       return;
     }
 
-    if (new Date(`${meetingDate}T${startTime}`).getTime() < Date.now()) {
+    const currentMinute = new Date();
+    currentMinute.setSeconds(0, 0);
+
+    if (
+      new Date(`${meetingDate}T${startTime}`).getTime() < currentMinute.getTime()
+    ) {
       alert("지난 일시는 선택할 수 없어요. 회의 날짜와 시각을 다시 확인해주세요.");
       return;
     }
@@ -319,15 +334,23 @@ export function MeetingNewPage() {
                     min={now.date}
                     onChange={(e) => setMeetingDate(e.target.value)}
                     className={cn(
-                      DATE_FIELD,
+                      PICKER_FIELD,
                       DATE_FIELD_TEXT[meetingDate ? "filled" : "empty"],
-                      "w-full",
                     )}
                   />
 
                   {!meetingDate && (
                     <span className={HINT_TEXT}>{now.dateHint}</span>
                   )}
+
+                  <span className={FIELD_ICON}>
+                    <img
+                      src={calendarIcon}
+                      alt=""
+                      aria-hidden
+                      className="block size-[20px] max-w-none"
+                    />
+                  </span>
                 </span>
 
                 <span className="relative inline-flex w-[calc(50%-6px)] sm:w-[163px]">
@@ -338,15 +361,23 @@ export function MeetingNewPage() {
                     min={meetingDate === now.date ? now.time : undefined}
                     onChange={(e) => setStartTime(e.target.value)}
                     className={cn(
-                      DATE_FIELD,
+                      PICKER_FIELD,
                       DATE_FIELD_TEXT[startTime ? "filled" : "empty"],
-                      "w-full",
                     )}
                   />
 
                   {!startTime && (
                     <span className={HINT_TEXT}>{now.timeHint}</span>
                   )}
+
+                  <span className={FIELD_ICON}>
+                    <img
+                      src={clockIcon}
+                      alt=""
+                      aria-hidden
+                      className="block size-[20px] max-w-none"
+                    />
+                  </span>
                 </span>
 
                 <select
