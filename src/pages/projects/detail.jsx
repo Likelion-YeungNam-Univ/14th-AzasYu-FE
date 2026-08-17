@@ -277,8 +277,8 @@ export function ProjectDetailPage() {
     <div className="min-h-svh w-full bg-white">
       <Header {...HEADER_PRESETS.appOnLight} omitProjectNav />
 
-      <div className="w-full bg-[#f5f5f5] py-10 lg:min-h-[300px] lg:pt-0 lg:pb-12">
-        <div className="mx-auto flex w-full max-w-[562px] flex-col items-start px-5 sm:px-8 lg:px-8 lg:pt-[70px]">
+      <div className="w-full bg-[#f5f5f5] py-10 lg:min-h-[256px] lg:pt-0 lg:pb-12">
+        <div className="mx-auto flex w-full max-w-[562px] flex-col items-start px-5 sm:px-8 lg:px-8 lg:pt-[48px]">
           <p className="mb-[16px] w-full break-all line-clamp-3 text-34 font-bold text-[#1c232b] lg:text-48">
             <DroppingChars text={project.name ?? ""} step={22} speed="fast" />
           </p>
@@ -318,7 +318,7 @@ export function ProjectDetailPage() {
       {meetings.length > 0 ? (
         <div
           style={{ animationDelay: "700ms" }}
-          className="animate-lift-in mx-auto flex w-full flex-col items-center overflow-x-clip px-5 pt-20 pb-20 sm:px-8 lg:px-8 lg:pt-[120px] lg:pb-[150px]"
+          className="animate-lift-in mx-auto flex w-full flex-col items-center overflow-x-clip px-5 pt-12 pb-20 sm:px-8 lg:px-8 lg:pt-[40px] lg:pb-[100px]"
         >
           <div
             ref={carouselRef}
