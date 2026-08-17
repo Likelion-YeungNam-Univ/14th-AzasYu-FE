@@ -58,9 +58,10 @@ const CARD_SHADOW = {
   meeting: "shadow-[10px_10px_30px_0px_rgba(0,0,0,0.06)]",
 };
 
-export function Card({ shadow = "soft", className, children }) {
+export function Card({ shadow = "soft", className, style, children }) {
   return (
     <div
+      style={style}
       className={cn(
         "relative overflow-clip rounded-[30px] bg-white",
         CARD_SHADOW[shadow],

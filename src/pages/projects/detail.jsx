@@ -337,7 +337,10 @@ export function ProjectDetailPage() {
       </div>
 
       {meetings.length > 0 ? (
-        <div className="mx-auto flex w-full flex-col items-center overflow-x-clip px-5 pt-20 pb-20 sm:px-8 lg:px-8 lg:pt-[120px] lg:pb-[150px]">
+        <div
+          style={{ animationDelay: "700ms" }}
+          className="animate-lift-in mx-auto flex w-full flex-col items-center overflow-x-clip px-5 pt-20 pb-20 sm:px-8 lg:px-8 lg:pt-[120px] lg:pb-[150px]"
+        >
           <div
             ref={carouselRef}
             className="relative flex min-h-[550px] w-full max-w-[1000px] items-center justify-center overflow-visible"
