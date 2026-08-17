@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router";
 import emptyMeetings from "@/assets/icons/empty-meetings.svg";
 import { Copy, Plus } from "@/components/icons";
@@ -151,9 +151,71 @@ export function ProjectDetailPage() {
   const [currentUserId, setCurrentUserId] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
 
+  const carouselRef = useRef(null);
+  const activeIndexRef = useRef(0);
+  const wheelLockRef = useRef(false);
+
   useEffect(() => {
     setCurrentUserId(getCurrentUserId());
   }, []);
+
+  useEffect(() => {
+    activeIndexRef.current = activeIndex;
+  }, [activeIndex]);
+
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    const lastIndex = meetings.length - 1;
+
+    if (!carousel || lastIndex < 1) {
+      return;
+    }
+
+    let unlockTimer = 0;
+    let lastMovedAt = 0;
+
+    const handleWheel = (event) => {
+      const delta =
+        Math.abs(event.deltaX) > Math.abs(event.deltaY)
+          ? event.deltaX
+          : event.deltaY;
+
+      if (!delta) {
+        return;
+      }
+
+      const direction = delta > 0 ? 1 : -1;
+      const nextIndex = activeIndexRef.current + direction;
+
+      if (nextIndex < 0 || nextIndex > lastIndex) {
+        return;
+      }
+
+      event.preventDefault();
+
+      window.clearTimeout(unlockTimer);
+      unlockTimer = window.setTimeout(() => {
+        wheelLockRef.current = false;
+      }, 120);
+
+      if (wheelLockRef.current && event.timeStamp - lastMovedAt < 500) {
+        return;
+      }
+
+      wheelLockRef.current = true;
+      lastMovedAt = event.timeStamp;
+      activeIndexRef.current = nextIndex;
+      setActiveIndex(nextIndex);
+    };
+
+    carousel.addEventListener("wheel", handleWheel, { passive: false });
+
+    return () => {
+      carousel.removeEventListener("wheel", handleWheel);
+      window.clearTimeout(unlockTimer);
+      wheelLockRef.current = false;
+    };
+  }, [meetings.length]);
 
   useEffect(() => {
     const fetchProjectDetail = async () => {
@@ -278,8 +340,11 @@ export function ProjectDetailPage() {
       </div>
 
       {meetings.length > 0 ? (
-        <div className="mx-auto flex w-full flex-col items-center px-5 pt-20 pb-20 sm:px-8 lg:px-0 lg:pt-[120px] lg:pb-[150px]">
-          <div className="relative flex min-h-[550px] w-full max-w-[1000px] items-center justify-center overflow-visible">
+        <div className="mx-auto flex w-full flex-col items-center overflow-x-clip px-5 pt-20 pb-20 sm:px-8 lg:px-0 lg:pt-[120px] lg:pb-[150px]">
+          <div
+            ref={carouselRef}
+            className="relative flex min-h-[550px] w-full max-w-[1000px] items-center justify-center overflow-visible"
+          >
             {meetings.map((meeting, index) => {
               const diff = index - activeIndex;
               const absDiff = Math.abs(diff);
