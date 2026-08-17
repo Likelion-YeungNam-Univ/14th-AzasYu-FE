@@ -278,7 +278,7 @@ export function ProjectDetailPage() {
       <Header {...HEADER_PRESETS.appOnLight} />
 
       <div className="relative z-20 w-full bg-[#f5f5f5] py-10 lg:min-h-[256px] lg:pt-0 lg:pb-12">
-        <div className="mx-auto flex w-full max-w-[562px] flex-col items-start px-5 sm:px-8 lg:px-8 lg:pt-[48px]">
+        <div className="mx-auto flex w-full max-w-[600px] flex-col items-start px-5 sm:px-8 lg:px-0 lg:pt-[48px]">
           <p className="mb-[16px] w-full break-all line-clamp-3 text-34 font-bold text-[#1c232b] lg:text-48">
             <DroppingChars text={project.name ?? ""} step={22} speed="fast" />
           </p>
