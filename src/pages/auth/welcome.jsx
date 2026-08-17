@@ -2,6 +2,7 @@ import { useNavigate } from "react-router";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import welcomeRings from "@/assets/welcome-rings.jpg";
 import { Header } from "@/components/layout";
+import { DroppingChars, RisingWords } from "@/components/motion";
 import { API_BASE_URL, cn, HEADER_PRESETS, PATHS } from "@/lib";
 
 const REMEMBERED_EMAIL_KEY = "rememberedEmail";
@@ -9,38 +10,6 @@ const REMEMBERED_EMAIL_KEY = "rememberedEmail";
 const INTRO_SEEN_KEY = "welcomeIntroSeen";
 
 const LANDING_TEXT = "text-[#1c232b]";
-
-function DroppingChars({ text, delay = 0, step = 45, paused = false }) {
-  return [...text].map((char, index) => (
-    <span
-      key={`${char}-${index}`}
-      className="animate-drop-in inline-block whitespace-pre"
-      style={{
-        animationDelay: `${delay + index * step}ms`,
-        animationPlayState: paused ? "paused" : "running",
-      }}
-    >
-      {char}
-    </span>
-  ));
-}
-
-function RisingWords({ text, delay = 0, step = 70, paused = false }) {
-  const words = text.split(" ");
-
-  return words.map((word, index) => (
-    <span
-      key={`${word}-${index}`}
-      className="animate-rise-in inline-block whitespace-pre"
-      style={{
-        animationDelay: `${delay + index * step}ms`,
-        animationPlayState: paused ? "paused" : "running",
-      }}
-    >
-      {index === words.length - 1 ? word : `${word} `}
-    </span>
-  ));
-}
 
 const LANDING_GRADIENT =
   "linear-gradient(-90deg, rgb(255,255,255) 0%, rgba(255,255,255,0) 51.923%, rgb(255,255,255) 100%)";

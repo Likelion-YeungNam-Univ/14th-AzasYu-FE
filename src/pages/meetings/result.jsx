@@ -4,6 +4,7 @@ import pencilIcon from "@/assets/icons/pencil.svg";
 import warningIcon from "@/assets/icons/warning-triangle.svg";
 import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
 import { StateView } from "@/components/states";
+import { RevealOnScroll } from "@/components/ui";
 import {
   API_BASE_URL,
   HEADER_PRESETS,
@@ -238,7 +239,7 @@ export function MeetingResultPage() {
         </Section>
       </div>
 
-      <div className="mt-20 w-full bg-[#fef1d8] py-12 lg:mt-[80px] lg:py-[79px]">
+      <RevealOnScroll className="mt-20 w-full bg-[#fef1d8] py-12 lg:mt-[80px] lg:py-[79px]">
         <div className={`${RESULT_CONTAINER} flex flex-col gap-[28px]`}>
           <div className="flex items-center gap-[14px]">
             <img
@@ -274,7 +275,7 @@ export function MeetingResultPage() {
             ))}
           </ol>
         </div>
-      </div>
+      </RevealOnScroll>
 
       <Footer />
     </HeroLayout>

@@ -49,6 +49,8 @@
 
   --animate-rise-in: rise-in 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
   --animate-drop-in: drop-in 1.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-drop-in-fast: drop-in 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-rise-in-fast: rise-in 0.375s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @keyframes rise-in {

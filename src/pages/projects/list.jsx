@@ -216,7 +216,7 @@ export function ProjectsPage() {
             onClick={() => navigate(PATHS.PROJECT_NEW)}
             className="flex items-center gap-[10px] rounded-[12px] px-6 py-4 text-18 font-bold text-[#4263eb] sm:px-8 sm:text-20"
           >
-            <Plus size={24} />
+            <Plus size={28} />
             새 프로젝트 만들기
           </Button>
         </div>
@@ -256,7 +256,9 @@ export function ProjectsPage() {
                 placeholder="참여코드를 입력하세요."
                 value={joinCode}
                 onChange={(e) => {
-                  setJoinCode(e.target.value);
+                  setJoinCode(
+                    e.target.value.replace(/[^A-Za-z0-9]/g, "").toUpperCase(),
+                  );
                   setJoinError("");
                 }}
                 wrapperClassName="w-full"

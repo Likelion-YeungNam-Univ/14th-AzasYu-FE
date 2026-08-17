@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router";
 import emptyMeetings from "@/assets/icons/empty-meetings.svg";
 import { Copy, Plus } from "@/components/icons";
 import { Header } from "@/components/layout";
+import { DroppingChars, RisingBlock } from "@/components/motion";
 import { StateView } from "@/components/states";
 import { Toast } from "@/components/toast";
 import { AvatarStack, Button, MeetingCard } from "@/components/ui";
@@ -300,9 +301,13 @@ export function ProjectDetailPage() {
       <div className="w-full bg-[#f5f5f5] py-10 lg:min-h-[300px] lg:pt-0 lg:pb-12">
         <div className="mx-auto flex w-full max-w-[562px] flex-col items-start px-5 sm:px-8 lg:px-8 lg:pt-[70px]">
           <p className="mb-[16px] w-full break-all line-clamp-3 text-34 font-bold text-[#1c232b] lg:text-48">
-            {project.name}
+            <DroppingChars text={project.name ?? ""} step={22} speed="fast" />
           </p>
 
+          <RisingBlock
+            delay={(project.name?.length ?? 0) * 22 + 200}
+            className="w-full"
+          >
           <div className="flex w-full flex-col items-start gap-8 lg:flex-row lg:items-end lg:justify-between lg:gap-6">
             <div className="flex flex-col items-start gap-[16px]">
               <button
@@ -324,9 +329,10 @@ export function ProjectDetailPage() {
               className="shrink-0"
               onClick={() => navigate(projectPath("MEETING_NEW", projectId))}
             >
-              <Plus />새 회의
+              <Plus size={26} />새 회의
             </Button>
           </div>
+          </RisingBlock>
         </div>
       </div>
 

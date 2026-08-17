@@ -57,6 +57,8 @@ function UserMessage({ children, tone = "primary" }) {
   );
 }
 
+const FIRST_SCROLL_DELAY_MS = 1600;
+
 export function MeetingInterviewPage() {
   const { projectId = "", meetingId = "" } = useParams();
   const navigate = useNavigate();
@@ -81,9 +83,39 @@ export function MeetingInterviewPage() {
   const submittedRef = useRef(false);
 
   const messagesEndRef = useRef(null);
+  const mountedAtRef = useRef(0);
+
+  if (mountedAtRef.current === 0) {
+    mountedAtRef.current = performance.now();
+  }
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    const target = messagesEndRef.current;
+
+    if (!target) return;
+
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    const remaining = reduced
+      ? 0
+      : Math.max(
+          0,
+          FIRST_SCROLL_DELAY_MS - (performance.now() - mountedAtRef.current),
+        );
+
+    if (remaining === 0) {
+      target.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+
+    const timer = window.setTimeout(
+      () => target.scrollIntoView({ behavior: "smooth" }),
+      remaining,
+    );
+
+    return () => window.clearTimeout(timer);
   }, [answered, questions, status]);
 
   const intro = buildIntro(localStorage.getItem("userName") ?? "");
