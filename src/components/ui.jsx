@@ -36,7 +36,12 @@ export function Button({
     <button
       type="button"
       className={cn(
-        "flex cursor-pointer items-center justify-center overflow-clip whitespace-nowrap disabled:cursor-not-allowed",
+        "flex cursor-pointer items-center justify-center overflow-clip whitespace-nowrap",
+        "transition-[translate,box-shadow,opacity] duration-150",
+        "enabled:hover:-translate-y-px enabled:hover:shadow-[0_4px_10px_0_rgba(0,0,0,0.12)]",
+        "enabled:active:translate-y-0 enabled:active:shadow-none",
+        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1c232b]",
+        "disabled:cursor-not-allowed disabled:opacity-40",
         BUTTON_VARIANT[variant],
         BUTTON_SIZE[size],
         className,
@@ -88,7 +93,7 @@ const FIELD_BOX = {
 };
 
 const FIELD_BASE =
-  "text-20 w-full border border-solid px-[16px] py-[14px] font-medium outline-none";
+  "text-20 w-full border border-solid px-[16px] py-[14px] font-medium outline-none transition-colors duration-150 focus:border-[#0075d3]";
 
 export function FieldLabel({
   children,
@@ -323,7 +328,10 @@ export function Table({ columns, rows, className }) {
           {rows.map((row) => (
             <div
               key={row.id}
-              className="text-20 relative flex h-[76px] items-center border-b-[0.5px] border-solid border-[#b8bccc] px-6 font-bold text-[#1c232b] sm:px-10 lg:px-[42px]"
+              className={cn(
+                "text-20 relative flex h-[76px] items-center border-b-[0.5px] border-solid border-[#b8bccc] px-6 font-bold text-[#1c232b] sm:px-10 lg:px-[42px]",
+                row.href && "transition-colors duration-150 hover:bg-[#f5f5f5]",
+              )}
             >
               {row.cells.map((cell, j) => (
                 <div
@@ -369,10 +377,14 @@ export function ProjectCard({ project, className }) {
   return (
     <Link
       to={projectPath("DETAIL", project.id)}
-      className={cn("flex flex-col", className)}
+      className={cn(
+        "group flex flex-col rounded-[14px] transition-[translate] duration-150 hover:-translate-y-[2px]",
+        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1c232b]",
+        className,
+      )}
     >
       <div
-        className="flex aspect-[470/275] w-full items-start rounded-[14px] px-[18px] py-[14px]"
+        className="flex aspect-[470/275] w-full items-start rounded-[14px] px-[18px] py-[14px] transition-shadow duration-150 group-hover:shadow-[0_10px_24px_0_rgba(0,0,0,0.14)]"
         style={{ backgroundImage: gradient }}
       >
         {typeof project.meetingCount === "number" && (
