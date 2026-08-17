@@ -57,7 +57,7 @@ function UserMessage({ children, tone = "primary" }) {
   );
 }
 
-const FIRST_SCROLL_DELAY_MS = 2400;
+const FIRST_SCROLL_DELAY_MS = 1600;
 
 export function MeetingInterviewPage() {
   const { projectId = "", meetingId = "" } = useParams();
