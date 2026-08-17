@@ -1,33 +1,41 @@
 import { useNavigate } from "react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import welcomeRings from "@/assets/welcome-rings.jpg";
 import { Header } from "@/components/layout";
-import { API_BASE_URL, HEADER_PRESETS, PATHS } from "@/lib";
+import { API_BASE_URL, cn, HEADER_PRESETS, PATHS } from "@/lib";
 
 const REMEMBERED_EMAIL_KEY = "rememberedEmail";
 
+const INTRO_SEEN_KEY = "welcomeIntroSeen";
+
 const LANDING_TEXT = "text-[#1c232b]";
 
-function DroppingChars({ text, delay = 0, step = 45 }) {
+function DroppingChars({ text, delay = 0, step = 45, paused = false }) {
   return [...text].map((char, index) => (
     <span
       key={`${char}-${index}`}
       className="animate-drop-in inline-block whitespace-pre"
-      style={{ animationDelay: `${delay + index * step}ms` }}
+      style={{
+        animationDelay: `${delay + index * step}ms`,
+        animationPlayState: paused ? "paused" : "running",
+      }}
     >
       {char}
     </span>
   ));
 }
 
-function RisingWords({ text, delay = 0, step = 70 }) {
+function RisingWords({ text, delay = 0, step = 70, paused = false }) {
   const words = text.split(" ");
 
   return words.map((word, index) => (
     <span
       key={`${word}-${index}`}
       className="animate-rise-in inline-block whitespace-pre"
-      style={{ animationDelay: `${delay + index * step}ms` }}
+      style={{
+        animationDelay: `${delay + index * step}ms`,
+        animationPlayState: paused ? "paused" : "running",
+      }}
     >
       {index === words.length - 1 ? word : `${word} `}
     </span>
@@ -56,6 +64,83 @@ export function WelcomePage() {
 
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+
+  const introRef = useRef(null);
+  const [introShift, setIntroShift] = useState(null);
+  const [introDone, setIntroDone] = useState(false);
+
+  useLayoutEffect(() => {
+    const target = introRef.current;
+
+    if (!target) return;
+
+    if (
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      sessionStorage.getItem(INTRO_SEEN_KEY) === "1"
+    ) {
+      setIntroDone(true);
+      return;
+    }
+
+    let cancelled = false;
+    let previous = null;
+    let frameId = 0;
+    let attemptTimer = 0;
+    let settleTimer = 0;
+
+    // 프레임마다 재는 것이 정확하지만, 숨은 탭에서는 rAF가 멈추므로 타이머도 같이 건다
+    const schedule = () => {
+      window.cancelAnimationFrame(frameId);
+      window.clearTimeout(attemptTimer);
+
+      frameId = window.requestAnimationFrame(attempt);
+      attemptTimer = window.setTimeout(attempt, 300);
+    };
+
+    const attempt = () => {
+      if (cancelled) return;
+
+      window.cancelAnimationFrame(frameId);
+      window.clearTimeout(attemptTimer);
+
+      const box = target.getBoundingClientRect();
+
+      const current = {
+        dx: window.innerWidth / 2 - (box.left + box.width / 2),
+        dy: window.innerHeight / 2 - (box.top + box.height / 2),
+      };
+
+      const stable =
+        previous !== null &&
+        window.getComputedStyle(target).maxWidth !== "none" &&
+        Math.abs(previous.dx - current.dx) < 0.5 &&
+        Math.abs(previous.dy - current.dy) < 0.5;
+
+      if (!stable) {
+        previous = current;
+        schedule();
+        return;
+      }
+
+      sessionStorage.setItem(INTRO_SEEN_KEY, "1");
+
+      setIntroShift(current);
+
+      settleTimer = window.setTimeout(() => {
+        setIntroShift(null);
+        setIntroDone(true);
+      }, 2700);
+    };
+
+    schedule();
+
+    return () => {
+      cancelled = true;
+      window.cancelAnimationFrame(frameId);
+      window.clearTimeout(attemptTimer);
+      window.clearTimeout(settleTimer);
+    };
+  }, []);
 
   useEffect(() => {
     setError("");
@@ -109,6 +194,8 @@ export function WelcomePage() {
     }
   };
 
+  const introReady = introShift !== null || introDone;
+
   const canSubmit = email.trim() !== "" && password.trim() !== "";
 
   return (
@@ -127,17 +214,38 @@ export function WelcomePage() {
       </div>
 
       <div className="relative min-h-svh w-full">
-        <div className="absolute inset-x-0 top-0 z-10">
+        <div
+          inert={!introDone}
+          className={cn(
+            "absolute inset-x-0 top-0 z-10 transition-[opacity,translate] duration-[800ms] ease-out",
+            introDone ? "translate-y-0 opacity-100" : "-translate-y-[20px] opacity-0",
+          )}
+        >
           <Header {...HEADER_PRESETS.landing} />
         </div>
 
         <div className="flex min-h-svh items-center py-28 xl:py-0">
           <div className="mx-auto flex w-full max-w-[1920px] flex-col items-center gap-14 pr-5 pl-5 sm:pr-8 sm:pl-8 xl:flex-row xl:items-center xl:justify-between xl:gap-16 xl:pr-[17.135%] xl:pl-[10.781%]">
             <div
-              className={`${LANDING_TEXT} @container flex w-full max-w-[680px] flex-col gap-[16px] text-center xl:-translate-y-[43px] xl:text-left`}
+              ref={introRef}
+              style={{
+                translate: introShift
+                  ? `${introShift.dx}px ${introShift.dy}px`
+                  : undefined,
+              }}
+              className={cn(
+                "w-full max-w-[680px] transition-[translate] duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)]",
+                !introReady && "invisible",
+              )}
+            >
+            <div
+              className={`${LANDING_TEXT} @container flex w-full flex-col gap-[16px] text-center xl:-translate-y-[43px] xl:text-left`}
             >
               <h1 className="text-[clamp(12px,7.1cqw,48px)] font-bold whitespace-nowrap">
-                <DroppingChars text="우리... 같은 얘기하고 있는 거 맞죠?" />
+                <DroppingChars
+                  text="우리... 같은 얘기하고 있는 거 맞죠?"
+                  paused={!introReady}
+                />
               </h1>
 
               <p className="text-16 font-semibold sm:text-18 lg:text-22">
@@ -145,11 +253,24 @@ export function WelcomePage() {
                   text="모두가 같은 의미로 이해할 수 있도록, 협업의 시작"
                   delay={1600}
                   step={45}
+                  paused={!introReady}
                 />
               </p>
             </div>
+            </div>
 
-            <div className="w-full max-w-[501px] shrink-0 xl:translate-y-[7px]">
+            <div
+              inert={!introDone}
+              className="w-full max-w-[501px] shrink-0 xl:translate-y-[7px]"
+            >
+              <div
+                className={cn(
+                  "transition-[opacity,translate] duration-[800ms] ease-out",
+                  introDone
+                    ? "translate-y-0 opacity-100"
+                    : "translate-y-[24px] opacity-0",
+                )}
+              >
               <div className="flex flex-col items-center gap-[9px]">
                 <h2
                   className={`${LANDING_TEXT} text-28 font-semibold sm:text-34 lg:text-48`}
@@ -254,6 +375,7 @@ export function WelcomePage() {
               >
                 회원가입
               </button>
+              </div>
             </div>
           </div>
         </div>
