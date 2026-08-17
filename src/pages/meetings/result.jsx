@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import pencilIcon from "@/assets/icons/pencil.svg";
 import warningIcon from "@/assets/icons/warning-triangle.svg";
 import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
 import { StateView } from "@/components/states";
 import { RevealOnScroll } from "@/components/motion";
+import { Button } from "@/components/ui";
 import {
   API_BASE_URL,
   HEADER_PRESETS,
   MEETING_TITLE,
+  PATHS,
+  projectPath,
   toUserMessage,
 } from "@/lib";
 
@@ -113,7 +116,7 @@ function Section({ title, children }) {
 }
 
 export function MeetingResultPage() {
-  const { meetingId = "" } = useParams();
+  const { projectId = "", meetingId = "" } = useParams();
 
   const [result, setResult] = useState(null);
   const [meeting, setMeeting] = useState(null);
@@ -173,22 +176,40 @@ export function MeetingResultPage() {
     return <StateView size="screen" title="회의 분석 결과를 불러오는 중입니다" />;
   }
 
-  if (error || !result) {
-    return (
-      <StateView
-        variant="error"
-        size="screen"
-        title={error || "회의 분석 결과가 없습니다."}
-      />
-    );
-  }
+  if (error || !result || result.status !== "GENERATED") {
+    const missing = Boolean(error) || !result;
 
-  if (result.status !== "GENERATED") {
     return (
       <StateView
         variant="error"
         size="screen"
-        title={result.failureMessage || "회의 분석에 실패했습니다."}
+        title={
+          missing
+            ? "회의를 찾을 수 없습니다"
+            : (result.failureMessage ?? "아직 회의 분석 결과가 없어요")
+        }
+        description={
+          missing
+            ? "아직 회의록이 올라오지 않았거나, 삭제된 회의일 수 있어요."
+            : "회의록을 올리면 AI가 분석해드려요."
+        }
+        action={
+          <div className="flex flex-wrap items-center justify-center gap-[12px]">
+            {projectId && (
+              <Link to={projectPath("DETAIL", projectId)}>
+                <Button size="action" variant="subtle">
+                  프로젝트로 이동하기
+                </Button>
+              </Link>
+            )}
+
+            <Link to={PATHS.PROJECTS}>
+              <Button size="action" variant="secondary">
+                홈으로 가기
+              </Button>
+            </Link>
+          </div>
+        }
       />
     );
   }
