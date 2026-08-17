@@ -196,9 +196,17 @@ export function MeetingCard({ projectId, meeting, currentUserId }) {
     >
       <div className="flex w-full flex-col gap-[30px]">
         <div className="flex flex-col gap-[4px]">
-          <p className="text-28 line-clamp-2 font-bold break-all text-[#1c232b] lg:text-34">
-            {title}
-          </p>
+          <div className="flex items-start justify-between gap-[8px]">
+            <p className="text-28 line-clamp-2 font-bold break-all text-[#1c232b] lg:text-34">
+              {title}
+            </p>
+
+            {isParticipant && (
+              <span className="mt-[6px] shrink-0 rounded-[4px] bg-[#def4ec] px-[6px] py-[2px] text-12 font-semibold text-[#0d7a4d]">
+                참여중
+              </span>
+            )}
+          </div>
 
           <p className="text-16 font-medium text-[#858894]">
             {formatMeetingDate(displayDate)}

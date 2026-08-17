@@ -62,9 +62,9 @@ const getProjectMeetings = async (project) => {
 const MEETINGS_PER_PAGE = 8;
 
 const TABLE_COLUMNS = [
-  { label: "회의명", width: 260 },
-  { label: "프로젝트", width: 280 },
-  { label: "주요 안건", width: 530 },
+  { label: "회의명", width: 310 },
+  { label: "프로젝트", width: 250 },
+  { label: "주요 안건", width: 510 },
   { label: "날짜", width: 180 },
 ];
 
@@ -125,7 +125,14 @@ export function MeetingsPage() {
     label: `${meeting.title} 회의 결과 보기`,
 
     cells: [
-      meeting.title,
+      <span key="title" className="flex items-center justify-between overflow-hidden">
+        <span className="truncate">{meeting.title}</span>
+        {meeting.participating && (
+          <span className="shrink-0 rounded-[4px] bg-[#def4ec] px-[6px] py-[2px] text-12 font-semibold text-[#0d7a4d]">
+            참여중
+          </span>
+        )}
+      </span>,
 
       <Link
         key="project"
@@ -135,7 +142,6 @@ export function MeetingsPage() {
         {meeting.projectName || "프로젝트"}
       </Link>,
 
-      // 목록 API에 안건이 없으면 회의 목적으로 대신 채운다
       meeting.agendas?.length
         ? meeting.agendas.map((agenda) => agenda.content ?? agenda).join(", ")
         : meeting.purpose,
