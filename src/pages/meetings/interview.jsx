@@ -331,7 +331,7 @@ export function MeetingInterviewPage() {
       <div className="flex w-full justify-center px-5 pt-12 pb-16 sm:px-8 lg:pt-[60px] lg:pb-[84px]">
         <Card
           shadow="meeting"
-          style={{ animationDelay: "1200ms" }}
+          style={{ animationDelay: "700ms" }}
           className="animate-lift-in w-full max-w-[878px] px-6 py-8 sm:px-10 lg:px-[48px] lg:py-[40px]"
         >
           <div className="flex w-full flex-col gap-[24px]">

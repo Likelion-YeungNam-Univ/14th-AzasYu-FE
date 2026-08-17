@@ -225,7 +225,7 @@ export function MeetingSummaryPage() {
       }
     >
       <div
-        style={{ animationDelay: "1200ms" }}
+        style={{ animationDelay: "700ms" }}
         className={`animate-lift-in ${SUMMARY_CONTAINER} mt-10 flex flex-col gap-[36px] pb-20 lg:mt-[68.62px] lg:gap-[60px] lg:pb-[150px]`}
       >
         {loading ? (

@@ -187,7 +187,7 @@ export function MeetingUploadPage() {
       <div className="flex w-full justify-center px-5 pt-12 pb-16 sm:px-8 lg:pt-[60px] lg:pb-[97px]">
         <Card
           shadow="meeting"
-          style={{ animationDelay: "1200ms" }}
+          style={{ animationDelay: "700ms" }}
           className="animate-lift-in w-full max-w-[878px] px-6 py-10 sm:px-10 lg:px-[40px] lg:py-[99px]"
         >
           <div className="flex w-full flex-col items-center gap-[20px]">

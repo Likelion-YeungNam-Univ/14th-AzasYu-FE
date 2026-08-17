@@ -210,7 +210,7 @@ export function ProjectsPage() {
       }
     >
       <div className="mx-auto w-full max-w-[1460px] px-5 pb-20 sm:px-8 lg:px-8 xl:px-12 lg:pb-[151px]">
-        <div style={{ animationDelay: "1200ms" }}
+        <div style={{ animationDelay: "700ms" }}
           className="animate-lift-in mt-10 flex lg:mt-[111px]">
           <Button
             variant="subtle"
@@ -231,8 +231,8 @@ export function ProjectsPage() {
             {projects.map((project, index) => (
               <RevealOnScroll
                 key={project.id}
-                after={1200}
-                delay={(index % 3) * 150}
+                after={700}
+                delay={(index % 3) * 90}
               >
                 <ProjectCard project={project} />
               </RevealOnScroll>
