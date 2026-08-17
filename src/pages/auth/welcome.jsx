@@ -8,6 +8,20 @@ const REMEMBERED_EMAIL_KEY = "rememberedEmail";
 
 const LANDING_TEXT = "text-[#1c232b]";
 
+function RisingWords({ text, delay = 0, step = 70 }) {
+  const words = text.split(" ");
+
+  return words.map((word, index) => (
+    <span
+      key={`${word}-${index}`}
+      className="animate-rise-in inline-block whitespace-pre"
+      style={{ animationDelay: `${delay + index * step}ms` }}
+    >
+      {index === words.length - 1 ? word : `${word} `}
+    </span>
+  ));
+}
+
 const LANDING_GRADIENT =
   "linear-gradient(-90deg, rgb(255,255,255) 0%, rgba(255,255,255,0) 51.923%, rgb(255,255,255) 100%)";
 
@@ -111,11 +125,15 @@ export function WelcomePage() {
               className={`${LANDING_TEXT} flex w-full max-w-[634px] flex-col gap-[16px] text-center lg:-translate-y-[43px] lg:text-left`}
             >
               <h1 className="text-28 font-bold sm:text-34 lg:text-48">
-                우리... 같은 얘기하고 있는 거 맞죠?
+                <RisingWords text="우리... 같은 얘기하고 있는 거 맞죠?" />
               </h1>
 
               <p className="text-16 font-semibold sm:text-18 lg:text-22">
-                모두가 같은 의미로 이해할 수 있도록, 협업의 시작
+                <RisingWords
+                  text="모두가 같은 의미로 이해할 수 있도록, 협업의 시작"
+                  delay={420}
+                  step={45}
+                />
               </p>
             </div>
 

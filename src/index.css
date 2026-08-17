@@ -46,6 +46,22 @@
   --text-48: 48px;
   --text-48--line-height: 1.4;
   --text-48--letter-spacing: -0.025em;
+
+  --animate-rise-in: rise-in 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.42em);
+    filter: blur(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
 }
 
 @layer base {
@@ -56,5 +72,16 @@
 
   body {
     word-break: keep-all;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
