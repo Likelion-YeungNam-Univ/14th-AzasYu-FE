@@ -436,7 +436,7 @@ export function MeetingInterviewPage() {
             )}
 
             {/* 답변 입력 */}
-            <div className="flex w-full items-center gap-[50px] rounded-[71px] bg-[#f5f5f5] px-[26px] py-[14px]">
+            <div className="flex w-full items-center gap-[50px] rounded-[71px] bg-[#f5f5f5] px-[26px] py-[14px] outline-offset-2 transition-[outline-color] duration-150 focus-within:outline focus-within:outline-2 focus-within:outline-[#0075d3]">
               <input
                 type="text"
                 value={draft}

@@ -9,20 +9,12 @@ import {
   TextAreaField,
   TextField,
 } from "@/components/ui";
-import {
-  alertOnTruncatedPaste,
-  API_BASE_URL,
-  cn,
-  FIELD_LIMITS,
-  formatDateWithWeekday,
-  HEADER_PRESETS,
-  projectPath,
-} from "@/lib";
+import { alertOnTruncatedPaste, API_BASE_URL, cn, FIELD_LIMITS, formatDateWithWeekday, HEADER_PRESETS, projectPath } from "@/lib";
 
 const NEW_COLUMN = "w-full max-w-[562px]";
 
 const DATE_FIELD =
-  "text-16 h-[40px] cursor-pointer rounded-[8px] border border-solid border-[#b8bccc] bg-white px-[16px] py-[8px] font-medium outline-none";
+  "text-16 h-[40px] cursor-pointer rounded-[8px] border border-solid border-[#b8bccc] bg-white px-[16px] py-[8px] font-medium outline-none transition-colors duration-150 focus:border-[#0075d3]";
 
 const DATE_FIELD_TEXT = {
   filled: "text-[#1c232b]",
@@ -301,7 +293,7 @@ export function MeetingNewPage() {
                   aria-label="회의 안건 추가"
                   maxLength={FIELD_LIMITS.AGENDA}
                   onPaste={alertOnTruncatedPaste(FIELD_LIMITS.AGENDA)}
-                  className="text-20 w-full rounded-[55px] border border-solid border-[#b8bccc] px-[16px] py-[8px] font-medium text-[#1c232b] outline-none placeholder:text-[#b8bccc]"
+                  className="text-20 w-full rounded-[55px] border border-solid border-[#b8bccc] px-[16px] py-[8px] font-medium text-[#1c232b] outline-none transition-colors duration-150 placeholder:text-[#b8bccc] focus:border-[#0075d3]"
                 />
               </div>
             </div>
@@ -377,7 +369,7 @@ export function MeetingNewPage() {
                   onChange={(e) => setMemberQuery(e.target.value)}
                   placeholder="이름을 입력하여 검색하세요."
                   aria-label="참여자 검색"
-                  className="text-20 h-[66px] w-full rounded-[8px] border border-solid border-[#b8bccc] px-[16px] py-[14px] font-medium text-[#1c232b] outline-none placeholder:text-[#b8bccc]"
+                  className="text-20 h-[66px] w-full rounded-[8px] border border-solid border-[#b8bccc] px-[16px] py-[14px] font-medium text-[#1c232b] outline-none transition-colors duration-150 placeholder:text-[#b8bccc] focus:border-[#0075d3]"
                 />
 
                 {suggestions.length > 0 && (
