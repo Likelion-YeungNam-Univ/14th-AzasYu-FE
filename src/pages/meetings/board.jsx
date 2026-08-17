@@ -211,7 +211,7 @@ export function MeetingBoardPage() {
           <div className="flex shrink-0 flex-wrap items-center gap-[12px]">
             <Button
               size="action"
-              variant="secondary"
+              variant="subtle"
               onClick={() =>
                 navigate(meetingPath("SUMMARY", projectId, meetingId))
               }
