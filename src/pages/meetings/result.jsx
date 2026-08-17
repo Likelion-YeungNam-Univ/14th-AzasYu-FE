@@ -218,7 +218,8 @@ export function MeetingResultPage() {
       }
     >
       <div
-        className={`${RESULT_CONTAINER} mt-10 flex flex-col gap-[52px] lg:mt-[80px] lg:gap-[80px]`}
+        style={{ animationDelay: "700ms" }}
+        className={`animate-lift-in ${RESULT_CONTAINER} mt-10 flex flex-col gap-[52px] lg:mt-[80px] lg:gap-[80px]`}
       >
         <Section title="회의 목적">
           <CheckList items={toLines(result.meetingPurpose)} />
