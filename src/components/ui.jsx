@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { ChevronRight, Close } from "@/components/icons";
 import {
@@ -375,6 +375,64 @@ const PROJECT_CARD_GRADIENTS = [
   "linear-gradient(124.58deg, rgb(238, 126, 111) 5.3878%, rgb(247, 73, 50) 94.612%)",
   "linear-gradient(124.58deg, rgb(255, 217, 141) 5.3878%, rgb(255, 176, 16) 94.612%)",
 ];
+
+export function RevealOnScroll({ children, delay = 0, className }) {
+  const ref = useRef(null);
+  const [shown, setShown] = useState(false);
+
+  useEffect(() => {
+    const target = ref.current;
+
+    if (!target) return;
+
+    if (typeof IntersectionObserver === "undefined") {
+      setShown(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+
+        setShown(true);
+        observer.disconnect();
+      },
+      { threshold: 0, rootMargin: "0px 0px -40px 0px" },
+    );
+
+    observer.observe(target);
+
+    const fallback = window.setTimeout(() => {
+      const box = target.getBoundingClientRect();
+
+      if (box.top >= window.innerHeight || box.bottom <= 0) return;
+
+      setShown(true);
+      observer.disconnect();
+    }, 1200);
+
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(fallback);
+    };
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      style={{ transitionDelay: shown ? `${delay}ms` : "0ms" }}
+      className={cn(
+        "transition-[opacity,filter,translate] duration-[600ms] ease-out",
+        shown
+          ? "translate-y-0 opacity-100 blur-none"
+          : "translate-y-[18px] opacity-0 blur-[10px]",
+        className,
+      )}
+    >
+      {children}
+    </div>
+  );
+}
 
 export function ProjectCard({ project, className }) {
   const palette = PROJECT_CARD_GRADIENTS.length;
