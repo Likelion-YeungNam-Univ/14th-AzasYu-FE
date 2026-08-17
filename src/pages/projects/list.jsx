@@ -3,12 +3,9 @@ import { useNavigate } from "react-router";
 import { Plus } from "@/components/icons";
 import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
 import { StateView } from "@/components/states";
-import {
-  Button,
-  ProjectCard,
-  RevealOnScroll,
-  TextField,
-} from "@/components/ui";
+import { ProjectCard } from "@/components/cards";
+import { RevealOnScroll } from "@/components/motion";
+import { Button, TextField } from "@/components/ui";
 import { API_BASE_URL, HEADER_PRESETS, PATHS } from "@/lib";
 
 const getMyProjects = async () => {
@@ -126,8 +123,6 @@ export function ProjectsPage() {
       try {
         const response = await getMyProjects();
 
-        console.log("프로젝트 API 응답:", response);
-
         setProjects(await toProjectCards(response.data));
       } catch (error) {
         console.error(error);
@@ -151,8 +146,6 @@ export function ProjectsPage() {
       setJoinError("");
 
       const response = await joinProject(joinCode.trim());
-
-      console.log("프로젝트 참여 응답:", response);
 
       if (!response.success) {
         setJoinError(

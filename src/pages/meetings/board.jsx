@@ -8,6 +8,7 @@ import { StateView } from "@/components/states";
 import { Button } from "@/components/ui";
 import {
   API_BASE_URL,
+  getCurrentUserId,
   HEADER_PRESETS,
   MEETING_TITLE,
   meetingPath,
@@ -16,25 +17,10 @@ import {
 
 const CARD_COLORS = ["#fde2df", "#fef2d8", "#eff7da", "#dbf0ff"];
 
-const getCurrentUserId = () => {
-  const accessToken = localStorage.getItem("accessToken");
-  if (!accessToken) return "";
-
-  try {
-    const base64Url = accessToken.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const paddedBase64 = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
-    const payload = JSON.parse(atob(paddedBase64));
-    return String(payload.userId ?? payload.sub ?? payload.id ?? "");
-  } catch {
-    return "";
-  }
-};
-
 const parseCoreOpinion = (text) => {
   if (!text) return [];
 
-  const regex = /\[(.*?)\]([^\[]*)/g;
+  const regex = /\[(.*?)\]([^[]*)/g;
   const matches = [...text.matchAll(regex)];
 
   // 태그가 없는 일반 텍스트

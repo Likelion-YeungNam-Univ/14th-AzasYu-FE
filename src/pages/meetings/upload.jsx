@@ -6,25 +6,11 @@ import { StateView } from "@/components/states";
 import { Button, Card } from "@/components/ui";
 import {
   API_BASE_URL,
+  getCurrentUserId,
   HEADER_PRESETS,
   meetingPath,
   toUserMessage,
 } from "@/lib";
-
-const getCurrentUserId = () => {
-  const accessToken = localStorage.getItem("accessToken");
-  if (!accessToken) return "";
-
-  try {
-    const base64Url = accessToken.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const paddedBase64 = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
-    const payload = JSON.parse(atob(paddedBase64));
-    return String(payload.userId ?? payload.sub ?? payload.id ?? "");
-  } catch {
-    return "";
-  }
-};
 
 export function MeetingUploadPage() {
   const { projectId = "", meetingId = "" } = useParams();

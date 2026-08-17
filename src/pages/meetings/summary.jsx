@@ -3,7 +3,12 @@ import { useParams } from "react-router";
 import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
 import { StateView } from "@/components/states";
 import { Button } from "@/components/ui";
-import { API_BASE_URL, HEADER_PRESETS, toUserMessage } from "@/lib";
+import {
+  API_BASE_URL,
+  getCurrentUserId,
+  HEADER_PRESETS,
+  toUserMessage,
+} from "@/lib";
 
 const SUMMARY_CONTAINER = "mx-auto w-full max-w-[976px] px-5 sm:px-8 lg:px-8";
 
@@ -12,21 +17,6 @@ const toLines = (text) =>
     .split("\n")
     .map((line) => line.replace(/^[-•\s]+/, "").trim())
     .filter(Boolean);
-
-const getCurrentUserId = () => {
-  const accessToken = localStorage.getItem("accessToken");
-  if (!accessToken) return "";
-
-  try {
-    const base64Url = accessToken.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const paddedBase64 = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
-    const payload = JSON.parse(atob(paddedBase64));
-    return String(payload.userId ?? payload.sub ?? payload.id ?? "");
-  } catch {
-    return "";
-  }
-};
 
 function SectionTitle({ children }) {
   return (

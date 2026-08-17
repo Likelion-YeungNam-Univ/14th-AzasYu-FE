@@ -6,10 +6,12 @@ import { Header } from "@/components/layout";
 import { DroppingChars, RisingBlock } from "@/components/motion";
 import { StateView } from "@/components/states";
 import { Toast } from "@/components/toast";
-import { AvatarStack, Button, MeetingCard } from "@/components/ui";
+import { AvatarStack, MeetingCard } from "@/components/cards";
+import { Button } from "@/components/ui";
 import {
   API_BASE_URL,
   copyText,
+  getCurrentUserId,
   HEADER_PRESETS,
   projectPath,
   toUserMessage,
@@ -19,29 +21,6 @@ const authHeaders = () => ({
   "Content-Type": "application/json",
   Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
 });
-
-const getCurrentUserId = () => {
-  const accessToken = localStorage.getItem("accessToken");
-
-  if (!accessToken) {
-    return "";
-  }
-
-  try {
-    const base64Url = accessToken.split(".")[1];
-
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-
-    const paddedBase64 = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
-
-    const payload = JSON.parse(atob(paddedBase64));
-
-    return String(payload.userId ?? payload.sub ?? payload.id ?? "");
-  } catch (error) {
-    console.error("JWT 사용자 ID 확인 실패:", error);
-    return "";
-  }
-};
 
 const getProjectDetail = async (projectId) => {
   const response = await fetch(`${API_BASE_URL}/api/v1/projects/${projectId}`, {
