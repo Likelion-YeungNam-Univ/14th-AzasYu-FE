@@ -3,7 +3,12 @@ import { useNavigate } from "react-router";
 import { Plus } from "@/components/icons";
 import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
 import { StateView } from "@/components/states";
-import { Button, ProjectCard, TextField } from "@/components/ui";
+import {
+  Button,
+  ProjectCard,
+  RevealOnScroll,
+  TextField,
+} from "@/components/ui";
 import { API_BASE_URL, HEADER_PRESETS, PATHS } from "@/lib";
 
 const getMyProjects = async () => {
@@ -228,8 +233,10 @@ export function ProjectsPage() {
         {/* 프로젝트 목록 */}
         {!loading && !error && (
           <div className="mt-6 grid grid-cols-1 gap-x-[25px] gap-y-10 sm:grid-cols-2 lg:mt-[35px] lg:grid-cols-3 lg:gap-y-[70px]">
-            {projects.map((project) => (
-              <ProjectCard key={project.id} project={project} />
+            {projects.map((project, index) => (
+              <RevealOnScroll key={project.id} delay={(index % 3) * 150}>
+                <ProjectCard project={project} />
+              </RevealOnScroll>
             ))}
           </div>
         )}
