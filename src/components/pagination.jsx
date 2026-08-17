@@ -21,7 +21,7 @@ export function Pagination({ page, totalPages, onChange, className }) {
         aria-label="이전 페이지"
         className={ARROW}
       >
-        <ChevronRight className="size-[16px] -scale-x-100" />
+        <ChevronRight className="rotate-180" />
       </button>
 
       {pages.map((value) => (
@@ -48,7 +48,7 @@ export function Pagination({ page, totalPages, onChange, className }) {
         aria-label="다음 페이지"
         className={ARROW}
       >
-        <ChevronRight className="size-[16px]" />
+        <ChevronRight />
       </button>
     </nav>
   );
