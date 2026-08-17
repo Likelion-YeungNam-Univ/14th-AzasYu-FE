@@ -131,10 +131,10 @@ export function WelcomePage() {
           <Header {...HEADER_PRESETS.landing} />
         </div>
 
-        <div className="flex min-h-svh items-center py-28 lg:py-0">
-          <div className="mx-auto flex w-full max-w-[1920px] flex-col items-center gap-14 pr-5 pl-5 sm:pr-8 sm:pl-8 lg:flex-row lg:items-center lg:justify-between lg:gap-16 lg:pr-[17.135%] lg:pl-[10.781%]">
+        <div className="flex min-h-svh items-center py-28 xl:py-0">
+          <div className="mx-auto flex w-full max-w-[1920px] flex-col items-center gap-14 pr-5 pl-5 sm:pr-8 sm:pl-8 xl:flex-row xl:items-center xl:justify-between xl:gap-16 xl:pr-[17.135%] xl:pl-[10.781%]">
             <div
-              className={`${LANDING_TEXT} @container flex w-full max-w-[634px] flex-col gap-[16px] text-center lg:-translate-y-[43px] lg:text-left`}
+              className={`${LANDING_TEXT} @container flex w-full max-w-[680px] flex-col gap-[16px] text-center xl:-translate-y-[43px] xl:text-left`}
             >
               <h1 className="text-[clamp(12px,7.1cqw,48px)] font-bold whitespace-nowrap">
                 <DroppingChars text="우리... 같은 얘기하고 있는 거 맞죠?" />
@@ -143,13 +143,13 @@ export function WelcomePage() {
               <p className="text-16 font-semibold sm:text-18 lg:text-22">
                 <RisingWords
                   text="모두가 같은 의미로 이해할 수 있도록, 협업의 시작"
-                  delay={420}
+                  delay={1600}
                   step={45}
                 />
               </p>
             </div>
 
-            <div className="w-full max-w-[501px] shrink-0 lg:translate-y-[7px]">
+            <div className="w-full max-w-[501px] shrink-0 xl:translate-y-[7px]">
               <div className="flex flex-col items-center gap-[9px]">
                 <h2
                   className={`${LANDING_TEXT} text-28 font-semibold sm:text-34 lg:text-48`}
