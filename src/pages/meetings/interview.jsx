@@ -57,7 +57,7 @@ function UserMessage({ children, tone = "primary" }) {
   );
 }
 
-const HERO_INTRO_MS = 1300;
+const FIRST_SCROLL_DELAY_MS = 2400;
 
 export function MeetingInterviewPage() {
   const { projectId = "", meetingId = "" } = useParams();
@@ -101,7 +101,7 @@ export function MeetingInterviewPage() {
 
     const timer = window.setTimeout(
       () => target.scrollIntoView({ behavior: "smooth" }),
-      reduced ? 0 : HERO_INTRO_MS,
+      reduced ? 0 : FIRST_SCROLL_DELAY_MS,
     );
 
     return () => window.clearTimeout(timer);
