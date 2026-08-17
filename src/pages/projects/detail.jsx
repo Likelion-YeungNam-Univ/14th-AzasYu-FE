@@ -6,7 +6,8 @@ import { Header } from "@/components/layout";
 import { DroppingChars, RisingBlock } from "@/components/motion";
 import { StateView } from "@/components/states";
 import { Toast } from "@/components/toast";
-import { AvatarStack, Button, MeetingCard } from "@/components/ui";
+import { AvatarStack, MeetingCard } from "@/components/cards";
+import { Button } from "@/components/ui";
 import {
   API_BASE_URL,
   copyText,

@@ -3,12 +3,9 @@ import { useNavigate } from "react-router";
 import { Plus } from "@/components/icons";
 import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
 import { StateView } from "@/components/states";
-import {
-  Button,
-  ProjectCard,
-  RevealOnScroll,
-  TextField,
-} from "@/components/ui";
+import { ProjectCard } from "@/components/cards";
+import { RevealOnScroll } from "@/components/motion";
+import { Button, TextField } from "@/components/ui";
 import { API_BASE_URL, HEADER_PRESETS, PATHS } from "@/lib";
 
 const getMyProjects = async () => {

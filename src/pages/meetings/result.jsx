@@ -4,7 +4,7 @@ import pencilIcon from "@/assets/icons/pencil.svg";
 import warningIcon from "@/assets/icons/warning-triangle.svg";
 import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
 import { StateView } from "@/components/states";
-import { RevealOnScroll } from "@/components/ui";
+import { RevealOnScroll } from "@/components/motion";
 import {
   API_BASE_URL,
   HEADER_PRESETS,
