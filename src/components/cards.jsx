@@ -146,6 +146,27 @@ export function AvatarStack({ members = [], className }) {
   );
 }
 
+function includesMember(members, userId) {
+  return members.some(
+    (member) =>
+      String(member.userId ?? member.id ?? member.memberId) === String(userId),
+  );
+}
+
+function toProgressRatio(done, total) {
+  if (!total) return 0;
+
+  return Math.min(100, Math.max(0, (done / total) * 100));
+}
+
+function toDisplayDate({ meetingDate, startTime, startsAt }) {
+  if (meetingDate && startTime) {
+    return `${meetingDate}T${startTime}`;
+  }
+
+  return startsAt || meetingDate;
+}
+
 export function MeetingCard({ projectId, meeting, currentUserId }) {
   const {
     id,
@@ -164,21 +185,9 @@ export function MeetingCard({ projectId, meeting, currentUserId }) {
   const navigate = useNavigate();
 
   const mySubmitted = interviewStatus?.mySubmitted ?? false;
-
-  const isParticipant = participants.some(
-    (participant) =>
-      String(participant.userId ?? participant.id ?? participant.memberId) ===
-      String(currentUserId),
-  );
-
-  const ratio = participantsTotal
-    ? Math.min(100, Math.max(0, (participantsDone / participantsTotal) * 100))
-    : 0;
-
-  const displayDate =
-    meetingDate && startTime
-      ? `${meetingDate}T${startTime}`
-      : startsAt || meetingDate;
+  const isParticipant = includesMember(participants, currentUserId);
+  const ratio = toProgressRatio(participantsDone, participantsTotal);
+  const displayDate = toDisplayDate({ meetingDate, startTime, startsAt });
 
   return (
     <Card
