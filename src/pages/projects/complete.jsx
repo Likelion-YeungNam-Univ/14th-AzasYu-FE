@@ -3,7 +3,8 @@ import { useLocation, useNavigate, useParams } from 'react-router'
 import checkBadge from '@/assets/icons/check-badge.svg'
 import { ArrowRight, Copy } from '@/components/icons'
 import { Header } from '@/components/layout'
-import { API_BASE_URL, HEADER_PRESETS, projectPath } from '@/lib'
+import { Toast } from '@/components/toast'
+import { API_BASE_URL, copyText, HEADER_PRESETS, projectPath } from '@/lib'
 
 export function ProjectCompletePage() {
   const { projectId = '' } = useParams()
@@ -49,25 +50,14 @@ export function ProjectCompletePage() {
     }
   }, [joinCode, projectId])
 
-  const handleCopyJoinCode = () => {
+  const [copyMessage, setCopyMessage] = useState('')
+
+  const handleCopyJoinCode = async () => {
     if (!joinCode) return
 
-    if (navigator.clipboard?.writeText) {
-      navigator.clipboard.writeText(joinCode)
-      return
-    }
+    const copied = await copyText(joinCode)
 
-    const textarea = document.createElement('textarea')
-
-    textarea.value = joinCode
-    textarea.setAttribute('readonly', '')
-    textarea.style.position = 'fixed'
-    textarea.style.opacity = '0'
-
-    document.body.appendChild(textarea)
-    textarea.select()
-    document.execCommand('copy')
-    document.body.removeChild(textarea)
+    setCopyMessage(copied ? '참여코드를 복사했습니다.' : '복사하지 못했습니다.')
   }
 
   return (
@@ -116,6 +106,8 @@ export function ProjectCompletePage() {
           </div>
         </div>
       </main>
+
+      <Toast message={copyMessage} onDone={() => setCopyMessage('')} />
     </div>
   )
 }

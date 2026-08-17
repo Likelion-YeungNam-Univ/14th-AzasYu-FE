@@ -16,6 +16,41 @@ export const FIELD_LIMITS = {
   AGENDA: 30,
 }
 
+export async function copyText(value) {
+  if (!value) return false
+
+  if (navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(value)
+      return true
+    } catch {
+      // 보안 컨텍스트가 아니거나 권한이 없으면 아래 폴백으로 내려간다
+    }
+  }
+
+  const textarea = document.createElement('textarea')
+
+  textarea.value = value
+  textarea.setAttribute('readonly', '')
+  textarea.style.position = 'fixed'
+  textarea.style.opacity = '0'
+
+  document.body.appendChild(textarea)
+  textarea.select()
+
+  let copied = false
+
+  try {
+    copied = document.execCommand('copy')
+  } catch {
+    copied = false
+  }
+
+  document.body.removeChild(textarea)
+
+  return copied
+}
+
 export function alertOnTruncatedPaste(limit) {
   return (event) => {
     if (typeof limit !== 'number') return
