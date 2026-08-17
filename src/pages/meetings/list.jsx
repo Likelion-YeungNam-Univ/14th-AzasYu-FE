@@ -11,6 +11,7 @@ import {
   PATHS,
   meetingPath,
   projectPath,
+  toUserMessage,
 } from "@/lib";
 
 const authHeaders = () => ({
@@ -102,7 +103,7 @@ export function MeetingsPage() {
       } catch (error) {
         console.error("회의 목록 조회 실패:", error);
 
-        if (!cancelled) setError(error.message);
+        if (!cancelled) setError(toUserMessage(error));
       } finally {
         if (!cancelled) setLoading(false);
       }

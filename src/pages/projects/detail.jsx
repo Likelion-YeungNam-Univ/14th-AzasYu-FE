@@ -6,7 +6,13 @@ import { Header } from "@/components/layout";
 import { StateView } from "@/components/states";
 import { Toast } from "@/components/toast";
 import { AvatarStack, Button, MeetingCard } from "@/components/ui";
-import { API_BASE_URL, copyText, HEADER_PRESETS, projectPath } from "@/lib";
+import {
+  API_BASE_URL,
+  copyText,
+  HEADER_PRESETS,
+  projectPath,
+  toUserMessage,
+} from "@/lib";
 
 const authHeaders = () => ({
   "Content-Type": "application/json",
@@ -250,7 +256,7 @@ export function ProjectDetailPage() {
       } catch (error) {
         console.error("프로젝트 상세 조회 실패:", error);
 
-        setError(error.message);
+        setError(toUserMessage(error));
       } finally {
         setLoading(false);
       }

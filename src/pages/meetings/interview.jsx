@@ -4,7 +4,12 @@ import sendIcon from "@/assets/icons/send.svg";
 import { Header, Hero, HeroLayout } from "@/components/layout";
 import { StateView } from "@/components/states";
 import { Button, Card } from "@/components/ui";
-import { API_BASE_URL, HEADER_PRESETS, meetingPath } from "@/lib";
+import {
+  API_BASE_URL,
+  HEADER_PRESETS,
+  meetingPath,
+  toUserMessage,
+} from "@/lib";
 
 const buildIntro = (userName) => [
   [
@@ -211,7 +216,7 @@ export function MeetingInterviewPage() {
       }
     } catch (error) {
       console.error("답변 제출 실패:", error);
-      alert(error.message);
+      alert(toUserMessage(error));
       setCardStatus("NOT_SUBMITTED"); // 에러 나면 다시 제출할 수 있게 원상복구
       submittedRef.current = false;
     } finally {
@@ -251,7 +256,7 @@ export function MeetingInterviewPage() {
       }
     } catch (error) {
       console.error("카드 재생성 에러:", error);
-      alert(error.message);
+      alert(toUserMessage(error));
       setCardStatus("FAILED"); // 실패 상태 유지 (재생성 버튼 계속 보이도록)
     }
   };

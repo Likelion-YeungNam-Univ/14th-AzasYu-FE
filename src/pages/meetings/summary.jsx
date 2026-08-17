@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
 import { StateView } from "@/components/states";
 import { Button } from "@/components/ui";
-import { API_BASE_URL, HEADER_PRESETS } from "@/lib";
+import { API_BASE_URL, HEADER_PRESETS, toUserMessage } from "@/lib";
 
 const SUMMARY_CONTAINER = "mx-auto w-full max-w-[976px] px-5 sm:px-8 lg:px-0";
 
@@ -142,7 +142,7 @@ export function MeetingSummaryPage() {
       setSummary(result.data);
     } catch (err) {
       console.error("의견 요약 조회 실패:", err);
-      setError(err.message);
+      setError(toUserMessage(err));
     } finally {
       setLoading(false);
     }

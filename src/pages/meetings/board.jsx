@@ -11,6 +11,7 @@ import {
   HEADER_PRESETS,
   MEETING_TITLE,
   meetingPath,
+  toUserMessage,
 } from "@/lib";
 
 const CARD_COLORS = ["#fde2df", "#fef2d8", "#eff7da", "#dbf0ff"];
@@ -143,7 +144,7 @@ export function MeetingBoardPage() {
         setIdeaCards(result.data || []);
       } catch (err) {
         console.error("아이디어 카드 조회 실패:", err);
-        setError(err.message);
+        setError(toUserMessage(err));
       } finally {
         setChecking(false);
         setLoading(false);

@@ -9,7 +9,16 @@ import {
   TextAreaField,
   TextField,
 } from "@/components/ui";
-import { alertOnTruncatedPaste, API_BASE_URL, cn, FIELD_LIMITS, formatDateWithWeekday, HEADER_PRESETS, projectPath } from "@/lib";
+import {
+  alertOnTruncatedPaste,
+  API_BASE_URL,
+  cn,
+  FIELD_LIMITS,
+  formatDateWithWeekday,
+  HEADER_PRESETS,
+  projectPath,
+  toUserMessage,
+} from "@/lib";
 
 const NEW_COLUMN = "w-full max-w-[562px]";
 
@@ -220,7 +229,7 @@ export function MeetingNewPage() {
       });
     } catch (error) {
       console.error("회의 생성 실패:", error);
-      alert(error.message);
+      alert(toUserMessage(error));
     } finally {
       setCreating(false);
     }
