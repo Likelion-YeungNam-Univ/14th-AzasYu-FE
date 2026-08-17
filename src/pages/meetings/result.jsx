@@ -11,7 +11,6 @@ import {
   HEADER_PRESETS,
   MEETING_TITLE,
   PATHS,
-  projectPath,
   toUserMessage,
 } from "@/lib";
 
@@ -116,7 +115,7 @@ function Section({ title, children }) {
 }
 
 export function MeetingResultPage() {
-  const { projectId = "", meetingId = "" } = useParams();
+  const { meetingId = "" } = useParams();
 
   const [result, setResult] = useState(null);
   const [meeting, setMeeting] = useState(null);
@@ -194,21 +193,11 @@ export function MeetingResultPage() {
             : "회의록을 올리면 AI가 분석해드려요."
         }
         action={
-          <div className="flex flex-wrap items-center justify-center gap-[12px]">
-            {projectId && (
-              <Link to={projectPath("DETAIL", projectId)}>
-                <Button size="action" variant="subtle">
-                  프로젝트로 이동하기
-                </Button>
-              </Link>
-            )}
-
-            <Link to={PATHS.PROJECTS}>
-              <Button size="action" variant="secondary">
-                홈으로 가기
-              </Button>
-            </Link>
-          </div>
+          <Link to={PATHS.PROJECTS}>
+            <Button size="action" variant="secondary">
+              홈으로 가기
+            </Button>
+          </Link>
         }
       />
     );
