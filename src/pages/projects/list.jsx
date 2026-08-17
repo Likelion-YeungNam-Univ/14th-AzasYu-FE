@@ -210,7 +210,8 @@ export function ProjectsPage() {
       }
     >
       <div className="mx-auto w-full max-w-[1460px] px-5 pb-20 sm:px-8 lg:px-8 xl:px-12 lg:pb-[151px]">
-        <div className="mt-10 flex lg:mt-[111px]">
+        <div style={{ animationDelay: "700ms" }}
+          className="animate-lift-in mt-10 flex lg:mt-[111px]">
           <Button
             variant="subtle"
             onClick={() => navigate(PATHS.PROJECT_NEW)}
@@ -228,7 +229,11 @@ export function ProjectsPage() {
         {!loading && !error && (
           <div className="mt-6 grid grid-cols-1 gap-x-[25px] gap-y-10 sm:grid-cols-2 lg:mt-[35px] lg:grid-cols-3 lg:gap-y-[70px]">
             {projects.map((project, index) => (
-              <RevealOnScroll key={project.id} delay={(index % 3) * 150}>
+              <RevealOnScroll
+                key={project.id}
+                after={700}
+                delay={(index % 3) * 90}
+              >
                 <ProjectCard project={project} />
               </RevealOnScroll>
             ))}

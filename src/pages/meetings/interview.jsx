@@ -59,6 +59,8 @@ function UserMessage({ children, tone = "primary" }) {
 
 const FIRST_SCROLL_DELAY_MS = 1600;
 
+const SCROLL_SETTLE_MS = 500;
+
 export function MeetingInterviewPage() {
   const { projectId = "", meetingId = "" } = useParams();
   const navigate = useNavigate();
@@ -83,6 +85,8 @@ export function MeetingInterviewPage() {
   const submittedRef = useRef(false);
 
   const messagesEndRef = useRef(null);
+  const inputRef = useRef(null);
+  const autoFocusedRef = useRef(false);
   const mountedAtRef = useRef(0);
 
   if (mountedAtRef.current === 0) {
@@ -105,17 +109,33 @@ export function MeetingInterviewPage() {
           FIRST_SCROLL_DELAY_MS - (performance.now() - mountedAtRef.current),
         );
 
+    let focusTimer = 0;
+
+    const focusInput = () => {
+      const input = inputRef.current;
+
+      if (autoFocusedRef.current || !input || input.disabled) return;
+
+      autoFocusedRef.current = true;
+      input.focus({ preventScroll: true });
+    };
+
+    const run = () => {
+      target.scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
+      focusTimer = window.setTimeout(focusInput, reduced ? 0 : SCROLL_SETTLE_MS);
+    };
+
     if (remaining === 0) {
-      target.scrollIntoView({ behavior: "smooth" });
-      return;
+      run();
+      return () => window.clearTimeout(focusTimer);
     }
 
-    const timer = window.setTimeout(
-      () => target.scrollIntoView({ behavior: "smooth" }),
-      remaining,
-    );
+    const timer = window.setTimeout(run, remaining);
 
-    return () => window.clearTimeout(timer);
+    return () => {
+      window.clearTimeout(timer);
+      window.clearTimeout(focusTimer);
+    };
   }, [answered, questions, status]);
 
   const intro = buildIntro(localStorage.getItem("userName") ?? "");
@@ -331,7 +351,8 @@ export function MeetingInterviewPage() {
       <div className="flex w-full justify-center px-5 pt-12 pb-16 sm:px-8 lg:pt-[60px] lg:pb-[84px]">
         <Card
           shadow="meeting"
-          className="w-full max-w-[878px] px-6 py-8 sm:px-10 lg:px-[48px] lg:py-[40px]"
+          style={{ animationDelay: "700ms" }}
+          className="animate-lift-in w-full max-w-[878px] px-6 py-8 sm:px-10 lg:px-[48px] lg:py-[40px]"
         >
           <div className="flex w-full flex-col gap-[24px]">
             {/* 상단 인사말 */}
@@ -475,6 +496,7 @@ export function MeetingInterviewPage() {
             {/* 답변 입력 */}
             <div className="flex w-full items-center gap-[50px] rounded-[71px] bg-[#f5f5f5] px-[26px] py-[14px] outline-offset-2 transition-[outline-color] duration-150 focus-within:outline focus-within:outline-2 focus-within:outline-[#0075d3]">
               <input
+                ref={inputRef}
                 type="text"
                 value={draft}
                 onChange={(e) => setDraft(e.target.value)}

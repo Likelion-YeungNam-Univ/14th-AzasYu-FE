@@ -96,7 +96,8 @@ export function ProjectNewPage() {
       }
     >
       <div className="flex w-full justify-center px-5 pt-12 pb-16 sm:px-8 lg:pt-[60px] lg:pb-[126px]">
-        <div className="w-full max-w-[562px]">
+        <div style={{ animationDelay: "700ms" }}
+          className="animate-lift-in w-full max-w-[562px]">
           <div className="flex w-full flex-col items-center gap-[34px]">
             <TextField
               tone="form"
