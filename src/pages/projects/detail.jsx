@@ -324,7 +324,7 @@ export function ProjectDetailPage() {
               className="shrink-0"
               onClick={() => navigate(projectPath("MEETING_NEW", projectId))}
             >
-              <Plus />새 회의
+              <Plus size={26} />새 회의
             </Button>
           </div>
         </div>
