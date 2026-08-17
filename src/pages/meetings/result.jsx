@@ -76,7 +76,7 @@ function CheckList({ items }) {
         <li key={item} className="flex items-center gap-[10px]">
           <CheckMark />
 
-          <p className="text-18 leading-[1.5] font-medium text-[#1c232b] lg:text-24">
+          <p className="text-16 leading-[1.5] font-medium text-[#1c232b] lg:text-20">
             {item}
           </p>
         </li>
@@ -103,7 +103,7 @@ function BulletList({ items, className }) {
 function Section({ title, children }) {
   return (
     <section className="flex w-full flex-col gap-[32px]">
-      <h2 className="text-28 font-semibold text-[#1c232b] lg:text-34">
+      <h2 className="text-24 font-semibold text-[#1c232b] lg:text-28">
         {title}
       </h2>
 
@@ -257,17 +257,17 @@ export function MeetingResultPage() {
           <ol className="flex flex-col gap-[18px]">
             {result.ambiguities?.map((ambiguity, i) => (
               <li key={ambiguity.id ?? i} className="flex items-start gap-[14px]">
-                <span className="text-20 flex size-[36px] shrink-0 items-center justify-center rounded-[10px] bg-white leading-[1.5] font-medium text-[#858894] lg:text-24">
+                <span className="text-16 flex size-[36px] shrink-0 items-center justify-center rounded-[10px] bg-white leading-[1.5] font-medium text-[#858894] lg:text-18">
                   {i + 1}
                 </span>
 
                 <div className="flex flex-col gap-[4px] pt-[2px]">
-                  <p className="text-18 font-medium text-[#1c232b] lg:text-24">
+                  <p className="text-16 font-semibold text-[#1c232b] lg:text-20">
                     {ambiguity.expression}
                   </p>
 
                   {ambiguity.reason && (
-                    <p className="text-16 font-medium text-[#858894] lg:text-20">
+                    <p className="text-14 font-medium text-[#858894] lg:text-18">
                       {ambiguity.reason}
                     </p>
                   )}
