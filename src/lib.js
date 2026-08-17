@@ -16,6 +16,23 @@ export const FIELD_LIMITS = {
   AGENDA: 30,
 }
 
+export function getCurrentUserId() {
+  const accessToken = localStorage.getItem('accessToken')
+
+  if (!accessToken) return ''
+
+  try {
+    const base64 = accessToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')
+    const padded = base64 + '='.repeat((4 - (base64.length % 4)) % 4)
+    const payload = JSON.parse(atob(padded))
+
+    return String(payload.userId ?? payload.sub ?? payload.id ?? '')
+  } catch (error) {
+    console.error('JWT 사용자 ID 확인 실패:', error)
+    return ''
+  }
+}
+
 export function toUserMessage(error) {
   if (error instanceof TypeError) {
     return '서버에 연결할 수 없습니다. 잠시 후 다시 시도해 주세요.'
