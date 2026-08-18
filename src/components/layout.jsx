@@ -74,6 +74,22 @@ export function Header({
 
   const activeNavHref = resolveActiveNavHref(pathname, navItems);
 
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => setMenuOpen(false), [pathname]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [menuOpen]);
+
   return (
     <header
       className={cn(
@@ -102,7 +118,7 @@ export function Header({
       </Link>
 
       {nav && (
-        <nav className="text-16 absolute left-1/2 flex w-full max-w-[40%] -translate-x-1/2 items-center justify-center gap-[16px] sm:gap-[32px] font-medium">
+        <nav className="text-16 absolute left-1/2 hidden w-full max-w-[40%] -translate-x-1/2 items-center justify-center gap-[16px] font-medium lg:flex lg:gap-[32px]">
           {navItems.map((item) => {
             const isActive = item.href === activeNavHref;
 
@@ -127,29 +143,106 @@ export function Header({
         </nav>
       )}
 
-      {action &&
-        (action.logout ? (
+      <div className="flex shrink-0 items-center gap-[10px]">
+        {action &&
+          (action.logout ? (
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="hidden cursor-pointer items-center gap-[6px] transition-opacity duration-150 hover:opacity-70 lg:flex"
+            >
+              <span className="text-18 font-medium whitespace-nowrap">
+                {action.label}
+              </span>
+              <ChevronRight />
+            </button>
+          ) : (
+            <Link
+              to={action.href}
+              className="hidden items-center gap-[6px] transition-opacity duration-150 hover:opacity-70 lg:flex"
+            >
+              <span className="text-18 font-medium whitespace-nowrap">
+                {action.label}
+              </span>
+              <ChevronRight />
+            </Link>
+          ))}
+
+        {(nav || action) && (
           <button
             type="button"
-            onClick={handleLogout}
-            className="flex cursor-pointer items-center gap-[6px] transition-opacity duration-150 hover:opacity-70"
+            aria-label={menuOpen ? "메뉴 닫기" : "메뉴 열기"}
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((open) => !open)}
+            className="flex size-[40px] cursor-pointer flex-col items-center justify-center gap-[5px] rounded-[8px] transition-colors duration-150 hover:bg-[#f5f5f5] lg:hidden"
           >
-            <span className="text-18 font-medium whitespace-nowrap">
-              {action.label}
-            </span>
-            <ChevronRight />
+            <span
+              className={cn(
+                "block h-[2px] w-[20px] rounded-full bg-current transition-transform duration-200",
+                menuOpen && "translate-y-[7px] rotate-45",
+              )}
+            />
+            <span
+              className={cn(
+                "block h-[2px] w-[20px] rounded-full bg-current transition-opacity duration-200",
+                menuOpen && "opacity-0",
+              )}
+            />
+            <span
+              className={cn(
+                "block h-[2px] w-[20px] rounded-full bg-current transition-transform duration-200",
+                menuOpen && "-translate-y-[7px] -rotate-45",
+              )}
+            />
           </button>
-        ) : (
-          <Link
-            to={action.href}
-            className="flex items-center gap-[6px] transition-opacity duration-150 hover:opacity-70"
-          >
-            <span className="text-18 font-medium whitespace-nowrap">
-              {action.label}
-            </span>
-            <ChevronRight />
-          </Link>
-        ))}
+        )}
+      </div>
+
+      {menuOpen && (
+        <div className="absolute inset-x-0 top-full border-b border-solid border-[#f6f5fa] bg-white shadow-[0_8px_20px_0_rgba(28,35,43,0.08)] lg:hidden">
+          <ul className="flex flex-col px-5 py-[10px] sm:px-8">
+            {nav &&
+              navItems.map((item) => (
+                <li key={item.label}>
+                  <Link
+                    to={item.href}
+                    aria-current={item.href === activeNavHref ? "page" : undefined}
+                    className={cn(
+                      "text-18 block rounded-[8px] px-[12px] py-[14px] font-medium transition-colors duration-150 hover:bg-[#f5f5f5]",
+                      item.href === activeNavHref
+                        ? "font-semibold text-[#0075d3]"
+                        : "text-[#1c232b]",
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+
+            {action && (
+              <li>
+                {action.logout ? (
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="text-18 block w-full cursor-pointer rounded-[8px] px-[12px] py-[14px] text-left font-medium text-[#858894] transition-colors duration-150 hover:bg-[#f5f5f5]"
+                  >
+                    {action.label}
+                  </button>
+                ) : (
+                  <Link
+                    to={action.href}
+                    className="text-18 block rounded-[8px] px-[12px] py-[14px] font-medium text-[#858894] transition-colors duration-150 hover:bg-[#f5f5f5]"
+                  >
+                    {action.label}
+                  </Link>
+                )}
+              </li>
+            )}
+          </ul>
+        </div>
+      )}
+
     </header>
   );
 }
