@@ -241,7 +241,19 @@ export function ProjectsPage() {
 
         {loading && <StateView title="프로젝트를 불러오는 중입니다" />}
 
-        {error && <StateView variant="error" title={error} />}
+        {error && <StateView
+            variant="error"
+            title={error}
+            action={
+              <Button
+                size="action"
+                variant="secondary"
+                onClick={() => window.location.reload()}
+              >
+                다시 시도
+              </Button>
+            }
+          />}
 
         {!loading && !error && (
           <div className="mt-6 grid grid-cols-1 gap-x-[25px] gap-y-10 sm:grid-cols-2 lg:mt-[35px] lg:grid-cols-3 lg:gap-y-[70px]">

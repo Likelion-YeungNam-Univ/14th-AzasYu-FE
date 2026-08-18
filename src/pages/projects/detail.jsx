@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams  } from "react-router";
 import emptyMeetings from "@/assets/icons/empty-meetings.svg";
 import { Copy, Plus } from "@/components/icons";
 import { Header } from "@/components/layout";
@@ -13,6 +13,7 @@ import {
   copyText,
   getCurrentUserId,
   HEADER_PRESETS,
+  PATHS,
   projectPath,
   toUserMessage,
 } from "@/lib";
@@ -269,6 +270,13 @@ export function ProjectDetailPage() {
         variant="error"
         size="screen"
         title={error || "프로젝트를 찾을 수 없습니다."}
+        action={
+          <Link to={PATHS.PROJECTS}>
+            <Button size="action" variant="secondary">
+              홈으로 가기
+            </Button>
+          </Link>
+        }
       />
     );
   }

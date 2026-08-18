@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams  } from "react-router";
 import bubbleLarge from "@/assets/icons/board-bubble-lg.svg";
 import bubbleSmall from "@/assets/icons/board-bubble-sm.svg";
 import { Plus } from "@/components/icons";
@@ -12,6 +12,7 @@ import {
   HEADER_PRESETS,
   MEETING_TITLE,
   meetingPath,
+  PATHS,
   toUserMessage,
 } from "@/lib";
 
@@ -163,6 +164,13 @@ export function MeetingBoardPage() {
         size="screen"
         title="회의 참여자만 접근할 수 있습니다"
         description="이 회의에 참여하지 않아 아이디어 보드를 볼 수 없습니다."
+        action={
+          <Link to={PATHS.PROJECTS}>
+            <Button size="action" variant="secondary">
+              홈으로 가기
+            </Button>
+          </Link>
+        }
       />
     );
   }
@@ -235,7 +243,19 @@ export function MeetingBoardPage() {
         {loading ? (
           <StateView title="아이디어 카드를 불러오는 중입니다" />
         ) : error ? (
-          <StateView variant="error" title={error} />
+          <StateView
+            variant="error"
+            title={error}
+            action={
+              <Button
+                size="action"
+                variant="secondary"
+                onClick={() => window.location.reload()}
+              >
+                다시 시도
+              </Button>
+            }
+          />
         ) : ideaCards.length === 0 ? (
           <StateView
             variant="empty"

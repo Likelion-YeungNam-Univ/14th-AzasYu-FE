@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams  } from "react-router";
 import uploadIcon from "@/assets/icons/upload.svg";
 import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
 import { StateView } from "@/components/states";
@@ -9,6 +9,7 @@ import {
   getCurrentUserId,
   HEADER_PRESETS,
   meetingPath,
+  PATHS,
   toUserMessage,
 } from "@/lib";
 
@@ -67,6 +68,13 @@ export function MeetingUploadPage() {
         size="screen"
         title="회의 참여자만 접근할 수 있습니다"
         description="이 회의에 참여하지 않아 업로드 권한이 없습니다."
+        action={
+          <Link to={PATHS.PROJECTS}>
+            <Button size="action" variant="secondary">
+              홈으로 가기
+            </Button>
+          </Link>
+        }
       />
     );
   }

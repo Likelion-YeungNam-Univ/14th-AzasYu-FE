@@ -4,7 +4,7 @@ import clockIcon from "@/assets/icons/clock.svg";
 import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
 import { Pagination } from "@/components/pagination";
 import { StateView } from "@/components/states";
-import { Table } from "@/components/ui";
+import { Button, Table } from "@/components/ui";
 import {
   API_BASE_URL,
   formatDateWithWeekday,
@@ -188,7 +188,19 @@ export function MeetingsPage() {
           {loading ? (
             <StateView title="회의 목록을 불러오는 중입니다" />
           ) : error ? (
-            <StateView variant="error" title={error} />
+            <StateView
+            variant="error"
+            title={error}
+            action={
+              <Button
+                size="action"
+                variant="secondary"
+                onClick={() => window.location.reload()}
+              >
+                다시 시도
+              </Button>
+            }
+          />
           ) : meetings.length === 0 ? (
             <StateView
               variant="empty"
