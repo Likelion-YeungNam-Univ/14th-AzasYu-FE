@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router";
 import clockIcon from "@/assets/icons/clock.svg";
 import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
 import { Pagination } from "@/components/pagination";
-import { StateView } from "@/components/states";
+import { SkeletonRows, StateView } from "@/components/states";
 import { Button, Table } from "@/components/ui";
 import {
   API_BASE_URL,
@@ -186,7 +186,7 @@ export function MeetingsPage() {
         <div style={{ animationDelay: "700ms" }}
           className="animate-lift-in mt-[40px] lg:mt-[82px]">
           {loading ? (
-            <StateView title="회의 목록을 불러오는 중입니다" />
+            <SkeletonRows count={8} />
           ) : error ? (
             <StateView
             variant="error"

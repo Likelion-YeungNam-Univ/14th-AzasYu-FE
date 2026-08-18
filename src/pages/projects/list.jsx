@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { Plus } from "@/components/icons";
 import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
-import { StateView } from "@/components/states";
+import { SkeletonCards, StateView } from "@/components/states";
 import { ProjectCard } from "@/components/cards";
 import { RevealOnScroll } from "@/components/motion";
 import { Pagination } from "@/components/pagination";
@@ -239,7 +239,7 @@ export function ProjectsPage() {
           </Button>
         </div>
 
-        {loading && <StateView title="프로젝트를 불러오는 중입니다" />}
+        {loading && <SkeletonCards className="mt-6 lg:mt-[35px]" count={9} />}
 
         {error && <StateView
             variant="error"
