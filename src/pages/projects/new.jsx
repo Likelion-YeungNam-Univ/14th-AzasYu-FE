@@ -120,7 +120,7 @@ export function ProjectNewPage() {
             />
 
             <div className={`${FORM_COLUMN} flex flex-col gap-[18px]`}>
-              <span className="text-20 font-medium text-[#1c232b]">
+              <span className="text-20 font-medium text-ink">
                 프로젝트 색상
               </span>
 

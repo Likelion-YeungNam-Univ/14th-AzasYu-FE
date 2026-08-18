@@ -9,16 +9,16 @@ const REMEMBERED_EMAIL_KEY = "rememberedEmail";
 
 const INTRO_SEEN_KEY = "welcomeIntroSeen";
 
-const LANDING_TEXT = "text-[#1c232b]";
+const LANDING_TEXT = "text-ink";
 
 const LANDING_GRADIENT =
   "linear-gradient(-90deg, rgb(255,255,255) 0%, rgba(255,255,255,0) 51.923%, rgb(255,255,255) 100%)";
 
 const LANDING_FIELD =
-  "text-20 h-[54px] w-full rounded-[10px] border border-solid bg-white px-[16px] font-medium text-[#1c232b] outline-none transition-colors duration-150 placeholder:text-[#b8bccc] focus:border-[#0075d3]";
+  "text-20 h-[54px] w-full rounded-[10px] border border-solid bg-white px-[16px] font-medium text-ink outline-none transition-colors duration-150 placeholder:text-line focus:border-brand";
 
 const landingFieldBorder = (filled) =>
-  filled ? "border-[#1c232b]" : "border-[#b8bccc]";
+  filled ? "border-ink" : "border-line";
 
 export function WelcomePage() {
   const navigate = useNavigate();
@@ -250,7 +250,7 @@ export function WelcomePage() {
                 {error && (
                   <p
                     role="alert"
-                    className="text-16 w-full text-center font-semibold text-[#da1e51] lg:text-20"
+                    className="text-16 w-full text-center font-semibold text-danger lg:text-20"
                   >
                     {error}
                   </p>
@@ -298,7 +298,7 @@ export function WelcomePage() {
 
                 <span
                   aria-hidden
-                  className="flex size-[18px] shrink-0 items-center justify-center rounded-[2px] border border-solid border-[#1c232b] bg-white text-transparent peer-checked:bg-[#1c232b] peer-checked:text-white peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#1c232b]"
+                  className="flex size-[18px] shrink-0 items-center justify-center rounded-[2px] border border-solid border-ink bg-white text-transparent peer-checked:bg-ink peer-checked:text-white peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-ink"
                 >
                   <svg
                     width="12"
@@ -330,8 +330,8 @@ export function WelcomePage() {
                 disabled={submitting}
                 className={`text-20 mt-8 flex h-[54px] w-full cursor-pointer items-center justify-center rounded-[59px] border border-solid font-medium whitespace-nowrap disabled:cursor-not-allowed disabled:opacity-60 lg:mt-[46px] ${
                   canSubmit
-                    ? "border-[#0075d3] bg-[#0075d3] text-white"
-                    : "border-[#1c232b] bg-white text-[#1c232b]"
+                    ? "border-brand bg-brand text-white"
+                    : "border-ink bg-white text-ink"
                 }`}
               >
                 {submitting ? "로그인 중..." : "로그인"}
@@ -340,7 +340,7 @@ export function WelcomePage() {
               <button
                 type="button"
                 onClick={() => navigate(PATHS.SIGNUP)}
-                className={`${LANDING_TEXT} text-20 mt-[14px] flex h-[54px] w-full cursor-pointer items-center justify-center rounded-[65px] border border-solid border-[#1c232b] bg-white font-medium whitespace-nowrap`}
+                className={`${LANDING_TEXT} text-20 mt-[14px] flex h-[54px] w-full cursor-pointer items-center justify-center rounded-[65px] border border-solid border-ink bg-white font-medium whitespace-nowrap`}
               >
                 회원가입
               </button>

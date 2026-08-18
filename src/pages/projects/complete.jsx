@@ -73,11 +73,11 @@ export function ProjectCompletePage() {
           />
 
           <div className="flex flex-col items-center gap-[12px]">
-            <h1 className="text-28 text-center font-bold text-[#1c232b] sm:text-34 lg:text-48 lg:whitespace-nowrap">
+            <h1 className="text-28 text-center font-bold text-ink sm:text-34 lg:text-48 lg:whitespace-nowrap">
               프로젝트가 생성되었습니다!
             </h1>
 
-            <p className="text-16 text-center font-medium text-[#858894] sm:text-18 lg:text-20">
+            <p className="text-16 text-center font-medium text-muted sm:text-18 lg:text-20">
               팀원에게 아래 참여코드를 공유해주세요.
             </p>
           </div>
@@ -87,7 +87,7 @@ export function ProjectCompletePage() {
               type="button"
               onClick={handleCopyJoinCode}
               aria-label={`참여코드 ${joinCode} 복사`}
-              className="text-20 flex cursor-pointer items-center gap-[10px] rounded-[33px] border border-solid border-[#1c232b] px-[18px] py-[14px] font-semibold whitespace-nowrap text-[#1c232b] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1c232b]"
+              className="text-20 flex cursor-pointer items-center gap-[10px] rounded-[33px] border border-solid border-ink px-[18px] py-[14px] font-semibold whitespace-nowrap text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
             >
               {joinCode}
               <Copy className="h-[22px] w-[20px]" />
@@ -98,7 +98,7 @@ export function ProjectCompletePage() {
               onClick={() =>
                 navigate(projectPath('DETAIL', projectId))
               }
-              className="text-20 flex cursor-pointer items-center gap-[10px] rounded-[33px] border border-solid border-white bg-[#1c232b] px-[18px] py-[14px] font-semibold whitespace-nowrap text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1c232b]"
+              className="text-20 flex cursor-pointer items-center gap-[10px] rounded-[33px] border border-solid border-white bg-ink px-[18px] py-[14px] font-semibold whitespace-nowrap text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
             >
               프로젝트 보러가기
               <ArrowRight />

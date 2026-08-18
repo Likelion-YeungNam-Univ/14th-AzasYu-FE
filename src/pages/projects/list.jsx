@@ -293,11 +293,11 @@ export function ProjectsPage() {
           >
             <div className="flex flex-col gap-6">
               <div>
-                <h2 className="text-28 font-semibold text-[#1c232b]">
+                <h2 className="text-28 font-semibold text-ink">
                   프로젝트 참여
                 </h2>
 
-                <p className="mt-2 text-16 text-[#858894]">
+                <p className="mt-2 text-16 text-muted">
                   참여코드를 입력해주세요.
                 </p>
               </div>
@@ -317,7 +317,7 @@ export function ProjectsPage() {
               />
 
               {joinError && (
-                <p role="alert" className="text-14 font-medium text-[#da1e51]">
+                <p role="alert" className="text-14 font-medium text-danger">
                   {joinError}
                 </p>
               )}

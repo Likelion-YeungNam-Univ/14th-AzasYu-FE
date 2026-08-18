@@ -14,8 +14,8 @@ import { buildNavItems, cn, PATHS, SERVICE_NAME } from "@/lib";
 import { clearSession } from "@/session";
 
 const TONE = {
-  onLight: "text-[#1c232b]",
-  onDark: "text-[#1c232b]",
+  onLight: "text-ink",
+  onDark: "text-ink",
 };
 
 const DEFAULT_ACTION = { label: "로그아웃", href: PATHS.WELCOME, logout: true };
@@ -96,7 +96,7 @@ export function Header({
         "sticky top-0 z-100 flex h-[80px] w-full items-center justify-between border-b border-solid px-5 sm:px-8 lg:px-[52px] transition-all duration-300",
         isScrolled
           ? "border-[#e6e8ef] bg-white/80 shadow-[0_2px_12px_0_rgba(28,35,43,0.08)] backdrop-blur-md"
-          : "border-[#f6f5fa] bg-white",
+          : "border-divider bg-white",
         TONE[tone],
         className,
       )}
@@ -174,7 +174,7 @@ export function Header({
             aria-label={menuOpen ? "메뉴 닫기" : "메뉴 열기"}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((open) => !open)}
-            className="flex size-[40px] cursor-pointer flex-col items-center justify-center gap-[5px] rounded-[8px] transition-colors duration-150 hover:bg-[#f5f5f5] lg:hidden"
+            className="flex size-[40px] cursor-pointer flex-col items-center justify-center gap-[5px] rounded-[8px] transition-colors duration-150 hover:bg-surface lg:hidden"
           >
             <span
               className={cn(
@@ -199,7 +199,7 @@ export function Header({
       </div>
 
       {menuOpen && (
-        <div className="absolute inset-x-0 top-full border-b border-solid border-[#f6f5fa] bg-white shadow-[0_8px_20px_0_rgba(28,35,43,0.08)] lg:hidden">
+        <div className="absolute inset-x-0 top-full border-b border-solid border-divider bg-white shadow-[0_8px_20px_0_rgba(28,35,43,0.08)] lg:hidden">
           <ul className="flex flex-col px-5 py-[10px] sm:px-8">
             {nav &&
               navItems.map((item) => (
@@ -208,10 +208,10 @@ export function Header({
                     to={item.href}
                     aria-current={item.href === activeNavHref ? "page" : undefined}
                     className={cn(
-                      "text-18 block rounded-[8px] px-[12px] py-[14px] font-medium transition-colors duration-150 hover:bg-[#f5f5f5]",
+                      "text-18 block rounded-[8px] px-[12px] py-[14px] font-medium transition-colors duration-150 hover:bg-surface",
                       item.href === activeNavHref
-                        ? "font-semibold text-[#0075d3]"
-                        : "text-[#1c232b]",
+                        ? "font-semibold text-brand"
+                        : "text-ink",
                     )}
                   >
                     {item.label}
@@ -225,14 +225,14 @@ export function Header({
                   <button
                     type="button"
                     onClick={handleLogout}
-                    className="text-18 block w-full cursor-pointer rounded-[8px] px-[12px] py-[14px] text-left font-medium text-[#858894] transition-colors duration-150 hover:bg-[#f5f5f5]"
+                    className="text-18 block w-full cursor-pointer rounded-[8px] px-[12px] py-[14px] text-left font-medium text-muted transition-colors duration-150 hover:bg-surface"
                   >
                     {action.label}
                   </button>
                 ) : (
                   <Link
                     to={action.href}
-                    className="text-18 block rounded-[8px] px-[12px] py-[14px] font-medium text-[#858894] transition-colors duration-150 hover:bg-[#f5f5f5]"
+                    className="text-18 block rounded-[8px] px-[12px] py-[14px] font-medium text-muted transition-colors duration-150 hover:bg-surface"
                   >
                     {action.label}
                   </Link>
@@ -295,7 +295,7 @@ export function Hero({
   return (
     <div
       className={cn(
-        "relative w-full bg-[#f5f5f5]",
+        "relative w-full bg-surface",
         HERO_HEIGHT[size],
         className,
       )}
@@ -304,7 +304,7 @@ export function Hero({
 
       <div
         className={cn(
-          "absolute flex flex-col gap-[40px] px-5 text-[#1c232b] sm:px-8 lg:px-8",
+          "absolute flex flex-col gap-[40px] px-5 text-ink sm:px-8 lg:px-8",
           isCenter
             ? "left-1/2 w-full -translate-x-1/2 items-center text-center lg:w-max"
             : "inset-x-0 mx-auto w-full max-w-[1460px] items-start",
@@ -334,7 +334,7 @@ export function Hero({
                   ? "text-16 sm:text-18 lg:text-20"
                   : "text-18 lg:text-20",
                 HERO_DESC_WEIGHT[weight],
-                "text-[#858894]",
+                "text-muted",
               )}
             >
               {descriptionText ? (

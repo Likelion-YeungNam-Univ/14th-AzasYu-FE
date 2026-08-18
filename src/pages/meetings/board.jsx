@@ -212,7 +212,7 @@ export function MeetingBoardPage() {
       <div className="mx-auto w-full max-w-[1460px] px-5 pb-16 sm:px-8 lg:px-8 xl:px-12 lg:pb-[170px]">
         <div style={{ animationDelay: "700ms" }}
           className="animate-lift-in mt-10 flex flex-wrap items-center justify-between gap-4 lg:mt-[93px]">
-          <p className="text-24 min-w-0 flex-1 break-words font-semibold text-[#1c232b] lg:text-28">
+          <p className="text-24 min-w-0 flex-1 break-words font-semibold text-ink lg:text-28">
             {meetingTitle}
           </p>
 
@@ -284,12 +284,12 @@ export function MeetingBoardPage() {
                     {blocks.map((block, idx) => (
                       <div key={idx} className="flex flex-col gap-[10px]">
                         {block.badge && (
-                          <span className="w-fit rounded-full bg-black/10 px-[14px] py-[6px] text-14 font-bold text-[#1c232b] lg:text-16">
+                          <span className="w-fit rounded-full bg-black/10 px-[14px] py-[6px] text-14 font-bold text-ink lg:text-16">
                             {block.badge}
                           </span>
                         )}
                         {block.text && (
-                          <p className="text-18 w-full break-words whitespace-pre-line font-medium text-[#1c232b] lg:text-20">
+                          <p className="text-18 w-full break-words whitespace-pre-line font-medium text-ink lg:text-20">
                             {block.text}
                           </p>
                         )}
@@ -323,7 +323,7 @@ export function MeetingBoardPage() {
             <button
               type="button"
               onClick={() => setSelectedCard(null)}
-              className="absolute top-5 right-5 flex h-[36px] w-[36px] cursor-pointer items-center justify-center rounded-full bg-[#1c232b]/10 text-18 font-bold text-[#1c232b]/60 transition-colors hover:bg-[#1c232b]/20 hover:text-[#1c232b]"
+              className="absolute top-5 right-5 flex h-[36px] w-[36px] cursor-pointer items-center justify-center rounded-full bg-ink/10 text-18 font-bold text-ink/60 transition-colors hover:bg-ink/20 hover:text-ink"
             >
               ✕
             </button>
@@ -332,12 +332,12 @@ export function MeetingBoardPage() {
               {selectedCard.blocks.map((block, idx) => (
                 <div key={idx} className="flex flex-col gap-[12px]">
                   {block.badge && (
-                    <span className="w-fit rounded-full bg-black/10 px-[16px] py-[8px] text-16 font-bold text-[#1c232b] sm:text-18">
+                    <span className="w-fit rounded-full bg-black/10 px-[16px] py-[8px] text-16 font-bold text-ink sm:text-18">
                       {block.badge}
                     </span>
                   )}
                   {block.text && (
-                    <p className="text-20 w-full break-words whitespace-pre-line font-medium leading-relaxed text-[#1c232b] sm:text-24">
+                    <p className="text-20 w-full break-words whitespace-pre-line font-medium leading-relaxed text-ink sm:text-24">
                       {block.text}
                     </p>
                   )}

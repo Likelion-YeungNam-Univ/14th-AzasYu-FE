@@ -1,9 +1,9 @@
 import { cn } from '@/lib'
 
 const STATE_TITLE_TONE = {
-  loading: 'text-[#858894]',
-  empty: 'text-[#858894]',
-  error: 'text-[#da1e51]',
+  loading: 'text-muted',
+  empty: 'text-muted',
+  error: 'text-danger',
 }
 
 const STATE_ROLE = {
@@ -44,7 +44,7 @@ export function Spinner({ className }) {
     <span
       aria-hidden
       className={cn(
-        'block size-[40px] shrink-0 animate-spin rounded-full border-4 border-solid border-[#e6f3fe] border-t-[#0075d3]',
+        'block size-[40px] shrink-0 animate-spin rounded-full border-4 border-solid border-brand-soft border-t-brand',
         className,
       )}
     />
@@ -55,7 +55,7 @@ export function Skeleton({ className }) {
   return (
     <span
       aria-hidden
-      className={cn('block animate-pulse rounded-[8px] bg-[#f5f5f5]', className)}
+      className={cn('block animate-pulse rounded-[8px] bg-surface', className)}
     />
   )
 }
@@ -86,16 +86,16 @@ export function SkeletonRows({ count = 6, className }) {
     <div
       aria-hidden
       className={cn(
-        'w-full overflow-hidden rounded-[35px] border-[0.4px] border-solid border-[#b8bccc] bg-white',
+        'w-full overflow-hidden rounded-[35px] border-[0.4px] border-solid border-line bg-white',
         className,
       )}
     >
-      <Skeleton className="h-[76px] w-full rounded-none bg-[#e6f3fe]" />
+      <Skeleton className="h-[76px] w-full rounded-none bg-brand-soft" />
 
       {Array.from({ length: count }, (_, index) => (
         <div
           key={index}
-          className="flex h-[76px] items-center gap-[24px] border-b-[0.5px] border-solid border-[#b8bccc] px-6 sm:px-10 lg:px-[42px]"
+          className="flex h-[76px] items-center gap-[24px] border-b-[0.5px] border-solid border-line px-6 sm:px-10 lg:px-[42px]"
         >
           <Skeleton className="h-[20px] w-[22%]" />
           <Skeleton className="h-[20px] w-[26%]" />
@@ -135,7 +135,7 @@ export function StateView({
         </p>
 
         {description && (
-          <p className={cn('font-medium text-[#858894]', scale.description)}>
+          <p className={cn('font-medium text-muted', scale.description)}>
             {description}
           </p>
         )}

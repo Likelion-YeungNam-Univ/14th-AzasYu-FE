@@ -213,7 +213,7 @@ export function MeetingsPage() {
                       ? projectPath("MEETING_NEW", projectId)
                       : PATHS.PROJECTS
                   }
-                  className="text-18 rounded-[8px] bg-[#e6f3fe] px-6 py-3 font-semibold text-[#0075d3]"
+                  className="text-18 rounded-[8px] bg-brand-soft px-6 py-3 font-semibold text-brand"
                 >
                   회의 생성하기
                 </Link>

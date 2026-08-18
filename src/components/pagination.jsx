@@ -2,7 +2,7 @@ import { ChevronRight } from "@/components/icons";
 import { cn } from "@/lib";
 
 const ARROW =
-  "flex size-[36px] shrink-0 cursor-pointer items-center justify-center rounded-[8px] text-[#1c232b] transition-colors duration-150 hover:bg-[#f5f5f5] disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent";
+  "flex size-[36px] shrink-0 cursor-pointer items-center justify-center rounded-[8px] text-ink transition-colors duration-150 hover:bg-surface disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent";
 
 export function Pagination({ page, totalPages, onChange, className }) {
   if (totalPages <= 1) return null;
@@ -67,8 +67,8 @@ export function Pagination({ page, totalPages, onChange, className }) {
           className={cn(
             "text-16 flex size-[36px] shrink-0 cursor-pointer items-center justify-center rounded-[8px] font-medium transition-colors duration-150",
             value === page
-              ? "bg-[#0075d3] font-semibold text-white"
-              : "text-[#858894] hover:bg-[#f5f5f5]",
+              ? "bg-brand font-semibold text-white"
+              : "text-muted hover:bg-surface",
           )}
         >
           {value}

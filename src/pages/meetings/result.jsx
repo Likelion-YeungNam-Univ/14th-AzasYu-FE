@@ -56,7 +56,7 @@ function CheckMark() {
   return (
     <span
       aria-hidden
-      className="flex size-[36px] shrink-0 items-center justify-center text-[#0075d3]"
+      className="flex size-[36px] shrink-0 items-center justify-center text-brand"
     >
       <svg width="18" height="14" viewBox="0 0 18 14" fill="none">
         <path
@@ -78,7 +78,7 @@ function CheckList({ items }) {
         <li key={item} className="flex items-center gap-[10px]">
           <CheckMark />
 
-          <p className="text-16 leading-[1.5] font-medium text-[#1c232b] lg:text-20">
+          <p className="text-16 leading-[1.5] font-medium text-ink lg:text-20">
             {item}
           </p>
         </li>
@@ -93,7 +93,7 @@ function BulletList({ items, className }) {
       {items.map((item) => (
         <li
           key={item}
-          className="ms-[30px] leading-[1.5] font-medium text-[#1c232b]"
+          className="ms-[30px] leading-[1.5] font-medium text-ink"
         >
           {item}
         </li>
@@ -105,7 +105,7 @@ function BulletList({ items, className }) {
 function Section({ title, children }) {
   return (
     <section className="flex w-full flex-col gap-[32px]">
-      <h2 className="text-24 font-semibold text-[#1c232b] lg:text-28">
+      <h2 className="text-24 font-semibold text-ink lg:text-28">
         {title}
       </h2>
 
@@ -236,7 +236,7 @@ export function MeetingResultPage() {
         </Section>
 
         <Section title="주요 논의 내용">
-          <div className="rounded-[14px] bg-[#f5f5f5] px-6 py-6 sm:px-[34px] sm:py-[28px]">
+          <div className="rounded-[14px] bg-surface px-6 py-6 sm:px-[34px] sm:py-[28px]">
             <BulletList items={toLines(result.keyDiscussions)} />
           </div>
         </Section>
@@ -259,7 +259,7 @@ export function MeetingResultPage() {
               className="block h-[30px] w-[32px] max-w-none shrink-0"
             />
 
-            <h2 className="text-24 font-semibold text-[#1c232b] lg:text-28">
+            <h2 className="text-24 font-semibold text-ink lg:text-28">
               다르게 이해될 수 있는 부분
             </h2>
           </div>
@@ -267,17 +267,17 @@ export function MeetingResultPage() {
           <ol className="flex flex-col gap-[18px]">
             {result.ambiguities?.map((ambiguity, i) => (
               <li key={ambiguity.id ?? i} className="flex items-start gap-[14px]">
-                <span className="text-16 flex size-[36px] shrink-0 items-center justify-center rounded-[10px] bg-white leading-[1.5] font-medium text-[#858894] lg:text-18">
+                <span className="text-16 flex size-[36px] shrink-0 items-center justify-center rounded-[10px] bg-white leading-[1.5] font-medium text-muted lg:text-18">
                   {i + 1}
                 </span>
 
                 <div className="flex flex-col gap-[4px] pt-[2px]">
-                  <p className="text-16 font-semibold text-[#1c232b] lg:text-20">
+                  <p className="text-16 font-semibold text-ink lg:text-20">
                     {ambiguity.expression}
                   </p>
 
                   {ambiguity.reason && (
-                    <p className="text-14 font-medium text-[#858894] lg:text-18">
+                    <p className="text-14 font-medium text-muted lg:text-18">
                       {ambiguity.reason}
                     </p>
                   )}

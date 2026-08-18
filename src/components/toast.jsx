@@ -36,7 +36,7 @@ export function Toast({ message, duration = 2000, onDone, className }) {
     >
       <span
         className={cn(
-          "text-16 rounded-[59px] bg-[#1c232b] px-[20px] py-[12px] font-medium whitespace-nowrap text-white",
+          "text-16 rounded-[59px] bg-ink px-[20px] py-[12px] font-medium whitespace-nowrap text-white",
           "shadow-[0_8px_24px_0_rgba(0,0,0,0.18)] transition-[opacity,translate] duration-200",
           open ? "translate-y-0 opacity-100" : "translate-y-[8px] opacity-0",
         )}

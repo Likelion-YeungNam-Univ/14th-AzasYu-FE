@@ -192,15 +192,15 @@ export function MeetingUploadPage() {
             />
 
             <div className="flex flex-col items-center gap-[12px] py-[10px] text-center">
-              <p className="text-20 font-semibold text-[#1c232b] lg:text-24">
+              <p className="text-20 font-semibold text-ink lg:text-24">
                 회의 내용을 분석해볼까요?
               </p>
-              <p className="text-16 font-medium text-[#858894] lg:text-18">
+              <p className="text-16 font-medium text-muted lg:text-18">
                 회의 내용을 담은 TXT, DOCX, PDF 파일을 업로드해주세요.
               </p>
             </div>
 
-            <label className="text-20 flex w-[152px] cursor-pointer items-center justify-center rounded-[62px] bg-[#1c232b] px-[24px] py-[14px] font-semibold whitespace-nowrap text-white focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[#1c232b]">
+            <label className="text-20 flex w-[152px] cursor-pointer items-center justify-center rounded-[62px] bg-ink px-[24px] py-[14px] font-semibold whitespace-nowrap text-white focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ink">
               파일 선택
               <input
                 type="file"
@@ -216,13 +216,13 @@ export function MeetingUploadPage() {
               />
             </label>
 
-            <p className="text-14 font-semibold text-[#858894]">또는</p>
+            <p className="text-14 font-semibold text-muted">또는</p>
 
             <textarea
               placeholder="텍스트 직접 입력하기"
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              className="text-14 h-[491px] w-full max-w-[516px] resize-none rounded-[8px] bg-[#f5f5f5] px-[24px] py-[20px] font-semibold text-[#1c232b] outline-none placeholder:text-[#858894] focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-[#0075d3]"
+              className="text-14 h-[491px] w-full max-w-[516px] resize-none rounded-[8px] bg-surface px-[24px] py-[20px] font-semibold text-ink outline-none placeholder:text-muted focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-brand"
             />
 
             <Button

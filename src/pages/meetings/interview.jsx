@@ -30,11 +30,11 @@ function BotMessage({ children, bubbleTop }) {
       <span className="mt-[2px] size-[32px] shrink-0 rounded-full bg-[#def4ec]" />
 
       <div className="flex min-w-0 flex-col">
-        <p className="text-16 font-medium text-[#1c232b]">AI 챗봇</p>
+        <p className="text-16 font-medium text-ink">AI 챗봇</p>
 
         <div
           style={{ marginTop: bubbleTop - 22.4 }}
-          className="text-16 w-fit rounded-[20px] border border-solid border-[#b8bccc] bg-white px-[20px] py-[12px] leading-[1.5] font-medium text-[#1c232b]"
+          className="text-16 w-fit rounded-[20px] border border-solid border-line bg-white px-[20px] py-[12px] leading-[1.5] font-medium text-ink"
         >
           {children}
         </div>
@@ -48,7 +48,7 @@ function UserMessage({ children, tone = "primary" }) {
     <div className="flex w-full justify-end">
       <p
         className={`text-16 max-w-[479px] rounded-[26px] px-[20px] py-[12px] leading-[1.5] font-medium text-white ${
-          tone === "dark" ? "bg-[#1c232b]" : "bg-[#0075d3]"
+          tone === "dark" ? "bg-ink" : "bg-brand"
         }`}
       >
         {children}
@@ -399,7 +399,7 @@ export function MeetingInterviewPage() {
                 return (
                   <Fragment key={question.id}>
                     <div className="flex flex-col gap-[8px]">
-                      <p className="text-14 font-medium text-[#858894]">
+                      <p className="text-14 font-medium text-muted">
                         질문 {index + 1}/{questions.length}
                       </p>
 
@@ -444,17 +444,17 @@ export function MeetingInterviewPage() {
 
             {/* 카드 생성 성공 (결과 렌더링) */}
             {cardStatus === "GENERATED" && ideaCard && (
-              <div className="flex w-full max-w-[500px] flex-col gap-4 self-center rounded-[20px] border border-solid border-[#b8bccc] p-8">
+              <div className="flex w-full max-w-[500px] flex-col gap-4 self-center rounded-[20px] border border-solid border-line p-8">
                 <div className="mb-2 text-center">
-                  <span className="text-12 mb-2 inline-block rounded-full bg-[#0075d3] px-3 py-1 font-bold text-white">
+                  <span className="text-12 mb-2 inline-block rounded-full bg-brand px-3 py-1 font-bold text-white">
                     나의 핵심 아이디어
                   </span>
-                  <h3 className="text-20 font-bold text-[#1c232b]">
+                  <h3 className="text-20 font-bold text-ink">
                     {ideaCard.coreOpinion}
                   </h3>
                 </div>
 
-                <div className="text-16 flex flex-col gap-3 leading-[1.5] text-[#858894]">
+                <div className="text-16 flex flex-col gap-3 leading-[1.5] text-muted">
                   <p>
                     <strong>💡 근거:</strong> {ideaCard.rationale}
                   </p>
@@ -494,7 +494,7 @@ export function MeetingInterviewPage() {
             )}
 
             {/* 답변 입력 */}
-            <div className="flex w-full items-center gap-[50px] rounded-[71px] bg-[#f5f5f5] px-[26px] py-[14px] outline-offset-2 transition-[outline-color] duration-150 focus-within:outline focus-within:outline-2 focus-within:outline-[#0075d3]">
+            <div className="flex w-full items-center gap-[50px] rounded-[71px] bg-surface px-[26px] py-[14px] outline-offset-2 transition-[outline-color] duration-150 focus-within:outline focus-within:outline-2 focus-within:outline-brand">
               <input
                 ref={inputRef}
                 type="text"
@@ -509,7 +509,7 @@ export function MeetingInterviewPage() {
                 disabled={!canType || isSubmitting}
                 placeholder="메세지 보내기..."
                 aria-label="답변 입력"
-                className="text-16 min-w-0 flex-1 bg-transparent leading-[1.5] font-medium text-[#1c232b] outline-none placeholder:text-[#b8bccc]"
+                className="text-16 min-w-0 flex-1 bg-transparent leading-[1.5] font-medium text-ink outline-none placeholder:text-line"
               />
 
               <button

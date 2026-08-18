@@ -21,7 +21,7 @@ export function SignUpCompletePage() {
             className="block size-[56.186px] shrink-0 max-w-none"
           />
 
-          <h1 className="text-28 text-center font-bold text-[#1c232b] sm:text-34 lg:text-48 lg:whitespace-nowrap">
+          <h1 className="text-28 text-center font-bold text-ink sm:text-34 lg:text-48 lg:whitespace-nowrap">
             회원가입이 완료되었습니다.
           </h1>
 
