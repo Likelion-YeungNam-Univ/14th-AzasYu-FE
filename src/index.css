@@ -7,6 +7,15 @@
     system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo",
     "Noto Sans KR", "Malgun Gothic", sans-serif;
 
+  --color-ink: #1c232b;
+  --color-muted: #858894;
+  --color-line: #b8bccc;
+  --color-surface: #f5f5f5;
+  --color-divider: #f6f5fa;
+  --color-brand: #0075d3;
+  --color-brand-soft: #e6f3fe;
+  --color-danger: #da1e51;
+
   --text-12: 12px;
   --text-12--line-height: 1.4;
   --text-12--letter-spacing: -0.025em;

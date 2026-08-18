@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { Link, useParams  } from "react-router";
 import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
 import { StateView } from "@/components/states";
 import { Button } from "@/components/ui";
@@ -7,6 +7,7 @@ import {
   API_BASE_URL,
   getCurrentUserId,
   HEADER_PRESETS,
+  PATHS,
   toUserMessage,
 } from "@/lib";
 
@@ -20,7 +21,7 @@ const toLines = (text) =>
 
 function SectionTitle({ children }) {
   return (
-    <h2 className="text-28 font-semibold text-[#1c232b] lg:text-34">
+    <h2 className="text-28 font-semibold text-ink lg:text-34">
       {children}
     </h2>
   );
@@ -30,20 +31,20 @@ function SummaryBox({ content }) {
   const lines = toLines(content);
 
   return (
-    <div className="rounded-[14px] bg-[#f5f5f5] px-6 py-6 sm:px-[40px] sm:py-[36px]">
+    <div className="rounded-[14px] bg-surface px-6 py-6 sm:px-[40px] sm:py-[36px]">
       {lines.length > 1 ? (
         <ul className="text-16 flex list-disc flex-col lg:text-20">
           {lines.map((line) => (
             <li
               key={line}
-              className="ms-[30px] leading-[1.5] font-medium text-[#1c232b]"
+              className="ms-[30px] leading-[1.5] font-medium text-ink"
             >
               {line}
             </li>
           ))}
         </ul>
       ) : (
-        <p className="text-16 leading-[1.5] font-medium whitespace-pre-wrap text-[#1c232b] lg:text-20">
+        <p className="text-16 leading-[1.5] font-medium whitespace-pre-wrap text-ink lg:text-20">
           {lines[0] || "내용이 없습니다."}
         </p>
       )}
@@ -153,6 +154,13 @@ export function MeetingSummaryPage() {
         size="screen"
         title="회의 참여자만 접근할 수 있습니다"
         description="이 회의에 참여하지 않아 전체 의견 요약을 볼 수 없습니다."
+        action={
+          <Link to={PATHS.PROJECTS}>
+            <Button size="action" variant="secondary">
+              홈으로 가기
+            </Button>
+          </Link>
+        }
       />
     );
   }
@@ -221,7 +229,19 @@ export function MeetingSummaryPage() {
         {loading ? (
           <StateView title="요약 데이터를 확인하고 있습니다" />
         ) : error ? (
-          <StateView variant="error" title={error} />
+          <StateView
+            variant="error"
+            title={error}
+            action={
+              <Button
+                size="action"
+                variant="secondary"
+                onClick={() => window.location.reload()}
+              >
+                다시 시도
+              </Button>
+            }
+          />
         ) : refreshing ? (
           <StateView
             title="AI가 팀원들의 아이디어 카드를 종합하고 있습니다"
@@ -240,12 +260,12 @@ export function MeetingSummaryPage() {
           />
         ) : (
           <>
-            <div className="flex items-center justify-between border-b border-solid border-[#f6f5fa] pb-6">
+            <div className="flex items-center justify-between border-b border-solid border-divider pb-6">
               <div>
-                <p className="text-18 font-semibold text-[#1c232b]">
+                <p className="text-18 font-semibold text-ink">
                   현재 요약 버전: v{summary.version}
                 </p>
-                <p className="text-14 mt-1 text-[#858894]">
+                <p className="text-14 mt-1 text-muted">
                   종합된 카드 수: {summary.sourceCardCount}개
                 </p>
               </div>

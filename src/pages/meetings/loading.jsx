@@ -109,11 +109,11 @@ export function MeetingLoadingPage() {
         />
 
         <div className="mt-10 flex flex-col items-center gap-[12px] text-center lg:mt-[51px]">
-          <h1 className="text-28 font-bold text-[#1c232b] sm:text-34 lg:text-48">
+          <h1 className="text-28 font-bold text-ink sm:text-34 lg:text-48">
             회의 내용을 꼼꼼히 분석하고 있어요.
           </h1>
 
-          <p className="text-18 font-medium text-[#858894] sm:text-20 lg:text-24">
+          <p className="text-18 font-medium text-muted sm:text-20 lg:text-24">
             회의 내용에 따라 최대 5분 정도 소요될 수 있어요.
           </p>
         </div>

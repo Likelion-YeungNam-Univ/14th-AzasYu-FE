@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams  } from "react-router";
 import emptyMeetings from "@/assets/icons/empty-meetings.svg";
 import { Copy, Plus } from "@/components/icons";
 import { Header } from "@/components/layout";
@@ -13,6 +13,7 @@ import {
   copyText,
   getCurrentUserId,
   HEADER_PRESETS,
+  PATHS,
   projectPath,
   toUserMessage,
 } from "@/lib";
@@ -269,6 +270,13 @@ export function ProjectDetailPage() {
         variant="error"
         size="screen"
         title={error || "프로젝트를 찾을 수 없습니다."}
+        action={
+          <Link to={PATHS.PROJECTS}>
+            <Button size="action" variant="secondary">
+              홈으로 가기
+            </Button>
+          </Link>
+        }
       />
     );
   }
@@ -277,9 +285,9 @@ export function ProjectDetailPage() {
     <div className="min-h-svh w-full bg-white">
       <Header {...HEADER_PRESETS.appOnLight} />
 
-      <div className="relative z-20 w-full bg-[#f5f5f5] py-10 lg:min-h-[256px] lg:pt-0 lg:pb-12">
+      <div className="relative z-20 w-full bg-surface py-10 lg:min-h-[256px] lg:pt-0 lg:pb-12">
         <div className="mx-auto flex w-full max-w-[600px] flex-col items-start px-5 sm:px-8 lg:px-0 lg:pt-[48px]">
-          <p className="mb-[16px] w-full break-all line-clamp-3 text-34 font-bold text-[#1c232b] lg:text-48">
+          <p className="mb-[16px] w-full break-all line-clamp-3 text-34 font-bold text-ink lg:text-48">
             <DroppingChars text={project.name ?? ""} step={22} speed="fast" />
           </p>
 
@@ -293,7 +301,7 @@ export function ProjectDetailPage() {
                 type="button"
                 onClick={handleCopyJoinCode}
                 aria-label={`참여코드 ${project.joinCode} 복사`}
-                className="text-18 flex cursor-pointer items-center gap-[8px] font-medium text-[#858894] lg:text-20"
+                className="text-18 flex cursor-pointer items-center gap-[8px] font-medium text-muted lg:text-20"
               >
                 참여코드 {project.joinCode}
                 <Copy className="h-[15px] w-[14px]" />

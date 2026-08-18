@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router";
+import serviceLogo from "@/assets/logo.png";
 import githubIcon from "@/assets/icons/github.svg";
 import instagramIcon from "@/assets/icons/instagram.svg";
 import likelionLogo from "@/assets/likelion-logo.svg";
@@ -13,8 +14,8 @@ import { buildNavItems, cn, PATHS, SERVICE_NAME } from "@/lib";
 import { clearSession } from "@/session";
 
 const TONE = {
-  onLight: "text-[#1c232b]",
-  onDark: "text-[#1c232b]",
+  onLight: "text-ink",
+  onDark: "text-ink",
 };
 
 const DEFAULT_ACTION = { label: "로그아웃", href: PATHS.WELCOME, logout: true };
@@ -73,26 +74,51 @@ export function Header({
 
   const activeNavHref = resolveActiveNavHref(pathname, navItems);
 
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => setMenuOpen(false), [pathname]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [menuOpen]);
+
   return (
     <header
       className={cn(
         "sticky top-0 z-100 flex h-[80px] w-full items-center justify-between border-b border-solid px-5 sm:px-8 lg:px-[52px] transition-all duration-300",
         isScrolled
           ? "border-[#e6e8ef] bg-white/80 shadow-[0_2px_12px_0_rgba(28,35,43,0.08)] backdrop-blur-md"
-          : "border-[#f6f5fa] bg-white",
+          : "border-divider bg-white",
         TONE[tone],
         className,
       )}
     >
       <Link
         to={nav ? PATHS.PROJECTS : PATHS.WELCOME}
-        className="text-18 font-semibold whitespace-nowrap transition-opacity duration-150 hover:opacity-70 sm:text-20 lg:text-24"
+        className="flex shrink-0 items-center gap-[10px] transition-opacity duration-150 hover:opacity-70"
       >
-        {SERVICE_NAME}
+        <img
+          src={serviceLogo}
+          alt=""
+          aria-hidden
+          className="block size-[36px] max-w-none shrink-0 rounded-[8px]"
+        />
+
+        <span className="hidden text-20 font-semibold whitespace-nowrap lg:inline lg:text-24">
+          {SERVICE_NAME}
+        </span>
       </Link>
 
       {nav && (
-        <nav className="text-16 absolute left-1/2 flex w-full max-w-[40%] -translate-x-1/2 items-center justify-center gap-[16px] sm:gap-[32px] font-medium">
+        <nav className="text-16 absolute left-1/2 hidden w-full max-w-[40%] -translate-x-1/2 items-center justify-center gap-[16px] font-medium lg:flex lg:gap-[32px]">
           {navItems.map((item) => {
             const isActive = item.href === activeNavHref;
 
@@ -117,29 +143,106 @@ export function Header({
         </nav>
       )}
 
-      {action &&
-        (action.logout ? (
+      <div className="flex shrink-0 items-center gap-[10px]">
+        {action &&
+          (action.logout ? (
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="hidden cursor-pointer items-center gap-[6px] transition-opacity duration-150 hover:opacity-70 lg:flex"
+            >
+              <span className="text-18 font-medium whitespace-nowrap">
+                {action.label}
+              </span>
+              <ChevronRight />
+            </button>
+          ) : (
+            <Link
+              to={action.href}
+              className="hidden items-center gap-[6px] transition-opacity duration-150 hover:opacity-70 lg:flex"
+            >
+              <span className="text-18 font-medium whitespace-nowrap">
+                {action.label}
+              </span>
+              <ChevronRight />
+            </Link>
+          ))}
+
+        {(nav || action) && (
           <button
             type="button"
-            onClick={handleLogout}
-            className="flex cursor-pointer items-center gap-[6px] transition-opacity duration-150 hover:opacity-70"
+            aria-label={menuOpen ? "메뉴 닫기" : "메뉴 열기"}
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((open) => !open)}
+            className="flex size-[40px] cursor-pointer flex-col items-center justify-center gap-[5px] rounded-[8px] transition-colors duration-150 hover:bg-surface lg:hidden"
           >
-            <span className="text-18 font-medium whitespace-nowrap">
-              {action.label}
-            </span>
-            <ChevronRight />
+            <span
+              className={cn(
+                "block h-[2px] w-[20px] rounded-full bg-current transition-transform duration-200",
+                menuOpen && "translate-y-[7px] rotate-45",
+              )}
+            />
+            <span
+              className={cn(
+                "block h-[2px] w-[20px] rounded-full bg-current transition-opacity duration-200",
+                menuOpen && "opacity-0",
+              )}
+            />
+            <span
+              className={cn(
+                "block h-[2px] w-[20px] rounded-full bg-current transition-transform duration-200",
+                menuOpen && "-translate-y-[7px] -rotate-45",
+              )}
+            />
           </button>
-        ) : (
-          <Link
-            to={action.href}
-            className="flex items-center gap-[6px] transition-opacity duration-150 hover:opacity-70"
-          >
-            <span className="text-18 font-medium whitespace-nowrap">
-              {action.label}
-            </span>
-            <ChevronRight />
-          </Link>
-        ))}
+        )}
+      </div>
+
+      {menuOpen && (
+        <div className="absolute inset-x-0 top-full border-b border-solid border-divider bg-white shadow-[0_8px_20px_0_rgba(28,35,43,0.08)] lg:hidden">
+          <ul className="flex flex-col px-5 py-[10px] sm:px-8">
+            {nav &&
+              navItems.map((item) => (
+                <li key={item.label}>
+                  <Link
+                    to={item.href}
+                    aria-current={item.href === activeNavHref ? "page" : undefined}
+                    className={cn(
+                      "text-18 block rounded-[8px] px-[12px] py-[14px] font-medium transition-colors duration-150 hover:bg-surface",
+                      item.href === activeNavHref
+                        ? "font-semibold text-brand"
+                        : "text-ink",
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+
+            {action && (
+              <li>
+                {action.logout ? (
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="text-18 block w-full cursor-pointer rounded-[8px] px-[12px] py-[14px] text-left font-medium text-muted transition-colors duration-150 hover:bg-surface"
+                  >
+                    {action.label}
+                  </button>
+                ) : (
+                  <Link
+                    to={action.href}
+                    className="text-18 block rounded-[8px] px-[12px] py-[14px] font-medium text-muted transition-colors duration-150 hover:bg-surface"
+                  >
+                    {action.label}
+                  </Link>
+                )}
+              </li>
+            )}
+          </ul>
+        </div>
+      )}
+
     </header>
   );
 }
@@ -192,7 +295,7 @@ export function Hero({
   return (
     <div
       className={cn(
-        "relative w-full bg-[#f5f5f5]",
+        "relative w-full bg-surface",
         HERO_HEIGHT[size],
         className,
       )}
@@ -201,7 +304,7 @@ export function Hero({
 
       <div
         className={cn(
-          "absolute flex flex-col gap-[40px] px-5 text-[#1c232b] sm:px-8 lg:px-8",
+          "absolute flex flex-col gap-[40px] px-5 text-ink sm:px-8 lg:px-8",
           isCenter
             ? "left-1/2 w-full -translate-x-1/2 items-center text-center lg:w-max"
             : "inset-x-0 mx-auto w-full max-w-[1460px] items-start",
@@ -231,7 +334,7 @@ export function Hero({
                   ? "text-16 sm:text-18 lg:text-20"
                   : "text-18 lg:text-20",
                 HERO_DESC_WEIGHT[weight],
-                "text-[#858894]",
+                "text-muted",
               )}
             >
               {descriptionText ? (

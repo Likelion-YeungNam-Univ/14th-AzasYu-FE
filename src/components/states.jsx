@@ -1,9 +1,9 @@
 import { cn } from '@/lib'
 
 const STATE_TITLE_TONE = {
-  loading: 'text-[#858894]',
-  empty: 'text-[#858894]',
-  error: 'text-[#da1e51]',
+  loading: 'text-muted',
+  empty: 'text-muted',
+  error: 'text-danger',
 }
 
 const STATE_ROLE = {
@@ -44,10 +44,65 @@ export function Spinner({ className }) {
     <span
       aria-hidden
       className={cn(
-        'block size-[40px] shrink-0 animate-spin rounded-full border-4 border-solid border-[#e6f3fe] border-t-[#0075d3]',
+        'block size-[40px] shrink-0 animate-spin rounded-full border-4 border-solid border-brand-soft border-t-brand',
         className,
       )}
     />
+  )
+}
+
+export function Skeleton({ className }) {
+  return (
+    <span
+      aria-hidden
+      className={cn('block animate-pulse rounded-[8px] bg-surface', className)}
+    />
+  )
+}
+
+export function SkeletonCards({ count = 6, className }) {
+  return (
+    <ul
+      aria-hidden
+      className={cn(
+        'grid grid-cols-1 gap-x-[25px] gap-y-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-y-[70px]',
+        className,
+      )}
+    >
+      {Array.from({ length: count }, (_, index) => (
+        <li key={index} className="flex flex-col">
+          <Skeleton className="aspect-[470/275] w-full rounded-[14px]" />
+          <Skeleton className="mt-[22px] h-[25px] w-[45%]" />
+          <Skeleton className="mt-[4px] h-[34px] w-[80%]" />
+          <Skeleton className="mt-[8px] h-[25px] w-[35%]" />
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+export function SkeletonRows({ count = 6, className }) {
+  return (
+    <div
+      aria-hidden
+      className={cn(
+        'w-full overflow-hidden rounded-[35px] border-[0.4px] border-solid border-line bg-white',
+        className,
+      )}
+    >
+      <Skeleton className="h-[76px] w-full rounded-none bg-brand-soft" />
+
+      {Array.from({ length: count }, (_, index) => (
+        <div
+          key={index}
+          className="flex h-[76px] items-center gap-[24px] border-b-[0.5px] border-solid border-line px-6 sm:px-10 lg:px-[42px]"
+        >
+          <Skeleton className="h-[20px] w-[22%]" />
+          <Skeleton className="h-[20px] w-[26%]" />
+          <Skeleton className="h-[20px] w-[30%]" />
+        </div>
+      ))}
+    </div>
   )
 }
 
@@ -80,7 +135,7 @@ export function StateView({
         </p>
 
         {description && (
-          <p className={cn('font-medium text-[#858894]', scale.description)}>
+          <p className={cn('font-medium text-muted', scale.description)}>
             {description}
           </p>
         )}

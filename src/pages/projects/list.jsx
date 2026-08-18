@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { Plus } from "@/components/icons";
 import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
-import { StateView } from "@/components/states";
+import { SkeletonCards, StateView } from "@/components/states";
 import { ProjectCard } from "@/components/cards";
 import { RevealOnScroll } from "@/components/motion";
 import { Pagination } from "@/components/pagination";
@@ -182,6 +182,18 @@ export function ProjectsPage() {
     }
   };
 
+  useEffect(() => {
+    if (!isJoinModalOpen) return;
+
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") handleCloseJoinModal();
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [isJoinModalOpen]);
+
   const handleCloseJoinModal = () => {
     setIsJoinModalOpen(false);
     setJoinCode("");
@@ -227,9 +239,21 @@ export function ProjectsPage() {
           </Button>
         </div>
 
-        {loading && <StateView title="프로젝트를 불러오는 중입니다" />}
+        {loading && <SkeletonCards className="mt-6 lg:mt-[35px]" count={9} />}
 
-        {error && <StateView variant="error" title={error} />}
+        {error && <StateView
+            variant="error"
+            title={error}
+            action={
+              <Button
+                size="action"
+                variant="secondary"
+                onClick={() => window.location.reload()}
+              >
+                다시 시도
+              </Button>
+            }
+          />}
 
         {!loading && !error && (
           <div className="mt-6 grid grid-cols-1 gap-x-[25px] gap-y-10 sm:grid-cols-2 lg:mt-[35px] lg:grid-cols-3 lg:gap-y-[70px]">
@@ -256,15 +280,24 @@ export function ProjectsPage() {
       </div>
 
       {isJoinModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-5">
-          <div className="w-full max-w-[500px] rounded-[24px] bg-white p-8">
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="프로젝트 참여"
+          onClick={handleCloseJoinModal}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-5"
+        >
+          <div
+            onClick={(event) => event.stopPropagation()}
+            className="w-full max-w-[500px] rounded-[24px] bg-white p-8 shadow-[10px_10px_30px_0px_rgba(0,0,0,0.12)]"
+          >
             <div className="flex flex-col gap-6">
               <div>
-                <h2 className="text-28 font-semibold text-black">
+                <h2 className="text-28 font-semibold text-ink">
                   프로젝트 참여
                 </h2>
 
-                <p className="mt-2 text-16 text-[#717171]">
+                <p className="mt-2 text-16 text-muted">
                   참여코드를 입력해주세요.
                 </p>
               </div>
@@ -284,7 +317,7 @@ export function ProjectsPage() {
               />
 
               {joinError && (
-                <p role="alert" className="text-14 font-medium text-[#da1e51]">
+                <p role="alert" className="text-14 font-medium text-danger">
                   {joinError}
                 </p>
               )}

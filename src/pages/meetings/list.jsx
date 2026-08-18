@@ -3,8 +3,8 @@ import { Link, useParams } from "react-router";
 import clockIcon from "@/assets/icons/clock.svg";
 import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
 import { Pagination } from "@/components/pagination";
-import { StateView } from "@/components/states";
-import { Table } from "@/components/ui";
+import { SkeletonRows, StateView } from "@/components/states";
+import { Button, Table } from "@/components/ui";
 import {
   API_BASE_URL,
   formatDateWithWeekday,
@@ -186,9 +186,21 @@ export function MeetingsPage() {
         <div style={{ animationDelay: "700ms" }}
           className="animate-lift-in mt-[40px] lg:mt-[82px]">
           {loading ? (
-            <StateView title="회의 목록을 불러오는 중입니다" />
+            <SkeletonRows count={8} />
           ) : error ? (
-            <StateView variant="error" title={error} />
+            <StateView
+            variant="error"
+            title={error}
+            action={
+              <Button
+                size="action"
+                variant="secondary"
+                onClick={() => window.location.reload()}
+              >
+                다시 시도
+              </Button>
+            }
+          />
           ) : meetings.length === 0 ? (
             <StateView
               variant="empty"
@@ -201,7 +213,7 @@ export function MeetingsPage() {
                       ? projectPath("MEETING_NEW", projectId)
                       : PATHS.PROJECTS
                   }
-                  className="text-18 rounded-[8px] bg-[#e6f3fe] px-6 py-3 font-semibold text-[#0075d3]"
+                  className="text-18 rounded-[8px] bg-brand-soft px-6 py-3 font-semibold text-brand"
                 >
                   회의 생성하기
                 </Link>

@@ -3,10 +3,10 @@ import { ChevronRight } from "@/components/icons";
 import { cn, formatDateWithWeekday } from "@/lib";
 
 const TRIGGER =
-  "text-18 flex h-[56px] w-full cursor-pointer items-center justify-between gap-[8px] rounded-[8px] border border-solid bg-white pr-[14px] pl-[16px] font-medium outline-none transition-colors duration-150 hover:border-[#858894]";
+  "text-18 flex h-[56px] w-full cursor-pointer items-center justify-between gap-[8px] rounded-[8px] border border-solid bg-white pr-[14px] pl-[16px] font-medium outline-none transition-colors duration-150 hover:border-muted";
 
 const PANEL =
-  "absolute top-[calc(100%+8px)] left-0 z-30 rounded-[12px] border border-solid border-[#f6f5fa] bg-white p-[14px] shadow-[10px_10px_30px_0px_rgba(0,0,0,0.12)]";
+  "absolute top-[calc(100%+8px)] left-0 z-30 rounded-[12px] border border-solid border-divider bg-white p-[14px] shadow-[10px_10px_30px_0px_rgba(0,0,0,0.12)]";
 
 const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -79,8 +79,8 @@ export function DatePicker({ value, onChange, placeholder, ariaLabel, icon }) {
         onClick={() => setOpen((current) => !current)}
         className={cn(
           TRIGGER,
-          open ? "border-[#0075d3]" : "border-[#b8bccc]",
-          value ? "text-[#1c232b]" : "text-[#b8bccc]",
+          open ? "border-brand" : "border-line",
+          value ? "text-ink" : "text-line",
         )}
       >
         <span className="truncate">
@@ -96,12 +96,12 @@ export function DatePicker({ value, onChange, placeholder, ariaLabel, icon }) {
               type="button"
               onClick={() => moveMonth(-1)}
               aria-label="이전 달"
-              className="flex size-[28px] cursor-pointer items-center justify-center rounded-[6px] text-[#1c232b] transition-colors duration-150 hover:bg-[#f5f5f5]"
+              className="flex size-[28px] cursor-pointer items-center justify-center rounded-[6px] text-ink transition-colors duration-150 hover:bg-surface"
             >
               <ChevronRight className="rotate-180" />
             </button>
 
-            <span className="text-18 font-semibold text-[#1c232b]">
+            <span className="text-18 font-semibold text-ink">
               {view.getFullYear()}년 {view.getMonth() + 1}월
             </span>
 
@@ -109,7 +109,7 @@ export function DatePicker({ value, onChange, placeholder, ariaLabel, icon }) {
               type="button"
               onClick={() => moveMonth(1)}
               aria-label="다음 달"
-              className="flex size-[28px] cursor-pointer items-center justify-center rounded-[6px] text-[#1c232b] transition-colors duration-150 hover:bg-[#f5f5f5]"
+              className="flex size-[28px] cursor-pointer items-center justify-center rounded-[6px] text-ink transition-colors duration-150 hover:bg-surface"
             >
               <ChevronRight />
             </button>
@@ -119,7 +119,7 @@ export function DatePicker({ value, onChange, placeholder, ariaLabel, icon }) {
             {WEEKDAYS.map((label) => (
               <span
                 key={label}
-                className="text-12 flex h-[28px] items-center justify-center font-medium text-[#858894]"
+                className="text-12 flex h-[28px] items-center justify-center font-medium text-muted"
               >
                 {label}
               </span>
@@ -143,13 +143,13 @@ export function DatePicker({ value, onChange, placeholder, ariaLabel, icon }) {
                   }}
                   className={cn(
                     "text-16 flex size-[36px] items-center justify-center justify-self-center rounded-full font-medium transition-colors duration-150",
-                    disabled && "cursor-not-allowed text-[#d7d7d7]",
-                    !disabled && !selected && "cursor-pointer text-[#1c232b] hover:bg-[#e6f3fe]",
-                    selected && "cursor-pointer bg-[#0075d3] font-semibold text-white",
+                    disabled && "cursor-not-allowed text-line",
+                    !disabled && !selected && "cursor-pointer text-ink hover:bg-brand-soft",
+                    selected && "cursor-pointer bg-brand font-semibold text-white",
                     !selected &&
                       !disabled &&
                       key === toKey(today) &&
-                      "border border-solid border-[#0075d3] text-[#0075d3]",
+                      "border border-solid border-brand text-brand",
                   )}
                 >
                   {date.getDate()}
@@ -178,8 +178,8 @@ export function Dropdown({ value, onChange, options, ariaLabel, icon }) {
         onClick={() => setOpen((prev) => !prev)}
         className={cn(
           TRIGGER,
-          open ? "border-[#0075d3]" : "border-[#b8bccc]",
-          current ? "text-[#1c232b]" : "text-[#b8bccc]",
+          open ? "border-brand" : "border-line",
+          current ? "text-ink" : "text-line",
         )}
       >
         <span className="truncate">{current?.label ?? ""}</span>
@@ -204,8 +204,8 @@ export function Dropdown({ value, onChange, options, ariaLabel, icon }) {
                 className={cn(
                   "text-16 flex w-full cursor-pointer items-center rounded-[8px] px-[12px] py-[10px] text-left font-medium transition-colors duration-150",
                   option.value === value
-                    ? "bg-[#e6f3fe] font-semibold text-[#0075d3]"
-                    : "text-[#1c232b] hover:bg-[#f5f5f5]",
+                    ? "bg-brand-soft font-semibold text-brand"
+                    : "text-ink hover:bg-surface",
                 )}
               >
                 {option.label}

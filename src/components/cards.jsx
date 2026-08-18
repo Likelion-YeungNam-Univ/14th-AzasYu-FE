@@ -22,7 +22,7 @@ export function ProjectCard({ project, className }) {
       to={projectPath("DETAIL", project.id)}
       className={cn(
         "group flex flex-col rounded-[14px] transition-[translate] duration-150 hover:-translate-y-[2px]",
-        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1c232b]",
+        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink",
         className,
       )}
     >
@@ -31,19 +31,19 @@ export function ProjectCard({ project, className }) {
         style={{ backgroundImage: gradient }}
       >
         {typeof project.meetingCount === "number" && (
-          <span className="text-12 flex items-center justify-center rounded-[8px] bg-white px-[13px] py-[8px] font-bold whitespace-nowrap text-[#1c232b]">
+          <span className="text-12 flex items-center justify-center rounded-[8px] bg-white px-[13px] py-[8px] font-bold whitespace-nowrap text-ink">
             {project.meetingCount}개 회의
           </span>
         )}
       </div>
 
-      <p className="text-18 mt-[22px] font-medium text-[#858894]">
+      <p className="text-18 mt-[22px] font-medium text-muted">
         {project.participants}
       </p>
-      <p className="text-24 mt-[4px] line-clamp-2 h-[65px] font-semibold break-all text-[#1c232b]">
+      <p className="text-24 mt-[4px] line-clamp-2 h-[65px] font-semibold break-all text-ink">
         {project.name}
       </p>
-      <p className="text-18 font-medium text-[#d7d7d7]">{project.date}</p>
+      <p className="text-18 font-medium text-line">{project.date}</p>
     </Link>
   );
 }
@@ -51,7 +51,7 @@ export function ProjectCard({ project, className }) {
 function Divider() {
   return (
     <div className="relative h-0 w-full">
-      <span className="absolute inset-x-0 -top-px block border-t border-[#f6f5fa]" />
+      <span className="absolute inset-x-0 -top-px block border-t border-divider" />
     </div>
   );
 }
@@ -108,7 +108,7 @@ export function AvatarStack({ members = [], className }) {
         ))}
 
         {rest > 0 && (
-          <span className="text-12 flex size-[33px] shrink-0 items-center justify-center rounded-full bg-white font-medium text-[#858894]">
+          <span className="text-12 flex size-[33px] shrink-0 items-center justify-center rounded-full bg-white font-medium text-muted">
             +{rest}
           </span>
         )}
@@ -134,7 +134,7 @@ export function AvatarStack({ members = [], className }) {
                   className="block size-[18px] shrink-0 rounded-full"
                 />
 
-                <span className="text-12 font-medium whitespace-nowrap text-[#1c232b]">
+                <span className="text-12 font-medium whitespace-nowrap text-ink">
                   {member.name}
                 </span>
               </li>
@@ -197,7 +197,7 @@ export function MeetingCard({ projectId, meeting, currentUserId }) {
       <div className="flex w-full flex-col gap-[30px]">
         <div className="flex flex-col gap-[4px]">
           <div className="flex items-start justify-between gap-[8px]">
-            <p className="text-28 line-clamp-2 font-bold break-all text-[#1c232b] lg:text-34">
+            <p className="text-28 line-clamp-2 font-bold break-all text-ink lg:text-34">
               {title}
             </p>
 
@@ -208,7 +208,7 @@ export function MeetingCard({ projectId, meeting, currentUserId }) {
             )}
           </div>
 
-          <p className="text-16 font-medium text-[#858894]">
+          <p className="text-16 font-medium text-muted">
             {formatMeetingDate(displayDate)}
           </p>
         </div>
@@ -217,17 +217,17 @@ export function MeetingCard({ projectId, meeting, currentUserId }) {
 
         <div className="flex flex-col gap-[28px]">
           <div className="relative h-[39px] w-full">
-            <p className="text-16 absolute top-0 left-0 font-medium text-[#858894]">
+            <p className="text-16 absolute top-0 left-0 font-medium text-muted">
               참여 현황
             </p>
 
-            <p className="text-16 absolute top-0 right-0 font-medium text-[#858894]">
+            <p className="text-16 absolute top-0 right-0 font-medium text-muted">
               {participantsDone}/{participantsTotal}명 완료
             </p>
 
-            <div className="absolute top-[31.5px] left-0 h-[9px] w-full overflow-clip rounded-[33px] bg-[#f5f5f5]">
+            <div className="absolute top-[31.5px] left-0 h-[9px] w-full overflow-clip rounded-[33px] bg-surface">
               <div
-                className="h-full rounded-[33px] bg-[#0075d3]"
+                className="h-full rounded-[33px] bg-brand"
                 style={{
                   width: `${ratio}%`,
                 }}
@@ -271,11 +271,11 @@ export function MeetingCard({ projectId, meeting, currentUserId }) {
         {!hasRecord && !hasResult && (
           <>
             <div className="flex flex-col gap-[4px]">
-              <p className="text-20 font-bold text-[#1c232b] lg:text-24">
+              <p className="text-20 font-bold text-ink lg:text-24">
                 회의가 끝났나요?
               </p>
 
-              <p className="text-16 font-medium text-[#858894]">
+              <p className="text-16 font-medium text-muted">
                 회의 내용을 업로드하면 AI가 분석해드려요.
               </p>
             </div>
@@ -293,11 +293,11 @@ export function MeetingCard({ projectId, meeting, currentUserId }) {
         {hasRecord && !hasResult && (
           <>
             <div className="flex flex-col gap-[4px]">
-              <p className="text-20 font-bold text-[#1c232b] lg:text-24">
+              <p className="text-20 font-bold text-ink lg:text-24">
                 회의 분석이 진행 중이에요.
               </p>
 
-              <p className="text-16 font-medium text-[#858894]">
+              <p className="text-16 font-medium text-muted">
                 회의 내용이 업로드되었어요. 분석 상태를 확인해보세요.
               </p>
             </div>
@@ -315,11 +315,11 @@ export function MeetingCard({ projectId, meeting, currentUserId }) {
         {hasResult && (
           <>
             <div className="flex flex-col gap-[4px]">
-              <p className="text-20 font-bold text-[#1c232b] lg:text-24">
+              <p className="text-20 font-bold text-ink lg:text-24">
                 회의 분석이 완료됐어요.
               </p>
 
-              <p className="text-16 font-medium text-[#858894]">
+              <p className="text-16 font-medium text-muted">
                 회의 분석 결과를 다시 확인할 수 있어요.
               </p>
             </div>

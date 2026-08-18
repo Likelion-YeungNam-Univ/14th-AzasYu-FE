@@ -35,7 +35,7 @@ const DURATION_OPTIONS = [
 const NEW_COLUMN = "w-full max-w-[562px] md:max-w-[620px] lg:max-w-[562px]";
 
 const DATE_FIELD =
-  "text-18 h-[56px] w-full cursor-pointer appearance-none rounded-[8px] border border-solid border-[#b8bccc] bg-white pr-[44px] pl-[16px] font-medium outline-none transition-colors duration-150 hover:border-[#858894] focus:border-[#0075d3]";
+  "text-18 h-[56px] w-full cursor-pointer appearance-none rounded-[8px] border border-solid border-line bg-white pr-[44px] pl-[16px] font-medium outline-none transition-colors duration-150 hover:border-muted focus:border-brand";
 
 const PICKER_FIELD = cn(
   DATE_FIELD,
@@ -46,12 +46,12 @@ const FIELD_ICON =
   "pointer-events-none absolute inset-y-0 right-[16px] flex items-center";
 
 const DATE_FIELD_TEXT = {
-  filled: "text-[#1c232b]",
+  filled: "text-ink",
   empty: "text-transparent",
 };
 
 const HINT_TEXT =
-  "text-18 pointer-events-none absolute inset-y-0 left-0 flex items-center px-[16px] font-medium text-[#b8bccc]";
+  "text-18 pointer-events-none absolute inset-y-0 left-0 flex items-center px-[16px] font-medium text-line";
 
 const pad = (value) => String(value).padStart(2, "0");
 
@@ -327,7 +327,7 @@ export function MeetingNewPage() {
                   aria-label="회의 안건 추가"
                   maxLength={FIELD_LIMITS.AGENDA}
                   onPaste={alertOnTruncatedPaste(FIELD_LIMITS.AGENDA)}
-                  className="text-20 w-full rounded-[55px] border border-solid border-[#b8bccc] px-[16px] py-[8px] font-medium text-[#1c232b] outline-none transition-colors duration-150 placeholder:text-[#b8bccc] focus:border-[#0075d3]"
+                  className="text-20 w-full rounded-[55px] border border-solid border-line px-[16px] py-[8px] font-medium text-ink outline-none transition-colors duration-150 placeholder:text-line focus:border-brand"
                 />
               </div>
             </div>
@@ -386,7 +386,7 @@ export function MeetingNewPage() {
                     onChange={setExpectedDurationMinutes}
                     ariaLabel="예상 소요 시간"
                     options={DURATION_OPTIONS}
-                    icon={<ChevronRight className="rotate-90 text-[#858894]" />}
+                    icon={<ChevronRight className="rotate-90 text-muted" />}
                   />
                 </span>
               </div>
@@ -402,7 +402,7 @@ export function MeetingNewPage() {
                   onChange={(e) => setMemberQuery(e.target.value)}
                   placeholder="이름을 입력하여 검색하세요."
                   aria-label="참여자 검색"
-                  className="text-20 h-[66px] w-full rounded-[8px] border border-solid border-[#b8bccc] px-[16px] py-[14px] font-medium text-[#1c232b] outline-none transition-colors duration-150 placeholder:text-[#b8bccc] focus:border-[#0075d3]"
+                  className="text-20 h-[66px] w-full rounded-[8px] border border-solid border-line px-[16px] py-[14px] font-medium text-ink outline-none transition-colors duration-150 placeholder:text-line focus:border-brand"
                 />
 
                 {suggestions.length > 0 && (
@@ -415,7 +415,7 @@ export function MeetingNewPage() {
                             setParticipants((prev) => [...prev, member]);
                             setMemberQuery("");
                           }}
-                          className="text-16 flex w-full cursor-pointer items-center px-[16px] py-[10px] text-left font-medium text-[#1c232b] hover:bg-[#f5f5f5]"
+                          className="text-16 flex w-full cursor-pointer items-center px-[16px] py-[10px] text-left font-medium text-ink hover:bg-surface"
                         >
                           {member.name}
                         </button>
