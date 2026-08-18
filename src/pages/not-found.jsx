@@ -4,10 +4,10 @@ import { PATHS } from "@/lib";
 export function NotFoundPage() {
   return (
     <div className="flex min-h-svh w-full flex-col items-center justify-center gap-4 bg-white px-5 text-center">
-      <p className="text-28 font-semibold text-black">
+      <p className="text-28 font-semibold text-[#1c232b]">
         페이지를 찾을 수 없습니다
       </p>
-      <p className="text-16 font-medium text-[#717171]">
+      <p className="text-16 font-medium text-[#858894]">
         주소가 바뀌었거나 삭제된 페이지일 수 있어요.
       </p>
       <Link

@@ -182,6 +182,18 @@ export function ProjectsPage() {
     }
   };
 
+  useEffect(() => {
+    if (!isJoinModalOpen) return;
+
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") handleCloseJoinModal();
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [isJoinModalOpen]);
+
   const handleCloseJoinModal = () => {
     setIsJoinModalOpen(false);
     setJoinCode("");
@@ -256,15 +268,24 @@ export function ProjectsPage() {
       </div>
 
       {isJoinModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-5">
-          <div className="w-full max-w-[500px] rounded-[24px] bg-white p-8">
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="프로젝트 참여"
+          onClick={handleCloseJoinModal}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-5"
+        >
+          <div
+            onClick={(event) => event.stopPropagation()}
+            className="w-full max-w-[500px] rounded-[24px] bg-white p-8 shadow-[10px_10px_30px_0px_rgba(0,0,0,0.12)]"
+          >
             <div className="flex flex-col gap-6">
               <div>
-                <h2 className="text-28 font-semibold text-black">
+                <h2 className="text-28 font-semibold text-[#1c232b]">
                   프로젝트 참여
                 </h2>
 
-                <p className="mt-2 text-16 text-[#717171]">
+                <p className="mt-2 text-16 text-[#858894]">
                   참여코드를 입력해주세요.
                 </p>
               </div>

@@ -143,7 +143,7 @@ export function DatePicker({ value, onChange, placeholder, ariaLabel, icon }) {
                   }}
                   className={cn(
                     "text-16 flex size-[36px] items-center justify-center justify-self-center rounded-full font-medium transition-colors duration-150",
-                    disabled && "cursor-not-allowed text-[#d7d7d7]",
+                    disabled && "cursor-not-allowed text-[#b8bccc]",
                     !disabled && !selected && "cursor-pointer text-[#1c232b] hover:bg-[#e6f3fe]",
                     selected && "cursor-pointer bg-[#0075d3] font-semibold text-white",
                     !selected &&

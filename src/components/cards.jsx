@@ -43,7 +43,7 @@ export function ProjectCard({ project, className }) {
       <p className="text-24 mt-[4px] line-clamp-2 h-[65px] font-semibold break-all text-[#1c232b]">
         {project.name}
       </p>
-      <p className="text-18 font-medium text-[#d7d7d7]">{project.date}</p>
+      <p className="text-18 font-medium text-[#b8bccc]">{project.date}</p>
     </Link>
   );
 }

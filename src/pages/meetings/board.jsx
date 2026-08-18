@@ -60,6 +60,18 @@ export function MeetingBoardPage() {
   const [selectedCard, setSelectedCard] = useState(null);
 
   useEffect(() => {
+    if (!selectedCard) return;
+
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") setSelectedCard(null);
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [selectedCard]);
+
+  useEffect(() => {
     if (!meetingId) return;
 
     const checkParticipantAndFetch = async () => {
@@ -291,7 +303,7 @@ export function MeetingBoardPage() {
             <button
               type="button"
               onClick={() => setSelectedCard(null)}
-              className="absolute top-5 right-5 flex h-[36px] w-[36px] cursor-pointer items-center justify-center rounded-full bg-black/10 text-18 font-bold text-black/60 transition-colors hover:bg-black/20 hover:text-black"
+              className="absolute top-5 right-5 flex h-[36px] w-[36px] cursor-pointer items-center justify-center rounded-full bg-[#1c232b]/10 text-18 font-bold text-[#1c232b]/60 transition-colors hover:bg-[#1c232b]/20 hover:text-[#1c232b]"
             >
               ✕
             </button>
