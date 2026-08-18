@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router";
+import serviceLogo from "@/assets/logo.png";
 import githubIcon from "@/assets/icons/github.svg";
 import instagramIcon from "@/assets/icons/instagram.svg";
 import likelionLogo from "@/assets/likelion-logo.svg";
@@ -86,9 +87,18 @@ export function Header({
     >
       <Link
         to={nav ? PATHS.PROJECTS : PATHS.WELCOME}
-        className="text-18 font-semibold whitespace-nowrap transition-opacity duration-150 hover:opacity-70 sm:text-20 lg:text-24"
+        className="flex shrink-0 items-center gap-[10px] transition-opacity duration-150 hover:opacity-70"
       >
-        {SERVICE_NAME}
+        <img
+          src={serviceLogo}
+          alt=""
+          aria-hidden
+          className="block size-[36px] max-w-none shrink-0 rounded-[8px]"
+        />
+
+        <span className="hidden text-20 font-semibold whitespace-nowrap lg:inline lg:text-24">
+          {SERVICE_NAME}
+        </span>
       </Link>
 
       {nav && (
