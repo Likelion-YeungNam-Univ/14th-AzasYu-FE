@@ -79,14 +79,25 @@ export function Close({ className }) {
   )
 }
 
-export function Plus({ size = 14.142, className }) {
+export function Plus({ size = 14.142, strokeWidth, className }) {
+  const stroke = ((strokeWidth ?? size * 0.053) / size) * 20
+  const arm = (10 - stroke) / 2
+
   return (
-    <span
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      aria-hidden
       style={{ width: size, height: size }}
-      className={cn('flex shrink-0 items-center justify-center', className)}
+      className={cn('block shrink-0', className)}
     >
-      <Close className="size-[70.71%] -rotate-45" />
-    </span>
+      <path
+        d={`M10 ${10 - arm}V${10 + arm}M${10 - arm} 10H${10 + arm}`}
+        stroke="currentColor"
+        strokeWidth={stroke}
+        strokeLinecap="round"
+      />
+    </svg>
   )
 }
 
