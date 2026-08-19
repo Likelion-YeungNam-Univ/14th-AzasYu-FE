@@ -30,7 +30,7 @@ const getProjectDetail = async (projectId) => {
   });
 
   if (!response.ok) {
-    throw new Error(`프로젝트 상세 조회 실패: ${response.status}`);
+    throw new Error("프로젝트를 찾을 수 없거나 접근 권한이 없습니다.");
   }
 
   return response.json();
@@ -46,7 +46,7 @@ const getProjectMeetings = async (projectId) => {
   );
 
   if (!response.ok) {
-    throw new Error(`회의 목록 조회 실패: ${response.status}`);
+    return { success: true, data: [] };
   }
 
   return response.json();
