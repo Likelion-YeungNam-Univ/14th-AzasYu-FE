@@ -323,7 +323,7 @@ export function ProjectDetailPage() {
         >
           <div
             ref={carouselRef}
-            className="relative flex min-h-[550px] w-full max-w-[1000px] items-center justify-center overflow-visible"
+            className="relative isolate flex min-h-[550px] w-full max-w-[1000px] items-center justify-center overflow-visible"
           >
             {meetings.map((meeting, index) => {
               const diff = index - activeIndex;
