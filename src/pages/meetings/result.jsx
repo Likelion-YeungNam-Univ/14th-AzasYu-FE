@@ -4,7 +4,6 @@ import pencilIcon from "@/assets/icons/pencil.svg";
 import warningIcon from "@/assets/icons/warning-triangle.svg";
 import { Footer, Header, Hero, HeroLayout } from "@/components/layout";
 import { StateView } from "@/components/states";
-import { RevealOnScroll } from "@/components/motion";
 import { Button } from "@/components/ui";
 import {
   API_BASE_URL,
@@ -307,8 +306,7 @@ export function MeetingResultPage() {
       }
     >
       <div
-        style={{ animationDelay: "700ms" }}
-        className={`animate-lift-in ${RESULT_CONTAINER} mt-10 flex flex-col gap-[52px] lg:mt-[80px] lg:gap-[80px]`}
+        className={`${RESULT_CONTAINER} mt-10 flex flex-col gap-[52px] lg:mt-[80px] lg:gap-[80px]`}
       >
         <Section title="회의 목적">
           <CheckList items={toLines(result.meetingPurpose)} />
@@ -329,7 +327,7 @@ export function MeetingResultPage() {
         </Section>
       </div>
 
-      <RevealOnScroll className="mt-20 w-full bg-[#fef1d8] py-12 lg:mt-[80px] lg:py-[79px]">
+      <div className="mt-20 w-full bg-[#fef1d8] py-12 lg:mt-[80px] lg:py-[79px]">
         <div className={`${RESULT_CONTAINER} flex flex-col gap-[28px]`}>
           <div className="flex items-center gap-[14px]">
             <img
@@ -365,7 +363,7 @@ export function MeetingResultPage() {
             ))}
           </ol>
         </div>
-      </RevealOnScroll>
+      </div>
 
       {record && (
         <div

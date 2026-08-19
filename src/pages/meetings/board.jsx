@@ -210,8 +210,8 @@ export function MeetingBoardPage() {
       }
     >
       <div className="mx-auto w-full max-w-[1460px] px-5 pb-16 sm:px-8 lg:px-8 xl:px-12 lg:pb-[170px]">
-        <div style={{ animationDelay: "700ms" }}
-          className="animate-lift-in mt-10 flex flex-wrap items-center justify-between gap-4 lg:mt-[93px]">
+        <div
+          className="mt-10 flex flex-wrap items-center justify-between gap-4 lg:mt-[93px]">
           <p className="text-24 min-w-0 flex-1 break-words font-semibold text-ink lg:text-28">
             {meetingTitle}
           </p>
@@ -275,10 +275,9 @@ export function MeetingBoardPage() {
                   onClick={() => setSelectedCard({ data: card, index, blocks })}
                   style={{
                     backgroundColor: CARD_COLORS[index % CARD_COLORS.length],
-                    animationDelay: `${800 + (index % 3) * 90}ms`,
                   }}
                   // ✨ 2. 마우스를 올리면 살짝 떠오르며 그림자가 생기도록 hover 효과를 줍니다. (cursor-pointer 추가)
-                  className="animate-lift-in flex h-[265px] flex-col cursor-pointer rounded-[14px] px-[24px] py-[36px] transition-all duration-200 hover:-translate-y-1 hover:shadow-lg sm:px-[40px]"
+                  className="flex h-[265px] flex-col cursor-pointer rounded-[14px] px-[24px] py-[36px] transition-all duration-200 hover:-translate-y-1 hover:shadow-lg sm:px-[40px]"
                 >
                   <div className="flex h-full w-full flex-col gap-[20px] overflow-y-auto pr-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                     {blocks.map((block, idx) => (

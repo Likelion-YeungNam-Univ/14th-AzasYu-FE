@@ -3,7 +3,6 @@ import { Link, useNavigate, useParams  } from "react-router";
 import emptyMeetings from "@/assets/icons/empty-meetings.svg";
 import { Copy, Plus } from "@/components/icons";
 import { Header } from "@/components/layout";
-import { DroppingChars, RisingBlock } from "@/components/motion";
 import { StateView } from "@/components/states";
 import { Toast } from "@/components/toast";
 import { AvatarStack, MeetingCard } from "@/components/cards";
@@ -288,13 +287,9 @@ export function ProjectDetailPage() {
       <div className="relative z-20 w-full bg-surface py-10 lg:min-h-[256px] lg:pt-0 lg:pb-12">
         <div className="mx-auto flex w-full max-w-[600px] flex-col items-start px-5 sm:px-8 lg:px-0 lg:pt-[48px]">
           <p className="mb-[16px] w-full break-all line-clamp-3 text-34 font-bold text-ink lg:text-48">
-            <DroppingChars text={project.name ?? ""} step={22} speed="fast" />
+            {project.name ?? ""}
           </p>
 
-          <RisingBlock
-            delay={(project.name?.length ?? 0) * 22 + 200}
-            className="w-full"
-          >
           <div className="flex w-full flex-col items-start gap-8 lg:flex-row lg:items-end lg:justify-between lg:gap-6">
             <div className="flex flex-col items-start gap-[16px]">
               <button
@@ -319,14 +314,12 @@ export function ProjectDetailPage() {
               <Plus size={26} />새 회의
             </Button>
           </div>
-          </RisingBlock>
         </div>
       </div>
 
       {meetings.length > 0 ? (
         <div
-          style={{ animationDelay: "700ms" }}
-          className="animate-lift-in mx-auto flex w-full flex-col items-center overflow-x-clip px-5 pt-12 pb-20 sm:px-8 lg:px-8 lg:pt-[40px] lg:pb-[100px]"
+          className="mx-auto flex w-full flex-col items-center overflow-x-clip px-5 pt-12 pb-20 sm:px-8 lg:px-8 lg:pt-[40px] lg:pb-[100px]"
         >
           <div
             ref={carouselRef}

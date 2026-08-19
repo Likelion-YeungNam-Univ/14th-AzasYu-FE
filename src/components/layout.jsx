@@ -5,11 +5,6 @@ import githubIcon from "@/assets/icons/github.svg";
 import instagramIcon from "@/assets/icons/instagram.svg";
 import likelionLogo from "@/assets/likelion-logo.svg";
 import { ChevronRight } from "@/components/icons";
-import {
-  DroppingChars,
-  RisingBlock,
-  RisingWords,
-} from "@/components/motion";
 import { buildNavItems, cn, PATHS, SERVICE_NAME } from "@/lib";
 import { clearSession } from "@/session";
 
@@ -257,8 +252,6 @@ const HERO_CONTENT_TOP = {
   sm: { center: 81, left: 82 },
 };
 
-const HERO_STEP = 22;
-
 const HERO_DESC_WEIGHT = {
   semibold: "font-semibold",
   medium: "font-medium",
@@ -279,18 +272,6 @@ export function Hero({
   const isCenter = align === "center";
   const top = contentTop ?? HERO_CONTENT_TOP[size][align];
   const weight = descriptionWeight ?? (isCenter ? "semibold" : "normal");
-
-  const titleText = typeof title === "string" ? title : null;
-  const descriptionText = typeof description === "string" ? description : null;
-
-  const titleSpread = titleText ? (titleText.length - 1) * HERO_STEP : 0;
-  const descriptionDelay = titleSpread + 200;
-
-  const descriptionSpread = descriptionText
-    ? (descriptionText.split(" ").length - 1) * HERO_STEP
-    : 0;
-
-  const footerDelay = descriptionDelay + descriptionSpread + 250;
 
   return (
     <div
@@ -320,11 +301,7 @@ export function Hero({
           )}
         >
           <p className="text-28 font-bold sm:text-34 lg:text-48 lg:whitespace-nowrap">
-            {titleText ? (
-              <DroppingChars text={titleText} step={HERO_STEP} speed="fast" />
-            ) : (
-              <RisingBlock speed="fast">{title}</RisingBlock>
-            )}
+            {title}
           </p>
 
           {description && (
@@ -337,21 +314,12 @@ export function Hero({
                 "text-muted",
               )}
             >
-              {descriptionText ? (
-                <RisingWords
-                  text={descriptionText}
-                  delay={descriptionDelay}
-                  step={HERO_STEP}
-                  speed="fast"
-                />
-              ) : (
-                <RisingBlock delay={descriptionDelay}>{description}</RisingBlock>
-              )}
+              {description}
             </p>
           )}
         </div>
 
-        {footer && <RisingBlock delay={footerDelay}>{footer}</RisingBlock>}
+        {footer}
       </div>
     </div>
   );

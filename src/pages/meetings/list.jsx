@@ -212,8 +212,8 @@ export function MeetingsPage() {
       }
     >
       <div className="mx-auto w-full max-w-[1460px] px-5 pb-16 sm:px-8 lg:px-8 xl:px-12 lg:pb-[186px]">
-        <div style={{ animationDelay: "700ms" }}
-          className="animate-lift-in mt-[40px] lg:mt-[82px]">
+        <div
+          className="mt-[40px] lg:mt-[82px]">
           {loading ? (
             <SkeletonRows count={8} />
           ) : error ? (
