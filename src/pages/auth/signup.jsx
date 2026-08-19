@@ -20,6 +20,7 @@ const SIGNUP_FIELDS = [
     placeholder: "비밀번호(8-15자)",
     type: "password",
     autoComplete: "new-password",
+    maxLength: 15,
   },
   {
     name: "passwordConfirm",
@@ -27,13 +28,15 @@ const SIGNUP_FIELDS = [
     placeholder: "비밀번호 확인",
     type: "password",
     autoComplete: "new-password",
+    maxLength: 15,
   },
   {
     name: "name",
     label: "이름",
-    placeholder: "이름",
+    placeholder: "이름 2자 이상 30자 이하",
     type: "text",
     autoComplete: "name",
+    maxLength: 30,
   },
 ];
 
@@ -58,6 +61,17 @@ export function SignUpPage() {
   };
 
   const handleSignUp = async () => {
+    const nameLength = formData.name.trim().length;
+    if (nameLength < 2 || nameLength > 30) {
+      alert("이름은 2자 이상 30자 이하로 입력해 주세요.");
+      return;
+    }
+
+    if (formData.password.length < 8 || formData.password.length > 15) {
+      alert("비밀번호는 8자 이상 15자 이하로 입력해 주세요.");
+      return;
+    }
+
     if (formData.password !== formData.passwordConfirm) {
       alert("비밀번호가 일치하지 않습니다.");
       return;
@@ -66,20 +80,17 @@ export function SignUpPage() {
     try {
       setSigningUp(true);
 
-      const response = await fetch(
-        `${API_BASE_URL}/api/v1/auth/signup`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: formData.email,
-            name: formData.name,
-            password: formData.password,
-          }),
+      const response = await fetch(`${API_BASE_URL}/api/v1/auth/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({
+          email: formData.email,
+          name: formData.name,
+          password: formData.password,
+        }),
+      });
 
       const result = await response.json();
 
@@ -119,6 +130,7 @@ export function SignUpPage() {
               placeholder={field.placeholder}
               type={field.type}
               autoComplete={field.autoComplete}
+              maxLength={field.maxLength}
               required
               tone="auth"
               wrapperClassName="w-full max-w-[445px]"
