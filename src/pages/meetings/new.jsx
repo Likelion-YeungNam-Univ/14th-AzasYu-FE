@@ -275,8 +275,7 @@ export function MeetingNewPage() {
     >
       <div className="flex w-full justify-center px-5 pt-12 pb-16 sm:px-8 lg:pt-[60px] lg:pb-[81px]">
         <div
-          style={{ animationDelay: "700ms" }}
-          className={`animate-lift-in ${NEW_COLUMN}`}
+          className={`${NEW_COLUMN}`}
         >
           <div className="flex w-full flex-col items-center gap-[34px]">
             <TextField
