@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams  } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import bubbleLarge from "@/assets/icons/board-bubble-lg.svg";
 import bubbleSmall from "@/assets/icons/board-bubble-sm.svg";
 import { Plus } from "@/components/icons";
@@ -24,7 +24,6 @@ const parseCoreOpinion = (text) => {
   const regex = /\[(.*?)\]([^[]*)/g;
   const matches = [...text.matchAll(regex)];
 
-  // 태그가 없는 일반 텍스트
   if (matches.length === 0) {
     return [{ badge: null, text: text }];
   }
@@ -60,17 +59,29 @@ export function MeetingBoardPage() {
 
   const [selectedCard, setSelectedCard] = useState(null);
 
+  const [editingCard, setEditingCard] = useState(null);
+  const [editForm, setEditForm] = useState({
+    coreOpinion: "",
+    rationale: "",
+    concern: "",
+    alternative: "",
+  });
+  const [editLoading, setEditLoading] = useState(false);
+
   useEffect(() => {
-    if (!selectedCard) return;
+    if (!selectedCard && !editingCard) return;
 
     const onKeyDown = (event) => {
-      if (event.key === "Escape") setSelectedCard(null);
+      if (event.key === "Escape") {
+        setSelectedCard(null);
+        setEditingCard(null);
+      }
     };
 
     document.addEventListener("keydown", onKeyDown);
 
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [selectedCard]);
+  }, [selectedCard, editingCard]);
 
   useEffect(() => {
     if (!meetingId) return;
@@ -153,6 +164,84 @@ export function MeetingBoardPage() {
     checkParticipantAndFetch();
   }, [meetingId]);
 
+  const handleEditOpen = (card) => {
+    setSelectedCard(null);
+    setEditingCard(card);
+    setEditForm({
+      coreOpinion: card.coreOpinion || "",
+      rationale: card.rationale || "",
+      concern: card.concern || "",
+      alternative: card.alternative || "",
+    });
+  };
+
+  const handleEditSubmit = async () => {
+    if (!editForm.coreOpinion.trim() || !editForm.rationale.trim() || !editForm.concern.trim() || !editForm.alternative.trim()) {
+      alert("모든 항목을 입력해주세요.");
+      return;
+    }
+
+    try {
+      setEditLoading(true);
+      const accessToken = localStorage.getItem("accessToken");
+
+      const response = await fetch(
+        `${API_BASE_URL}/api/v1/meetings/${meetingId}/idea-cards/${editingCard.id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify(editForm),
+        },
+      );
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error?.message || "카드 수정에 실패했습니다.");
+      }
+
+      setIdeaCards((prev) =>
+        prev.map((c) => (c.id === editingCard.id ? result.data : c)),
+      );
+      setEditingCard(null);
+    } catch (err) {
+      console.error("카드 수정 실패:", err);
+      alert(toUserMessage(err));
+    } finally {
+      setEditLoading(false);
+    }
+  };
+
+  const handleDelete = async (cardId) => {
+    if (!confirm("아이디어 카드를 삭제하시겠습니까?")) return;
+
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+
+      const response = await fetch(
+        `${API_BASE_URL}/api/v1/meetings/${meetingId}/idea-cards/${cardId}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${accessToken}` },
+        },
+      );
+
+      if (!response.ok) {
+        const result = await response.json();
+        throw new Error(result.error?.message || "카드 삭제에 실패했습니다.");
+      }
+
+      setIdeaCards((prev) => prev.filter((c) => c.id !== cardId));
+      setSelectedCard(null);
+    } catch (err) {
+      console.error("카드 삭제 실패:", err);
+      alert(toUserMessage(err));
+    }
+  };
+
   if (checking) {
     return <StateView size="screen" title="권한을 확인하고 있습니다" />;
   }
@@ -210,8 +299,7 @@ export function MeetingBoardPage() {
       }
     >
       <div className="mx-auto w-full max-w-[1460px] px-5 pb-16 sm:px-8 lg:px-8 xl:px-12 lg:pb-[170px]">
-        <div
-          className="mt-10 flex flex-wrap items-center justify-between gap-4 lg:mt-[93px]">
+        <div className="mt-10 flex flex-wrap items-center justify-between gap-4 lg:mt-[93px]">
           <p className="text-24 min-w-0 flex-1 break-words font-semibold text-ink lg:text-28">
             {meetingTitle}
           </p>
@@ -263,7 +351,6 @@ export function MeetingBoardPage() {
             description="첫 번째 카드의 주인공이 되어보세요!"
           />
         ) : (
-          /* 아이디어 카드 렌더링 */
           <ul className="mt-6 grid grid-cols-1 gap-[25px] sm:grid-cols-2 lg:mt-[25px] lg:grid-cols-3">
             {ideaCards.map((card, index) => {
               const blocks = parseCoreOpinion(card.coreOpinion);
@@ -271,14 +358,17 @@ export function MeetingBoardPage() {
               return (
                 <li
                   key={card.id}
-                  // ✨ 1. 클릭 시 카드 정보, 색상 인덱스, 분리된 블록 데이터를 저장합니다.
                   onClick={() => setSelectedCard({ data: card, index, blocks })}
                   style={{
                     backgroundColor: CARD_COLORS[index % CARD_COLORS.length],
                   }}
-                  // ✨ 2. 마우스를 올리면 살짝 떠오르며 그림자가 생기도록 hover 효과를 줍니다. (cursor-pointer 추가)
-                  className="flex h-[265px] flex-col cursor-pointer rounded-[14px] px-[24px] py-[36px] transition-all duration-200 hover:-translate-y-1 hover:shadow-lg sm:px-[40px]"
+                  className="relative flex h-[265px] flex-col cursor-pointer rounded-[14px] px-[24px] py-[36px] transition-all duration-200 hover:-translate-y-1 hover:shadow-lg sm:px-[40px]"
                 >
+                  {card.isMine && (
+                    <span className="absolute top-[12px] right-[12px] rounded-[4px] bg-white/80 px-[6px] py-[2px] text-12 font-semibold text-ink">
+                      내 카드
+                    </span>
+                  )}
                   <div className="flex h-full w-full flex-col gap-[20px] overflow-y-auto pr-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                     {blocks.map((block, idx) => (
                       <div key={idx} className="flex flex-col gap-[10px]">
@@ -307,17 +397,16 @@ export function MeetingBoardPage() {
       {selectedCard && (
         <div
           className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 px-5 backdrop-blur-sm"
-          onClick={() => setSelectedCard(null)} // 어두운 배경 클릭 시 닫힘
+          onClick={() => setSelectedCard(null)}
         >
           <div
             className="relative flex w-full max-w-[700px] flex-col rounded-[24px] p-8 shadow-2xl sm:p-12"
             style={{
-              // 클릭했던 카드의 원래 배경색을 그대로 유지합니다.
               backgroundColor:
                 CARD_COLORS[selectedCard.index % CARD_COLORS.length],
-              maxHeight: "80vh", // 화면 밖으로 넘어가지 않도록 높이 제한
+              maxHeight: "80vh",
             }}
-            onClick={(e) => e.stopPropagation()} // 모달 안쪽을 클릭했을 때는 안 닫히게 막음
+            onClick={(e) => e.stopPropagation()}
           >
             <button
               type="button"
@@ -342,6 +431,97 @@ export function MeetingBoardPage() {
                   )}
                 </div>
               ))}
+            </div>
+
+            {selectedCard.data.isMine && (
+              <div className="mt-6 flex items-center gap-[12px] border-t border-ink/10 pt-6">
+                <Button
+                  size="pill"
+                  variant="secondary"
+                  onClick={() => handleEditOpen(selectedCard.data)}
+                >
+                  수정하기
+                </Button>
+                <Button
+                  size="pill"
+                  variant="secondary"
+                  className="text-[#da1e51] border-[#da1e51]"
+                  onClick={() => handleDelete(selectedCard.data.id)}
+                >
+                  삭제하기
+                </Button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {editingCard && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 px-5 backdrop-blur-sm"
+          onClick={() => setEditingCard(null)}
+        >
+          <div
+            className="relative flex w-full max-w-[600px] flex-col gap-[20px] rounded-[24px] bg-white p-8 shadow-2xl sm:p-10"
+            style={{ maxHeight: "85vh" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <p className="text-24 font-bold text-ink">아이디어 카드 수정</p>
+
+            <div className="flex flex-col gap-[16px] overflow-y-auto">
+              <label className="flex flex-col gap-[8px]">
+                <span className="text-16 font-semibold text-ink">핵심 의견</span>
+                <textarea
+                  value={editForm.coreOpinion}
+                  onChange={(e) => setEditForm((f) => ({ ...f, coreOpinion: e.target.value }))}
+                  className="h-[100px] w-full resize-none rounded-[8px] border border-line px-[16px] py-[12px] text-16 font-medium text-ink outline-none focus:border-brand"
+                />
+              </label>
+
+              <label className="flex flex-col gap-[8px]">
+                <span className="text-16 font-semibold text-ink">이유</span>
+                <textarea
+                  value={editForm.rationale}
+                  onChange={(e) => setEditForm((f) => ({ ...f, rationale: e.target.value }))}
+                  className="h-[80px] w-full resize-none rounded-[8px] border border-line px-[16px] py-[12px] text-16 font-medium text-ink outline-none focus:border-brand"
+                />
+              </label>
+
+              <label className="flex flex-col gap-[8px]">
+                <span className="text-16 font-semibold text-ink">우려 사항</span>
+                <textarea
+                  value={editForm.concern}
+                  onChange={(e) => setEditForm((f) => ({ ...f, concern: e.target.value }))}
+                  className="h-[80px] w-full resize-none rounded-[8px] border border-line px-[16px] py-[12px] text-16 font-medium text-ink outline-none focus:border-brand"
+                />
+              </label>
+
+              <label className="flex flex-col gap-[8px]">
+                <span className="text-16 font-semibold text-ink">대안</span>
+                <textarea
+                  value={editForm.alternative}
+                  onChange={(e) => setEditForm((f) => ({ ...f, alternative: e.target.value }))}
+                  className="h-[80px] w-full resize-none rounded-[8px] border border-line px-[16px] py-[12px] text-16 font-medium text-ink outline-none focus:border-brand"
+                />
+              </label>
+            </div>
+
+            <div className="flex items-center justify-end gap-[12px]">
+              <Button
+                size="pill"
+                variant="secondary"
+                onClick={() => setEditingCard(null)}
+                disabled={editLoading}
+              >
+                취소
+              </Button>
+              <Button
+                size="pill"
+                onClick={handleEditSubmit}
+                disabled={editLoading}
+              >
+                {editLoading ? "수정 중..." : "수정 완료"}
+              </Button>
             </div>
           </div>
         </div>

@@ -278,6 +278,21 @@ export function MeetingSummaryPage() {
               </Button>
             </div>
 
+            {summary.isOutdated && (
+              <div className="flex items-center justify-between rounded-[14px] bg-[#fff8e6] px-6 py-4">
+                <p className="text-16 font-medium text-[#8a6d00]">
+                  아이디어 카드가 변경되었습니다. 최신 의견을 반영하려면 새로고침해주세요.
+                </p>
+                <Button
+                  size="pill"
+                  variant="secondary"
+                  onClick={handleRefreshSummary}
+                >
+                  새로고침
+                </Button>
+              </div>
+            )}
+
             <section className="flex flex-col gap-[32px]">
               <SectionTitle>의견이 나뉘는 부분</SectionTitle>
               <SummaryBox content={summary.differingOpinions} />
