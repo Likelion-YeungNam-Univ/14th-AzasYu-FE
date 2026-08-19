@@ -322,7 +322,7 @@ export function MeetingBoardPage() {
                 navigate(meetingPath("INTERVIEW", projectId, meetingId))
               }
             >
-              <Plus />
+              <Plus size={26} strokeWidth={2} />
               아이디어 추가하기
             </Button>
           </div>
