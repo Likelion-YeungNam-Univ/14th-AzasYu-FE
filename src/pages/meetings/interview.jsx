@@ -122,7 +122,10 @@ export function MeetingInterviewPage() {
 
     const run = () => {
       target.scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
-      focusTimer = window.setTimeout(focusInput, reduced ? 0 : SCROLL_SETTLE_MS);
+      focusTimer = window.setTimeout(
+        focusInput,
+        reduced ? 0 : SCROLL_SETTLE_MS,
+      );
     };
 
     if (remaining === 0) {
@@ -158,6 +161,17 @@ export function MeetingInterviewPage() {
       );
 
       const result = await response.json();
+
+      if (
+        response.status === 403 ||
+        (result.error?.message &&
+          (result.error.message.includes("참여") ||
+            result.error.message.includes("권한")))
+      ) {
+        alert(result.error?.message || "회의 참여자만 접근할 수 있습니다.");
+        navigate(projectPath("DETAIL", projectId), { replace: true });
+        return;
+      }
 
       if (response.status === 404) {
         setStatus("NOT_FOUND");
