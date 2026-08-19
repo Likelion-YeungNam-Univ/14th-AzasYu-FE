@@ -20,6 +20,7 @@ import {
   cn,
   FIELD_LIMITS,
   formatDateWithWeekday,
+  getCurrentUserId,
   HEADER_PRESETS,
   PATHS,
   projectPath,
@@ -169,10 +170,17 @@ export function MeetingNewPage() {
 
   const query = memberQuery.trim();
 
+  const currentUserId = getCurrentUserId();
+
+  const isMe = (member) =>
+    Boolean(currentUserId) &&
+    String(member.userId ?? member.id ?? member.memberId) === currentUserId;
+
   const suggestions = query
     ? projectMembers.filter(
         (member) =>
           member.name?.includes(query) &&
+          !isMe(member) &&
           !participants.some((picked) => picked.userId === member.userId),
       )
     : [];
