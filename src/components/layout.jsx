@@ -28,11 +28,7 @@ function resolveActiveNavHref(pathname, navItems) {
     (item) => item.href !== PATHS.PROJECTS && item.href !== PATHS.MEETINGS,
   );
 
-  if (
-    projectItem &&
-    (pathname === projectItem.href ||
-      pathname.startsWith(`${projectItem.href}/`))
-  ) {
+  if (projectItem && pathname === projectItem.href) {
     return projectItem.href;
   }
 

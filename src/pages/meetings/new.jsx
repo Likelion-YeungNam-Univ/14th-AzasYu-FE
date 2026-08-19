@@ -381,13 +381,20 @@ export function MeetingNewPage() {
                   />
                 </div>
 
-                <span
-                  className={cn(
-                    "text-14 self-end font-medium",
-                    agendaFull ? "text-danger" : "text-muted",
-                  )}
-                >
-                  {agenda.length}/{FIELD_LIMITS.AGENDA_COUNT}
+                <span className="text-14 flex w-full items-center justify-between gap-[10px] font-medium">
+                  <span className={agendaFull ? "text-danger" : "text-muted"}>
+                    안건 {agenda.length}/{FIELD_LIMITS.AGENDA_COUNT}
+                  </span>
+
+                  <span
+                    className={
+                      newAgenda.length >= FIELD_LIMITS.AGENDA
+                        ? "text-danger"
+                        : "text-muted"
+                    }
+                  >
+                    글자 {newAgenda.length}/{FIELD_LIMITS.AGENDA}
+                  </span>
                 </span>
               </div>
             </div>
