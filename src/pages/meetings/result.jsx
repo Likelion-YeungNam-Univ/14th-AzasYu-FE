@@ -10,6 +10,7 @@ import {
   API_BASE_URL,
   HEADER_PRESETS,
   MEETING_TITLE,
+  meetingPath,
   PATHS,
   toUserMessage,
 } from "@/lib";
@@ -21,6 +22,21 @@ const toLines = (text) =>
     .split("\n")
     .map((line) => line.replace(/^[-•\s]+/, "").trim())
     .filter(Boolean);
+
+const RECORD_SOURCE_LABEL = {
+  TEXT: "직접 입력한 텍스트",
+  TXT: "TXT 파일",
+  DOCX: "DOCX 파일",
+  PDF: "PDF 파일",
+};
+
+const formatRecordSource = (record) => {
+  const label = RECORD_SOURCE_LABEL[record?.sourceType] ?? "등록한 회의 내용";
+
+  return record?.originalFileName
+    ? `${label} · ${record.originalFileName}`
+    : label;
+};
 
 const formatMeetingRange = (meeting) => {
   if (!meeting?.meetingDate) return "";
@@ -115,10 +131,12 @@ function Section({ title, children }) {
 }
 
 export function MeetingResultPage() {
-  const { meetingId = "" } = useParams();
+  const { projectId = "", meetingId = "" } = useParams();
 
   const [result, setResult] = useState(null);
   const [meeting, setMeeting] = useState(null);
+  const [record, setRecord] = useState(null);
+  const [recordOpen, setRecordOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -138,28 +156,45 @@ export function MeetingResultPage() {
 
         const headers = { Authorization: `Bearer ${accessToken}` };
 
-        const [resultResponse, meetingResponse] = await Promise.all([
-          fetch(`${API_BASE_URL}/api/v1/meetings/${meetingId}/result`, {
-            headers,
-          }),
-          fetch(`${API_BASE_URL}/api/v1/meetings/${meetingId}`, { headers }),
-        ]);
+        const [resultResponse, meetingResponse, recordResponse] =
+          await Promise.all([
+            fetch(`${API_BASE_URL}/api/v1/meetings/${meetingId}/result`, {
+              headers,
+            }),
+            fetch(`${API_BASE_URL}/api/v1/meetings/${meetingId}`, { headers }),
+            fetch(`${API_BASE_URL}/api/v1/meetings/${meetingId}/record`, {
+              headers,
+            }),
+          ]);
+
+        let meetingData = null;
+
+        if (meetingResponse.ok) {
+          const meetingResult = await meetingResponse.json();
+
+          if (meetingResult.success) meetingData = meetingResult.data;
+        }
+
+        setMeeting(meetingData);
+
+        if (recordResponse.ok) {
+          const recordResult = await recordResponse.json();
+
+          if (recordResult.success) setRecord(recordResult.data);
+        }
 
         const data = await resultResponse.json();
 
         if (!resultResponse.ok || !data.success) {
+          // 회의는 있는데 분석만 없는 경우는 오류가 아니라 빈 상태로 안내한다
+          if (meetingData) return;
+
           throw new Error(
             data.error?.message || "회의 분석 결과를 불러오지 못했습니다.",
           );
         }
 
         setResult(data.data);
-
-        if (meetingResponse.ok) {
-          const meetingData = await meetingResponse.json();
-
-          if (meetingData.success) setMeeting(meetingData.data);
-        }
       } catch (error) {
         console.error("회의 분석 결과 조회 실패:", error);
         setError(toUserMessage(error));
@@ -176,26 +211,70 @@ export function MeetingResultPage() {
   }
 
   if (error || !result || result.status !== "GENERATED") {
-    const missing = Boolean(error) || !result;
+    if (!meeting) {
+      return (
+        <StateView
+          variant="error"
+          size="screen"
+          title="회의를 찾을 수 없습니다"
+          description="이미 삭제되었거나 접근할 수 없는 회의예요."
+          action={
+            <Link to={PATHS.PROJECTS}>
+              <Button size="action" variant="secondary">
+                홈으로 가기
+              </Button>
+            </Link>
+          }
+        />
+      );
+    }
+
+    if (!record) {
+      return (
+        <StateView
+          variant="empty"
+          size="screen"
+          title="아직 회의 내용이 등록되지 않았어요"
+          description="회의 내용을 올리면 AI가 주요 결과와 모호한 부분을 정리해드려요."
+          action={
+            <div className="flex flex-wrap items-center justify-center gap-[12px]">
+              <Link to={meetingPath("UPLOAD", projectId, meetingId)}>
+                <Button size="action">회의 내용 올리기</Button>
+              </Link>
+
+              <Link to={PATHS.PROJECTS}>
+                <Button size="action" variant="secondary">
+                  홈으로 가기
+                </Button>
+              </Link>
+            </div>
+          }
+        />
+      );
+    }
+
+    const analyzing = result?.status === "PENDING";
 
     return (
       <StateView
-        variant="error"
+        variant={analyzing ? "loading" : "error"}
         size="screen"
         title={
-          missing
-            ? "회의를 찾을 수 없습니다"
-            : (result.failureMessage ?? "아직 회의 분석 결과가 없어요")
+          analyzing
+            ? "회의 내용을 분석하고 있어요"
+            : (result?.failureMessage ?? "아직 회의 분석 결과가 없어요")
         }
-        description={
-          missing
-            ? "아직 회의록이 올라오지 않았거나, 삭제된 회의일 수 있어요."
-            : "회의록을 올리면 AI가 분석해드려요."
-        }
+        description={formatRecordSource(record)}
         action={
-          <Link to={PATHS.PROJECTS}>
+          <Link
+            to={
+              analyzing
+                ? meetingPath("LOADING", projectId, meetingId)
+                : PATHS.PROJECTS
+            }
+          >
             <Button size="action" variant="secondary">
-              홈으로 가기
+              {analyzing ? "분석 진행 보기" : "홈으로 가기"}
             </Button>
           </Link>
         }
@@ -287,6 +366,39 @@ export function MeetingResultPage() {
           </ol>
         </div>
       </RevealOnScroll>
+
+      {record && (
+        <div
+          className={`${RESULT_CONTAINER} mt-12 mb-16 flex flex-col gap-[20px] lg:mt-[80px] lg:mb-[120px]`}
+        >
+          <div className="flex flex-wrap items-center justify-between gap-[12px]">
+            <div className="flex min-w-0 flex-col gap-[4px]">
+              <h2 className="text-24 font-semibold text-ink lg:text-28">
+                회의 원문
+              </h2>
+
+              <p className="text-14 font-medium break-all text-muted lg:text-16">
+                {formatRecordSource(record)}
+              </p>
+            </div>
+
+            <Button
+              size="action"
+              variant="secondary"
+              onClick={() => setRecordOpen((open) => !open)}
+              aria-expanded={recordOpen}
+            >
+              {recordOpen ? "접기" : "원문 보기"}
+            </Button>
+          </div>
+
+          {recordOpen && (
+            <p className="text-14 max-h-[420px] w-full overflow-y-auto rounded-[14px] bg-surface px-6 py-6 leading-[1.7] font-medium whitespace-pre-line text-ink sm:px-[34px] sm:py-[28px] lg:text-16">
+              {record.content}
+            </p>
+          )}
+        </div>
+      )}
 
       <Footer />
     </HeroLayout>
