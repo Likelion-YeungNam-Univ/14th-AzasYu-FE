@@ -444,26 +444,26 @@ export function MeetingInterviewPage() {
             {/* 카드 생성 성공 (결과 렌더링) */}
             {cardStatus === "GENERATED" && ideaCard && (
               <div className="flex w-full max-w-[500px] flex-col gap-4 self-center rounded-[20px] border border-solid border-line p-8">
-                <div className="mb-2 text-center">
+                <div className="mb-2 w-full min-w-0 text-center">
                   <span className="text-12 mb-2 inline-block rounded-full bg-brand px-3 py-1 font-bold text-white">
                     나의 핵심 아이디어
                   </span>
-                  <h3 className="text-20 font-bold text-ink">
+                  <h3 className="text-20 w-full break-words whitespace-pre-line font-bold text-ink">
                     {ideaCard.coreOpinion}
                   </h3>
                 </div>
 
-                <div className="text-16 flex flex-col gap-3 leading-[1.5] text-muted">
-                  <p>
+                <div className="text-16 flex w-full min-w-0 flex-col gap-3 leading-[1.5] text-muted">
+                  <p className="w-full break-words whitespace-pre-line">
                     <strong>💡 근거:</strong> {ideaCard.rationale}
                   </p>
                   {ideaCard.concern && (
-                    <p>
+                    <p className="w-full break-words whitespace-pre-line">
                       <strong>⚠️ 우려점:</strong> {ideaCard.concern}
                     </p>
                   )}
                   {ideaCard.alternative && (
-                    <p>
+                    <p className="w-full break-words whitespace-pre-line">
                       <strong>✅ 대안:</strong> {ideaCard.alternative}
                     </p>
                   )}

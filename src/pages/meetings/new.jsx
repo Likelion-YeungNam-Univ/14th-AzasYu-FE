@@ -148,6 +148,11 @@ export function MeetingNewPage() {
   const handleAddAgenda = () => {
     if (!newAgenda.trim()) return;
 
+    if (agenda.length >= FIELD_LIMITS.AGENDA_COUNT) {
+      alert(`회의 안건은 최대 ${FIELD_LIMITS.AGENDA_COUNT}개까지 추가할 수 있습니다.`);
+      return;
+    }
+
     setAgenda((prev) => [
       ...prev,
       {
@@ -158,6 +163,8 @@ export function MeetingNewPage() {
 
     setNewAgenda("");
   };
+
+  const agendaFull = agenda.length >= FIELD_LIMITS.AGENDA_COUNT;
 
   // 안건 삭제
   const handleRemoveAgenda = (id) => {
@@ -303,31 +310,47 @@ export function MeetingNewPage() {
             <div className={`${NEW_COLUMN} flex flex-col gap-[18px]`}>
               <FieldLabel required>회의 안건</FieldLabel>
 
-              <div className="flex flex-col gap-[10px]">
-                {agenda.length > 0 && (
-                  <AgendaList items={agenda} onRemove={handleRemoveAgenda} />
-                )}
+              <div className="flex flex-col gap-[6px]">
+                <div className="flex flex-col gap-[10px]">
+                  {agenda.length > 0 && (
+                    <AgendaList items={agenda} onRemove={handleRemoveAgenda} />
+                  )}
 
-                <input
-                  type="text"
-                  value={newAgenda}
-                  onChange={(e) => setNewAgenda(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      handleAddAgenda();
-                    }
+                  <input
+                    type="text"
+                    value={newAgenda}
+                    onChange={(e) => setNewAgenda(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        handleAddAgenda();
+                      }
 
-                    if (e.key === "Escape") {
-                      setNewAgenda("");
+                      if (e.key === "Escape") {
+                        setNewAgenda("");
+                      }
+                    }}
+                    disabled={agendaFull}
+                    placeholder={
+                      agendaFull
+                        ? `안건은 최대 ${FIELD_LIMITS.AGENDA_COUNT}개까지 추가할 수 있습니다`
+                        : `안건을 입력하고 Enter (${FIELD_LIMITS.AGENDA}자 이내)`
                     }
-                  }}
-                  placeholder={`안건을 입력하고 Enter (${FIELD_LIMITS.AGENDA}자 이내)`}
-                  aria-label="회의 안건 추가"
-                  maxLength={FIELD_LIMITS.AGENDA}
-                  onPaste={alertOnTruncatedPaste(FIELD_LIMITS.AGENDA)}
-                  className="text-20 w-full rounded-[55px] border border-solid border-line px-[16px] py-[8px] font-medium text-ink outline-none transition-colors duration-150 placeholder:text-line focus:border-brand"
-                />
+                    aria-label="회의 안건 추가"
+                    maxLength={FIELD_LIMITS.AGENDA}
+                    onPaste={alertOnTruncatedPaste(FIELD_LIMITS.AGENDA)}
+                    className="text-20 w-full rounded-[55px] border border-solid border-line px-[16px] py-[8px] font-medium text-ink outline-none transition-colors duration-150 placeholder:text-line focus:border-brand disabled:cursor-not-allowed"
+                  />
+                </div>
+
+                <span
+                  className={cn(
+                    "text-14 self-end font-medium",
+                    agendaFull ? "text-danger" : "text-muted",
+                  )}
+                >
+                  {agenda.length}/{FIELD_LIMITS.AGENDA_COUNT}
+                </span>
               </div>
             </div>
 

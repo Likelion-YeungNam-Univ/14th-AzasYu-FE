@@ -283,7 +283,7 @@ export function MeetingBoardPage() {
                     {blocks.map((block, idx) => (
                       <div key={idx} className="flex flex-col gap-[10px]">
                         {block.badge && (
-                          <span className="w-fit rounded-full bg-black/10 px-[14px] py-[6px] text-14 font-bold text-ink lg:text-16">
+                          <span className="w-fit max-w-full rounded-full bg-black/10 px-[14px] py-[6px] text-14 font-bold break-words text-ink lg:text-16">
                             {block.badge}
                           </span>
                         )}
@@ -331,7 +331,7 @@ export function MeetingBoardPage() {
               {selectedCard.blocks.map((block, idx) => (
                 <div key={idx} className="flex flex-col gap-[12px]">
                   {block.badge && (
-                    <span className="w-fit rounded-full bg-black/10 px-[16px] py-[8px] text-16 font-bold text-ink sm:text-18">
+                    <span className="w-fit max-w-full rounded-full bg-black/10 px-[16px] py-[8px] text-16 font-bold break-words text-ink sm:text-18">
                       {block.badge}
                     </span>
                   )}
