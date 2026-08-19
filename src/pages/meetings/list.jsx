@@ -7,6 +7,7 @@ import { SkeletonRows, StateView } from "@/components/states";
 import { Button, Table } from "@/components/ui";
 import {
   API_BASE_URL,
+  cn,
   formatDateWithWeekday,
   HEADER_PRESETS,
   PATHS,
@@ -49,10 +50,27 @@ const getProjectMeetings = async (project) => {
 
     if (!response.ok || !result.success) return [];
 
-    return (result.data ?? []).map((meeting) => ({
+    const meetings = result.data ?? [];
+
+    const records = await Promise.all(
+      meetings.map(async (meeting) => {
+        try {
+          const res = await fetch(
+            `${API_BASE_URL}/api/v1/meetings/${meeting.id}/record`,
+            { headers: authHeaders() },
+          );
+          return res.ok;
+        } catch {
+          return false;
+        }
+      }),
+    );
+
+    return meetings.map((meeting, i) => ({
       ...meeting,
       projectId: project.id,
       projectName: project.name,
+      hasRecord: records[i],
     }));
   } catch {
     return [];
@@ -127,11 +145,22 @@ export function MeetingsPage() {
     cells: [
       <span key="title" className="flex items-center justify-between overflow-hidden">
         <span className="truncate">{meeting.title}</span>
-        {meeting.participating && (
-          <span className="shrink-0 rounded-[4px] bg-[#def4ec] px-[6px] py-[2px] text-12 font-semibold text-[#0d7a4d]">
-            참여중
-          </span>
-        )}
+        <span
+          className={cn(
+            "shrink-0 rounded-[4px] px-[6px] py-[2px] text-12 font-semibold",
+            meeting.hasRecord
+              ? "bg-[#e6f3fe] text-[#0075d3]"
+              : meeting.participating
+                ? "bg-[#def4ec] text-[#0d7a4d]"
+                : "bg-[#f0f0f0] text-[#858894]",
+          )}
+        >
+          {meeting.hasRecord
+            ? "회의완료"
+            : meeting.participating
+              ? "회의중"
+              : "미참여"}
+        </span>
       </span>,
 
       <Link
