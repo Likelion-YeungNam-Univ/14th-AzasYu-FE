@@ -13,6 +13,13 @@ import {
   toUserMessage,
 } from "@/lib";
 
+const RECORD_SOURCE_LABEL = {
+  TEXT: "직접 입력한 텍스트",
+  TXT: "TXT 파일",
+  DOCX: "DOCX 파일",
+  PDF: "PDF 파일",
+};
+
 export function MeetingUploadPage() {
   const { projectId = "", meetingId = "" } = useParams();
   const navigate = useNavigate();
@@ -20,6 +27,7 @@ export function MeetingUploadPage() {
   const [uploading, setUploading] = useState(false);
   const [checking, setChecking] = useState(true);
   const [isParticipant, setIsParticipant] = useState(false);
+  const [existingRecord, setExistingRecord] = useState(null);
 
   useEffect(() => {
     if (!meetingId) return;
@@ -29,10 +37,20 @@ export function MeetingUploadPage() {
         const accessToken = localStorage.getItem("accessToken");
         if (!accessToken) return;
 
-        const response = await fetch(
-          `${API_BASE_URL}/api/v1/meetings/${meetingId}`,
-          { headers: { Authorization: `Bearer ${accessToken}` } },
-        );
+        const headers = { Authorization: `Bearer ${accessToken}` };
+
+        const [response, recordResponse] = await Promise.all([
+          fetch(`${API_BASE_URL}/api/v1/meetings/${meetingId}`, { headers }),
+          fetch(`${API_BASE_URL}/api/v1/meetings/${meetingId}/record`, {
+            headers,
+          }),
+        ]);
+
+        if (recordResponse.ok) {
+          const recordResult = await recordResponse.json();
+
+          if (recordResult.success) setExistingRecord(recordResult.data);
+        }
 
         const result = await response.json();
         if (!response.ok || !result.success) return;
@@ -74,6 +92,34 @@ export function MeetingUploadPage() {
               홈으로 가기
             </Button>
           </Link>
+        }
+      />
+    );
+  }
+
+  if (existingRecord) {
+    return (
+      <StateView
+        variant="empty"
+        size="screen"
+        title="회의 내용이 이미 등록되어 있어요"
+        description={`${RECORD_SOURCE_LABEL[existingRecord.sourceType] ?? "등록한 회의 내용"}${
+          existingRecord.originalFileName
+            ? ` · ${existingRecord.originalFileName}`
+            : ""
+        } · 회의당 한 번만 등록할 수 있어요.`}
+        action={
+          <div className="flex flex-wrap items-center justify-center gap-[12px]">
+            <Link to={meetingPath("DETAIL", projectId, meetingId)}>
+              <Button size="action">분석 결과 보기</Button>
+            </Link>
+
+            <Link to={PATHS.PROJECTS}>
+              <Button size="action" variant="secondary">
+                홈으로 가기
+              </Button>
+            </Link>
+          </div>
         }
       />
     );
