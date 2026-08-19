@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import calendarIcon from "@/assets/icons/calendar.svg";
 import clockIcon from "@/assets/icons/clock.svg";
 import { Header, Hero, HeroLayout } from "@/components/layout";
+import { StateView } from "@/components/states";
 import { ChevronRight } from "@/components/icons";
 import { DatePicker, Dropdown } from "@/components/picker";
 import {
@@ -20,6 +21,7 @@ import {
   FIELD_LIMITS,
   formatDateWithWeekday,
   HEADER_PRESETS,
+  PATHS,
   projectPath,
   toUserMessage,
 } from "@/lib";
@@ -96,6 +98,8 @@ export function MeetingNewPage() {
   const [projectMembers, setProjectMembers] = useState([]);
   const [memberQuery, setMemberQuery] = useState("");
   const [participants, setParticipants] = useState([]);
+  const [checking, setChecking] = useState(true);
+  const [isMember, setIsMember] = useState(false);
 
   useEffect(() => {
     if (!projectId) return;
@@ -117,13 +121,20 @@ export function MeetingNewPage() {
 
         const result = await response.json();
 
-        if (!response.ok || !result.success) return;
+        if (!response.ok || !result.success) {
+          if (!cancelled) setIsMember(false);
+          return;
+        }
 
         if (!cancelled) {
           setProjectMembers(result.data?.members ?? []);
+          setIsMember(true);
         }
       } catch (error) {
         console.error("프로젝트 구성원 조회 실패:", error);
+        if (!cancelled) setIsMember(false);
+      } finally {
+        if (!cancelled) setChecking(false);
       }
     };
 
@@ -133,6 +144,28 @@ export function MeetingNewPage() {
       cancelled = true;
     };
   }, [projectId]);
+
+  if (checking) {
+    return <StateView size="screen" title="권한을 확인하고 있습니다" />;
+  }
+
+  if (!isMember) {
+    return (
+      <StateView
+        variant="error"
+        size="screen"
+        title="프로젝트 구성원만 회의를 생성할 수 있습니다"
+        description="이 프로젝트에 참여하지 않아 회의 생성 권한이 없습니다."
+        action={
+          <Link to={PATHS.PROJECTS}>
+            <Button size="action" variant="secondary">
+              홈으로 가기
+            </Button>
+          </Link>
+        }
+      />
+    );
+  }
 
   const query = memberQuery.trim();
 
