@@ -201,9 +201,20 @@ export function MeetingCard({ projectId, meeting, currentUserId }) {
               {title}
             </p>
 
-            {isParticipant && (
-              <span className="mt-[6px] shrink-0 rounded-[4px] bg-[#def4ec] px-[6px] py-[2px] text-12 font-semibold text-[#0d7a4d]">
-                참여중
+            {isParticipant ? (
+              <span
+                className={cn(
+                  "mt-[6px] shrink-0 rounded-[4px] px-[6px] py-[2px] text-12 font-semibold",
+                  hasRecord
+                    ? "bg-[#e6f3fe] text-[#0075d3]"
+                    : "bg-[#def4ec] text-[#0d7a4d]",
+                )}
+              >
+                {hasRecord ? "회의완료" : "회의중"}
+              </span>
+            ) : (
+              <span className="mt-[6px] shrink-0 rounded-[4px] bg-[#f0f0f0] px-[6px] py-[2px] text-12 font-semibold text-[#858894]">
+                미참여
               </span>
             )}
           </div>
