@@ -79,6 +79,32 @@ const getProjectMeetings = async (project) => {
 
 const MEETINGS_PER_PAGE = 8;
 
+const STATUS_FILTERS = [
+  { value: "ALL", label: "전체" },
+  { value: "NOT_JOINED", label: "미참여" },
+  { value: "IN_PROGRESS", label: "참여중" },
+  { value: "DONE", label: "참여완료" },
+];
+
+const meetingStatus = (meeting) =>
+  meeting.hasRecord
+    ? "DONE"
+    : meeting.participating
+      ? "IN_PROGRESS"
+      : "NOT_JOINED";
+
+const BADGE_LABEL = {
+  DONE: "회의완료",
+  IN_PROGRESS: "회의중",
+  NOT_JOINED: "미참여",
+};
+
+const BADGE_STYLE = {
+  DONE: "bg-[#e6f3fe] text-[#0075d3]",
+  IN_PROGRESS: "bg-[#def4ec] text-[#0d7a4d]",
+  NOT_JOINED: "bg-[#f0f0f0] text-[#858894]",
+};
+
 const TABLE_COLUMNS = [
   { label: "회의명", width: 310 },
   { label: "프로젝트", width: 250 },
@@ -91,6 +117,8 @@ export function MeetingsPage() {
   const [meetings, setMeetings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [status, setStatus] = useState("ALL");
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     let cancelled = false;
@@ -137,7 +165,12 @@ export function MeetingsPage() {
     };
   }, [projectId]);
 
-  const tableRows = meetings.map((meeting) => ({
+  const visibleMeetings =
+    status === "ALL"
+      ? meetings
+      : meetings.filter((meeting) => meetingStatus(meeting) === status);
+
+  const tableRows = visibleMeetings.map((meeting) => ({
     id: `${meeting.projectId}-${meeting.id}`,
 
     label: `${meeting.title} 회의 결과 보기`,
@@ -148,18 +181,10 @@ export function MeetingsPage() {
         <span
           className={cn(
             "shrink-0 rounded-[4px] px-[6px] py-[2px] text-12 font-semibold",
-            meeting.hasRecord
-              ? "bg-[#e6f3fe] text-[#0075d3]"
-              : meeting.participating
-                ? "bg-[#def4ec] text-[#0d7a4d]"
-                : "bg-[#f0f0f0] text-[#858894]",
+            BADGE_STYLE[meetingStatus(meeting)],
           )}
         >
-          {meeting.hasRecord
-            ? "회의완료"
-            : meeting.participating
-              ? "회의중"
-              : "미참여"}
+          {BADGE_LABEL[meetingStatus(meeting)]}
         </span>
       </span>,
 
@@ -180,8 +205,6 @@ export function MeetingsPage() {
 
     href: meetingPath("DETAIL", meeting.projectId, meeting.id),
   }));
-
-  const [page, setPage] = useState(1);
 
   const totalPages = Math.max(1, Math.ceil(tableRows.length / MEETINGS_PER_PAGE));
   const currentPage = Math.min(page, totalPages);
@@ -250,14 +273,55 @@ export function MeetingsPage() {
             />
           ) : (
             <>
-              <Table columns={TABLE_COLUMNS} rows={pageRows} />
+              <div
+                role="group"
+                aria-label="회의 상태 필터"
+                className="mb-[18px] flex flex-wrap items-center gap-[10px] lg:mb-[24px]"
+              >
+                {STATUS_FILTERS.map((filter) => {
+                  const selected = status === filter.value;
 
-              <Pagination
-                page={currentPage}
-                totalPages={totalPages}
-                onChange={setPage}
-                className="mt-10 lg:mt-[56px]"
-              />
+                  return (
+                    <button
+                      key={filter.value}
+                      type="button"
+                      aria-pressed={selected}
+                      onClick={() => {
+                        setStatus(filter.value);
+                        setPage(1);
+                      }}
+                      className={cn(
+                        "text-16 flex h-[41px] cursor-pointer items-center justify-center rounded-[8px] border border-solid px-[16px] font-medium whitespace-nowrap transition-colors duration-150",
+                        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink",
+                        selected
+                          ? "border-brand bg-brand text-white"
+                          : "border-line bg-white text-muted hover:border-ink hover:text-ink",
+                      )}
+                    >
+                      {filter.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {visibleMeetings.length === 0 ? (
+                <StateView
+                  variant="empty"
+                  title={`'${STATUS_FILTERS.find((filter) => filter.value === status)?.label}'에 해당하는 회의가 없어요`}
+                  description="다른 상태를 선택해보세요."
+                />
+              ) : (
+                <>
+                  <Table columns={TABLE_COLUMNS} rows={pageRows} />
+
+                  <Pagination
+                    page={currentPage}
+                    totalPages={totalPages}
+                    onChange={setPage}
+                    className="mt-10 lg:mt-[56px]"
+                  />
+                </>
+              )}
             </>
           )}
         </div>
