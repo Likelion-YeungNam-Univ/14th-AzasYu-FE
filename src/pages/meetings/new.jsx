@@ -423,6 +423,12 @@ export function MeetingNewPage() {
                     ))}
                   </ul>
                 )}
+
+                {query && suggestions.length === 0 && (
+                  <p className="absolute top-[calc(100%+6px)] left-0 z-20 w-full rounded-[8px] bg-white px-[16px] py-[10px] text-16 font-medium text-muted shadow-[10px_10px_30px_0px_rgba(0,0,0,0.06)]">
+                    일치하는 구성원이 없습니다.
+                  </p>
+                )}
               </div>
 
               {participants.length > 0 && (

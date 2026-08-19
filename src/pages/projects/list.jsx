@@ -41,10 +41,6 @@ const joinProject = async (joinCode) => {
     }),
   });
 
-  if (!response.ok) {
-    throw new Error(`프로젝트 참여 실패: ${response.status}`);
-  }
-
   return response.json();
 };
 
@@ -153,6 +149,11 @@ export function ProjectsPage() {
       return;
     }
 
+    if (joinCode.trim().length !== 8) {
+      setJoinError("참여코드는 8자리 영문·숫자입니다.");
+      return;
+    }
+
     try {
       setJoinLoading(true);
       setJoinError("");
@@ -160,9 +161,9 @@ export function ProjectsPage() {
       const response = await joinProject(joinCode.trim());
 
       if (!response.success) {
-        setJoinError(
-          response.error?.message || "프로젝트 참여에 실패했습니다.",
-        );
+        const raw = response.error?.message || "프로젝트 참여에 실패했습니다.";
+        const cleaned = raw.replace(/^joinCode:\s*/, "");
+        setJoinError(cleaned);
         return;
       }
 
