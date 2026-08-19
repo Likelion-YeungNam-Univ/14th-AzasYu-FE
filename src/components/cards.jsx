@@ -3,19 +3,19 @@ import { Link, useNavigate } from "react-router";
 import { Button, Card } from "@/components/ui";
 import { cn, meetingPath, projectPath } from "@/lib";
 
-const PROJECT_CARD_GRADIENTS = [
-  "linear-gradient(124.58deg, rgb(155, 213, 255) 5.3878%, rgb(35, 162, 255) 94.612%)",
-  "linear-gradient(124.58deg, rgb(109, 219, 172) 5.3878%, rgb(1, 183, 106) 94.612%)",
-  "linear-gradient(124.58deg, rgb(238, 126, 111) 5.3878%, rgb(247, 73, 50) 94.612%)",
-  "linear-gradient(124.58deg, rgb(255, 217, 141) 5.3878%, rgb(255, 176, 16) 94.612%)",
-];
+const PROJECT_CARD_GRADIENTS = {
+  RED: "linear-gradient(124.58deg, rgb(238, 126, 111) 5.3878%, rgb(247, 73, 50) 94.612%)",
+  ORANGE: "linear-gradient(124.58deg, rgb(255, 217, 141) 5.3878%, rgb(255, 176, 16) 94.612%)",
+  GREEN: "linear-gradient(124.58deg, rgb(109, 219, 172) 5.3878%, rgb(1, 183, 106) 94.612%)",
+  BLUE: "linear-gradient(124.58deg, rgb(155, 213, 255) 5.3878%, rgb(35, 162, 255) 94.612%)",
+  BLACK: "linear-gradient(124.58deg, rgb(80, 80, 80) 5.3878%, rgb(28, 35, 43) 94.612%)",
+};
+
+const FALLBACK_COLORS = ["RED", "ORANGE", "GREEN", "BLUE", "BLACK"];
 
 export function ProjectCard({ project, className }) {
-  const palette = PROJECT_CARD_GRADIENTS.length;
-  const gradient =
-    PROJECT_CARD_GRADIENTS[
-      ((((Number(project.id) || 0) - 1) % palette) + palette) % palette
-    ];
+  const colorKey = project.color || FALLBACK_COLORS[((Number(project.id) || 0) - 1 + FALLBACK_COLORS.length) % FALLBACK_COLORS.length];
+  const gradient = PROJECT_CARD_GRADIENTS[colorKey];
 
   return (
     <Link

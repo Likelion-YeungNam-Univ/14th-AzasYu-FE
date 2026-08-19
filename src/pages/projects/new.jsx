@@ -14,6 +14,8 @@ import {
   projectPath,
 } from '@/lib'
 
+const COLOR_NAMES = ["RED", "ORANGE", "GREEN", "BLUE", "BLACK"];
+
 const createProject = async (data) => {
   const accessToken = localStorage.getItem('accessToken')
 
@@ -64,6 +66,7 @@ export function ProjectNewPage() {
       const response = await createProject({
         name: projectName,
         description,
+        color: COLOR_NAMES[color],
       })
 
       const projectId = response.data.id
