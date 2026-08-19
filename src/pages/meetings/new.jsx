@@ -195,6 +195,11 @@ export function MeetingNewPage() {
       return;
     }
 
+    if (memberQuery.trim()) {
+      alert("참여자 검색을 완료하거나 검색창을 비워주세요.");
+      return;
+    }
+
     const currentMinute = new Date();
     currentMinute.setSeconds(0, 0);
 
