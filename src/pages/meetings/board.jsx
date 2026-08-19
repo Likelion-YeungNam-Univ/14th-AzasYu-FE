@@ -56,6 +56,7 @@ export function MeetingBoardPage() {
   const [error, setError] = useState("");
   const [checking, setChecking] = useState(true);
   const [isParticipant, setIsParticipant] = useState(false);
+  const [mySubmitted, setMySubmitted] = useState(false);
 
   const [selectedCard, setSelectedCard] = useState(null);
 
@@ -115,6 +116,10 @@ export function MeetingBoardPage() {
           );
 
           setIsParticipant(participant);
+
+          setMySubmitted(
+            meetingResult.data?.interviewStatus?.mySubmitted ?? false,
+          );
 
           if (!participant) {
             setChecking(false);
@@ -176,7 +181,12 @@ export function MeetingBoardPage() {
   };
 
   const handleEditSubmit = async () => {
-    if (!editForm.coreOpinion.trim() || !editForm.rationale.trim() || !editForm.concern.trim() || !editForm.alternative.trim()) {
+    if (
+      !editForm.coreOpinion.trim() ||
+      !editForm.rationale.trim() ||
+      !editForm.concern.trim() ||
+      !editForm.alternative.trim()
+    ) {
       alert("모든 항목을 입력해주세요.");
       return;
     }
@@ -315,16 +325,18 @@ export function MeetingBoardPage() {
               전체 의견 요약 보기
             </Button>
 
-            <Button
-              size="action"
-              variant="subtle"
-              onClick={() =>
-                navigate(meetingPath("INTERVIEW", projectId, meetingId))
-              }
-            >
-              <Plus size={26} strokeWidth={2} />
-              아이디어 추가하기
-            </Button>
+            {!mySubmitted && (
+              <Button
+                size="action"
+                variant="subtle"
+                onClick={() =>
+                  navigate(meetingPath("INTERVIEW", projectId, meetingId))
+                }
+              >
+                <Plus size={26} strokeWidth={2} />
+                아이디어 추가하기
+              </Button>
+            )}
           </div>
         </div>
 
@@ -470,10 +482,14 @@ export function MeetingBoardPage() {
 
             <div className="flex flex-col gap-[16px] overflow-y-auto">
               <label className="flex flex-col gap-[8px]">
-                <span className="text-16 font-semibold text-ink">핵심 의견</span>
+                <span className="text-16 font-semibold text-ink">
+                  핵심 의견
+                </span>
                 <textarea
                   value={editForm.coreOpinion}
-                  onChange={(e) => setEditForm((f) => ({ ...f, coreOpinion: e.target.value }))}
+                  onChange={(e) =>
+                    setEditForm((f) => ({ ...f, coreOpinion: e.target.value }))
+                  }
                   className="h-[100px] w-full resize-none rounded-[8px] border border-line px-[16px] py-[12px] text-16 font-medium text-ink outline-none focus:border-brand"
                 />
               </label>
@@ -482,16 +498,22 @@ export function MeetingBoardPage() {
                 <span className="text-16 font-semibold text-ink">이유</span>
                 <textarea
                   value={editForm.rationale}
-                  onChange={(e) => setEditForm((f) => ({ ...f, rationale: e.target.value }))}
+                  onChange={(e) =>
+                    setEditForm((f) => ({ ...f, rationale: e.target.value }))
+                  }
                   className="h-[80px] w-full resize-none rounded-[8px] border border-line px-[16px] py-[12px] text-16 font-medium text-ink outline-none focus:border-brand"
                 />
               </label>
 
               <label className="flex flex-col gap-[8px]">
-                <span className="text-16 font-semibold text-ink">우려 사항</span>
+                <span className="text-16 font-semibold text-ink">
+                  우려 사항
+                </span>
                 <textarea
                   value={editForm.concern}
-                  onChange={(e) => setEditForm((f) => ({ ...f, concern: e.target.value }))}
+                  onChange={(e) =>
+                    setEditForm((f) => ({ ...f, concern: e.target.value }))
+                  }
                   className="h-[80px] w-full resize-none rounded-[8px] border border-line px-[16px] py-[12px] text-16 font-medium text-ink outline-none focus:border-brand"
                 />
               </label>
@@ -500,7 +522,9 @@ export function MeetingBoardPage() {
                 <span className="text-16 font-semibold text-ink">대안</span>
                 <textarea
                   value={editForm.alternative}
-                  onChange={(e) => setEditForm((f) => ({ ...f, alternative: e.target.value }))}
+                  onChange={(e) =>
+                    setEditForm((f) => ({ ...f, alternative: e.target.value }))
+                  }
                   className="h-[80px] w-full resize-none rounded-[8px] border border-line px-[16px] py-[12px] text-16 font-medium text-ink outline-none focus:border-brand"
                 />
               </label>
