@@ -15,6 +15,7 @@ export const FIELD_LIMITS = {
   MEETING_PURPOSE: 40,
   AGENDA: 30,
   AGENDA_COUNT: 10,
+  IDEA_CORE_OPINION: 1000,
 }
 
 export function getCurrentUserId() {
