@@ -82,7 +82,7 @@ const MEETINGS_PER_PAGE = 8;
 const STATUS_FILTERS = [
   { value: "ALL", label: "전체" },
   { value: "NOT_JOINED", label: "미참여" },
-  { value: "IN_PROGRESS", label: "참여중" },
+  { value: "IN_PROGRESS", label: "회의중" },
   { value: "DONE", label: "참여완료" },
 ];
 
