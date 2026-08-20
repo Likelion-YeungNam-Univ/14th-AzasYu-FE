@@ -20,6 +20,17 @@ const RECORD_SOURCE_LABEL = {
   PDF: "PDF 파일",
 };
 
+const FILE_SIZE_LIMITS = {
+  txt: { bytes: 100 * 1024, label: "100KB" },
+  docx: { bytes: 1024 * 1024, label: "1MB" },
+  pdf: { bytes: 1024 * 1024, label: "1MB" },
+};
+
+const formatFileSize = (bytes) =>
+  bytes >= 1024 * 1024
+    ? `${Math.ceil(bytes / ((1024 * 1024) / 10)) / 10}MB`
+    : `${Math.max(1, Math.ceil(bytes / 1024))}KB`;
+
 export function MeetingUploadPage() {
   const { projectId = "", meetingId = "" } = useParams();
   const navigate = useNavigate();
@@ -171,6 +182,22 @@ export function MeetingUploadPage() {
     }
   };
   const handleFileUpload = async (file) => {
+    const extension = file.name.split(".").pop().toLowerCase();
+    const limit = FILE_SIZE_LIMITS[extension];
+
+    if (!limit) {
+      alert("TXT, DOCX, PDF 파일만 업로드할 수 있어요.");
+      return;
+    }
+
+    if (file.size > limit.bytes) {
+      alert(
+        `${extension.toUpperCase()} 파일은 최대 ${limit.label}까지 업로드할 수 있어요.\n` +
+          `선택한 파일은 ${formatFileSize(file.size)}입니다.`,
+      );
+      return;
+    }
+
     try {
       setUploading(true);
 
@@ -243,6 +270,10 @@ export function MeetingUploadPage() {
               <p className="text-16 font-medium text-muted lg:text-18">
                 회의 내용을 담은 TXT, DOCX, PDF 파일을 업로드해주세요.
               </p>
+              <p className="text-14 font-medium text-muted">
+                TXT는 최대 {FILE_SIZE_LIMITS.txt.label}, DOCX·PDF는 최대{" "}
+                {FILE_SIZE_LIMITS.pdf.label}까지 올릴 수 있어요.
+              </p>
             </div>
 
             <label className="text-20 flex w-[152px] cursor-pointer items-center justify-center rounded-[62px] bg-ink px-[24px] py-[14px] font-semibold whitespace-nowrap text-white focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ink">
@@ -253,6 +284,8 @@ export function MeetingUploadPage() {
                 className="sr-only"
                 onChange={(e) => {
                   const file = e.target.files?.[0];
+
+                  e.target.value = "";
 
                   if (file) {
                     handleFileUpload(file);
