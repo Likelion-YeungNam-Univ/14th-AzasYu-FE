@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
+import { ImPencil } from "react-icons/im";
+import { FaTrashAlt } from "react-icons/fa";
 import bubbleLarge from "@/assets/icons/board-bubble-lg.svg";
 import bubbleSmall from "@/assets/icons/board-bubble-sm.svg";
 import { Plus } from "@/components/icons";
@@ -377,9 +379,30 @@ export function MeetingBoardPage() {
                   className="relative flex h-[265px] flex-col cursor-pointer rounded-[14px] px-[24px] py-[36px] transition-all duration-200 hover:-translate-y-1 hover:shadow-lg sm:px-[40px]"
                 >
                   {card.isMine && (
-                    <span className="absolute top-[12px] right-[12px] rounded-[4px] bg-white/80 px-[6px] py-[2px] text-12 font-semibold text-ink">
-                      내 카드
-                    </span>
+                    <div className="absolute top-[12px] right-[12px] flex items-center gap-[6px]">
+                      <button
+                        type="button"
+                        aria-label="카드 수정"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEditOpen(card);
+                        }}
+                        className="flex h-[32px] w-[32px] cursor-pointer items-center justify-center rounded-[6px] bg-white/80 text-ink/60 transition-all duration-150 hover:bg-[#0075d3] hover:text-white hover:shadow-[0_2px_8px_rgba(0,117,211,0.3)]"
+                      >
+                        <ImPencil size={14} />
+                      </button>
+                      <button
+                        type="button"
+                        aria-label="카드 삭제"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(card.id);
+                        }}
+                        className="flex h-[32px] w-[32px] cursor-pointer items-center justify-center rounded-[6px] bg-white/80 text-ink/60 transition-all duration-150 hover:bg-[#da1e51] hover:text-white hover:shadow-[0_2px_8px_rgba(218,30,81,0.3)]"
+                      >
+                        <FaTrashAlt size={14} />
+                      </button>
+                    </div>
                   )}
                   <div className="flex h-full w-full flex-col gap-[20px] overflow-y-auto pr-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                     {blocks.map((block, idx) => (
